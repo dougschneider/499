@@ -1,0 +1,11 @@
+2.
+
+k) We can conclude that the power for each motor is not the same. We can also
+conclude that friction differs across different surfaces. We can conclude
+these two facts because the motors require different power when travelling in
+a straight line. And the robot may travel in a circle on one surface, and not
+on another due to the change in friction.
+
+4.
+
+a) 

@@ -1,0 +1,19 @@
+importlejos.nxt.Button;
+importlejos.nxt.BasicMotorPort;
+importlejos.nxt.MotorPort;
+importlejos.nxt.LCD;
+importlejos.util.Delay;
+public class HelloWorld {
+public static void main(String[] args)
+{
+MotorPort.A.controlMotor(80, BasicMotorPort.FORWARD);
+MotorPort.C.controlMotor(80, BasicMotorPort.FORWARD);
+Delay.msDelay(2000);
+MotorPort.A.getTachoCount();
+MotorPort.C.getTachoCount();
+LCD.drawInt(MotorPort.A.getTachoCount(), 0, 0);
+LCD.drawInt(MotorPo
+rt.C.getTachoCount(), 7, 0);
+Button.waitForPress();
+}
+}

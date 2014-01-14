@@ -1,0 +1,314 @@
+[
+  {
+    "symbolicName": "org.apache.commons.cli",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "2bf96b7aa8b611c177d329452af1dc933e14501c",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/commons-cli.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "classes",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "3ff1a698b9f7660a9429d743e9d271de28dfe0b6",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/nxt/classes.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "60df4dd092cf736e88f0d2b5da5a0e1d75bb7bf3",
+    "jarFileModificationDate": "2013-11-16T08:33:41-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/jsse.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "c8b575ebbbf828dccf387c21db8501c1f70a5925",
+    "jarFileModificationDate": "2013-11-16T08:25:35-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-common/jre/lib/ext/dnsns.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jfreechart",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "8ceb15028cf9b99c25c88775ab292faa27d3030a",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/jfreechart.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jcommon",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "348f9e02dfd982b105133aea7f702baca4427364",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/jcommon.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "charting",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "4b86c5fd3add9298079937a420df96966a6bc1a6",
+    "jarFileModificationDate": "2012-05-28T16:13:00-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/charting.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "5b544d79aa2e1760ef7aa31dc9cd4c0bbd89922c",
+    "jarFileModificationDate": "2013-11-16T08:25:18-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/jce.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "80263389bdd4aa7f80e9c49b47ab5705dae58747",
+    "jarFileModificationDate": "2013-11-16T08:33:41-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/rhino.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "stax-api-1.0.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "49c100caf72d658aca8e58bd74a4ba90fa2b0d70",
+    "jarFileModificationDate": "2012-05-28T16:13:00-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/stax-api-1.0.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "bluecove",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "0873e4b60fdd6d2acf852f3b1b7c79a746b49bc6",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/bluecove.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "net.sf.bluecove.bluecove-gpl",
+    "version": {
+      "major": 2,
+      "minor": 1,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "bf8b04bffb8467ec1cd2f356605c55c09c742a42",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/bluecove-gpl.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "1090175837308811bb8bb8907f7ff90533a1cc2a",
+    "jarFileModificationDate": "2012-01-22T16:44:05-07:00",
+    "location": "/usr/share/java/java-atk-wrapper.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "pctools",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "811d426c9a8495c5388ff824aa71508194998a2a",
+    "jarFileModificationDate": "2012-05-28T16:13:00-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/pctools.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "5302d21634cbd50e88398b6e428be12ad2e198c3",
+    "jarFileModificationDate": "2013-11-16T08:26:46-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-common/jre/lib/ext/sunjce_provider.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "bcel",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "96b2cefeb067c08c31225d48e2a689f814baae25",
+    "jarFileModificationDate": "2012-05-28T16:12:59-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/3rdparty/bcel.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "319f2276d937270eee262d8c1d0d878cadc3c276",
+    "jarFileModificationDate": "2013-11-16T08:33:41-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/resources.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "ac60a06c8a05fecaa472f9833e04fd487d96efef",
+    "jarFileModificationDate": "2013-11-16T08:23:37-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/rt.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "adfb84a80dc6b4141aaad92a501c60b4b4a70e75",
+    "jarFileModificationDate": "2013-11-16T08:26:31-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-common/jre/lib/ext/localedata.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "03a64dba96afdffc852d763636483a3075b3981a",
+    "jarFileModificationDate": "2013-11-16T08:16:39-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-common/jre/lib/ext/pulse-java.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "pccomm",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "373ed05d2ec537429cc3f930d450732d8a854055",
+    "jarFileModificationDate": "2012-05-28T16:13:00-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/pccomm.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "57e2c352137049c989e635685922ff199620a3d8",
+    "jarFileModificationDate": "2013-11-16T08:26:35-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/charsets.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "5e3df3f706ae33f20e425753298bdc328e942997",
+    "jarFileModificationDate": "2013-11-16T08:25:31-07:00",
+    "location": "/usr/lib/jvm/java-6-openjdk-common/jre/lib/ext/sunpkcs11.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jtools",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "480632bd86ec604abdde1370842f93b0edb00d16",
+    "jarFileModificationDate": "2012-05-28T16:13:00-06:00",
+    "location": "/usr/local/leJOS/leJOS_NXJ/lib/pc/jtools.jar",
+    "javaRuntime": false
+  }
+]

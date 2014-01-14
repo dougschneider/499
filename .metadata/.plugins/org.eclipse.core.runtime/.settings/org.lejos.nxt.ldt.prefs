@@ -1,0 +1,7 @@
+ConnectToName=true
+ConnectionName=cauchy
+connectionType=b
+debug.linkVerbose=true
+eclipse.preferences.version=1
+nxjHome=/usr/local/leJOS/leJOS_NXJ
+run.linkVerbose=true
