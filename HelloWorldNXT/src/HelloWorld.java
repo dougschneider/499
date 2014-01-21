@@ -8,19 +8,19 @@ import lejos.util.Delay;
 
 public class HelloWorld {
 	public static void main(String[] args) {
-		//line();
+		line();
 		//rectangle();
 		//circle();
 		//figureEight();
 
-		SensorPort.S2.setTypeAndMode(SensorPort.TYPE_SWITCH, SensorPort.MODE_BOOLEAN);
+		//SensorPort.S2.setTypeAndMode(SensorPort.TYPE_SWITCH, SensorPort.MODE_BOOLEAN);
 		
 		// stuff to display tach count and wait
-		//Delay.msDelay(2000);
-		while(true) {
-			Delay.msDelay(500);
-			System.out.println(SensorPort.S2.readValue());
-		}
+		Delay.msDelay(2000);
+		//while(true) {
+		//	Delay.msDelay(500);
+		//	System.out.println(SensorPort.S2.readValue());
+		//}
 		//MotorPort.A.getTachoCount();
 		//MotorPort.C.getTachoCount();
 		//LCD.drawInt(MotorPort.A.getTachoCount(), 0, 0);

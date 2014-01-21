@@ -6,6 +6,18 @@ these two facts because the motors require different power when travelling in
 a straight line. And the robot may travel in a circle on one surface, and not
 on another due to the change in friction.
 
+3.
+
+Implementation:
+
+Our implementation for finding the final position and heading of the robot
+works by using frequent measurements from the tachometers. Each wheels
+tachometer is read every 10 milliseconds. The readings are used to calculate
+change in heading and the change in distance. These are in turn used to find
+the change in x and change in y. On every iteration the change in y, change in x,
+and change in heading are incrementally added to the stored x, y, and heading.
+The final output is the cumulative x, y, and heading values.
+
 4.
 
 a) 
