@@ -20,4 +20,19 @@ The final output is the cumulative x, y, and heading values.
 
 4.
 
-a) 
+a1) We will measure the x and y travel using a ruler( the actual value), and
+compare that with the x and y movement measured by the
+tachometer (the expected value). The difference between these values
+at varying powers, will be the error.
+
+a2) We will perform the above analysis but instead of measuring
+the distance with a ruler, we will use two distance sensors. One
+facing to the side and one facing forward. This will act as the
+actual distance moved.
+
+b1) We will measure the error in heading by using the theta moved
+calculated using the tachometer as the expected value. And we will
+measure the actual heading by hand using a ruler and measuring the
+heading by hand.
+
+b2)

@@ -9,10 +9,10 @@ public class Main {
 	private static double robotRadius = 56;// millimeters
 	
 	public static void main(String[] args) {
-		int[][] commands = {{80, 60, 2},
-				             {60, 60, 1},
-				             {-50, 80, 2}};
-//		int[][] commands = {{80, 80, 2}, {75, 80, 2}, {80, 80, 2}};
+//		int[][] commands = {{80, 60, 2},
+//				             {60, 60, 1},
+//				             {-50, 80, 2}};
+		int[][] commands = {{60, 60, 2}};
 		followCommands(commands);
 		MotorPort.C.controlMotor(100, MotorPort.STOP);
 		MotorPort.A.controlMotor(100, MotorPort.STOP);
@@ -72,7 +72,7 @@ public class Main {
 			data.heading = data.heading + deltaHeading;
 
 		}
-		System.out.println((int)data.x/10 + " " + (int) data.y/10 + " " + Math.toDegrees(data.heading));
+		System.out.println(data.x/10.0 + " " + data.y/10.0 + " " + Math.toDegrees(data.heading));
 	}
 }
 

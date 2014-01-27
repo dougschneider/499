@@ -2,6 +2,8 @@ import lejos.nxt.BasicMotorPort;
 import lejos.nxt.Button;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
+import lejos.nxt.SoundSensor;
+import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
 
@@ -18,28 +20,45 @@ public class Main {
 //			Delay.msDelay(100);
 //		}
 
-		OpticalDistanceSensor distSensor = new OpticalDistanceSensor(SensorPort.S1);
+		UltrasonicSensor xSensor = new UltrasonicSensor(SensorPort.S2);
+		OpticalDistanceSensor ySensor = new OpticalDistanceSensor(SensorPort.S3);
 		LocalizationData data = new LocalizationData();
 		data.heading = Math.PI/2;
 		data.x = 0;
 		data.y = 0;
-		int startDist = distSensor.getDistLSB();
-		driveStraight();
-		localize(2, data);
-		int endDist = distSensor.getDistLSB();
-		int travelledDist = startDist - endDist;
-		int estTravelled = (int)data.y;
-		System.out.println("sensor: " + travelledDist);
-		System.out.println("measured: " + estTravelled);
-		System.out.println("error: " + (travelledDist-estTravelled));
+		int startyDist = getYDist(ySensor);
+		int startxDist = getXDist(xSensor);
+		MotorPort.A.controlMotor(70, BasicMotorPort.FORWARD);
+		MotorPort.C.controlMotor(70, BasicMotorPort.FORWARD);
+		localize(1, data);
 		MotorPort.C.controlMotor(100, MotorPort.STOP);
 		MotorPort.A.controlMotor(100, MotorPort.STOP);
+		Delay.msDelay(1000);
+		int endyDist = getYDist(ySensor);
+		int endxDist = getXDist(xSensor);
+		int yTravelledDist = startyDist - endyDist;
+		int xTravelledDist = startxDist - endxDist;
+		double yEstTravelled = data.y;
+		double xEstTravelled = data.x;
+		System.out.println("ysensor: " + yTravelledDist);
+		System.out.println("ymeasured: " + yEstTravelled);
+		System.out.println("yerror: " + (yTravelledDist-yEstTravelled));
+		Button.waitForAnyPress();
+		System.out.println("xsensor: " + xTravelledDist);
+		System.out.println("xmeasured: " + xEstTravelled);
+		System.out.println("xerror: " + (xTravelledDist-xEstTravelled));
 		Button.waitForAnyPress();
 	}
-
-	private static void driveStraight() {
-		MotorPort.A.controlMotor(76, BasicMotorPort.FORWARD);
-		MotorPort.C.controlMotor(70, BasicMotorPort.FORWARD);
+	
+	public static int getYDist(OpticalDistanceSensor sensor) {
+		// adjust for sensor being ahead of wheel axis
+		return sensor.getDistLSB() + 50;
+	}
+	
+	public static int getXDist(UltrasonicSensor sensor) {
+		// multiply to convert cm to mm
+		// add constant to account for distance from robot centre
+		return sensor.getDistance()*10 + 90;
 	}
 	
 	public static void localize(int seconds, LocalizationData data)
