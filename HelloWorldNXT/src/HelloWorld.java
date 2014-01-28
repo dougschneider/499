@@ -8,23 +8,14 @@ import lejos.util.Delay;
 
 public class HelloWorld {
 	public static void main(String[] args) {
+		// uncomment the line below that represents the
+		// action you want the bot to perform.
 		line();
 		//rectangle();
 		//circle();
 		//figureEight();
-
-		//SensorPort.S2.setTypeAndMode(SensorPort.TYPE_SWITCH, SensorPort.MODE_BOOLEAN);
 		
-		// stuff to display tach count and wait
 		Delay.msDelay(2000);
-		//while(true) {
-		//	Delay.msDelay(500);
-		//	System.out.println(SensorPort.S2.readValue());
-		//}
-		//MotorPort.A.getTachoCount();
-		//MotorPort.C.getTachoCount();
-		//LCD.drawInt(MotorPort.A.getTachoCount(), 0, 0);
-		//LCD.drawInt(MotorPort.C.getTachoCount(), 7, 0);
 	}
 	
 	private static void rectangle() {
@@ -42,25 +33,40 @@ public class HelloWorld {
 		turnRight();
 	}
 	
+	/**
+	 * Draw a straight line.
+	 */
 	private static void line() {
 		driveStraight();
 	}
 	
+	/**
+	 * Drive straight.
+	 */
 	private static void driveStraight() {
 		MotorPort.A.controlMotor(84, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(80, BasicMotorPort.FORWARD);
 	}
 	
+	/**
+	 * Drive in a circle to the right(clockwise)
+	 */
 	private static void circle() {
 		circleRight();
-		//circleLeft();
 	}
 	
+	/**
+	 * Draw a figure eight. Starting in the middle, and beginning
+	 * circling to the right.
+	 */
 	private static void figureEight() {
 		circleRight();
 		circleLeft();
 	}
 	
+	/**
+	 * Turn to the right.
+	 */
 	private static void turnRight(){
 		MotorPort.A.controlMotor(0, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(80, BasicMotorPort.FORWARD);
@@ -69,19 +75,24 @@ public class HelloWorld {
 		MotorPort.C.controlMotor(100, BasicMotorPort.STOP);
 	}
 	
+	/**
+	 * Circle to the right.
+	 */
 	private static void circleRight() {
 		MotorPort.A.controlMotor(70, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(80, BasicMotorPort.FORWARD);
-		//Delay.msDelay(4700);
 		Delay.msDelay(7600);
 		MotorPort.A.controlMotor(100, BasicMotorPort.STOP);
 		MotorPort.C.controlMotor(100, BasicMotorPort.STOP);
 		Delay.msDelay(50);
 	}
+	
+	/**
+	 * Circle to the left.
+	 */
 	private static void circleLeft() {
 		MotorPort.A.controlMotor(85, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(69, BasicMotorPort.FORWARD);
-		//Delay.msDelay(4950);
 		Delay.msDelay(7000);
 		MotorPort.A.controlMotor(100, BasicMotorPort.STOP);
 		MotorPort.C.controlMotor(100, BasicMotorPort.STOP);

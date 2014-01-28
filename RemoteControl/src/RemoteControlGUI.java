@@ -66,7 +66,7 @@ public class RemoteControlGUI extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			// update the power based on the button clicked.
 			if (e.getSource() == leftUp) {
 				leftPow = Math.min(100, leftPow + powStep);
 			} else if (e.getSource() == leftDown) {
@@ -76,6 +76,7 @@ public class RemoteControlGUI extends JFrame {
 			} else if (e.getSource() == rightDown) {
 				rightPow = Math.max(0, rightPow - powStep);
 			}
+			// print out the new power
 			System.out.println("Left Pow: " + leftPow);
 			System.out.println("Right Pow: " + rightPow);
 		}
@@ -111,6 +112,7 @@ public class RemoteControlGUI extends JFrame {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
+			// set the power based on the key pressed
 			switch (e.getKeyChar()) {
 			case 'w':
 				MotorPort.C.controlMotor(leftPow, MotorPort.FORWARD);
@@ -130,6 +132,7 @@ public class RemoteControlGUI extends JFrame {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			// float when the key is released
 			switch (e.getKeyChar()) {
 			case 'w':
 			case 's':
