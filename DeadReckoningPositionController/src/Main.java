@@ -9,10 +9,10 @@ public class Main {
 	private static double robotRadius = 56;// millimeters
 	
 	public static void main(String[] args) {
-//		int[][] commands = {{80, 60, 2},
-//				             {60, 60, 1},
-//				             {-50, 80, 2}};
-		int[][] commands = {{60, 60, 2}};
+		int[][] commands = {{80, 60, 2},
+				             {60, 60, 1},
+				             {-50, 80, 2}};
+//		int[][] commands = {{60, 60, 2}};
 		followCommands(commands);
 		MotorPort.C.controlMotor(100, MotorPort.STOP);
 		MotorPort.A.controlMotor(100, MotorPort.STOP);

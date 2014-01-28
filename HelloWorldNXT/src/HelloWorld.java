@@ -73,7 +73,7 @@ public class HelloWorld {
 		MotorPort.A.controlMotor(70, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(80, BasicMotorPort.FORWARD);
 		//Delay.msDelay(4700);
-		Delay.msDelay(7000);
+		Delay.msDelay(7600);
 		MotorPort.A.controlMotor(100, BasicMotorPort.STOP);
 		MotorPort.C.controlMotor(100, BasicMotorPort.STOP);
 		Delay.msDelay(50);
@@ -82,7 +82,7 @@ public class HelloWorld {
 		MotorPort.A.controlMotor(85, BasicMotorPort.FORWARD);
 		MotorPort.C.controlMotor(69, BasicMotorPort.FORWARD);
 		//Delay.msDelay(4950);
-		Delay.msDelay(7200);
+		Delay.msDelay(7000);
 		MotorPort.A.controlMotor(100, BasicMotorPort.STOP);
 		MotorPort.C.controlMotor(100, BasicMotorPort.STOP);
 		Delay.msDelay(50);
