@@ -3,7 +3,6 @@ import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
-import lejos.nxt.SoundSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 

@@ -1,9 +1,5 @@
-import lejos.nxt.Button;
-import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
 import lejos.nxt.BasicMotorPort;
 import lejos.nxt.MotorPort;
-import lejos.nxt.LCD;
 import lejos.util.Delay;
 
 public class HelloWorld {
