@@ -6,9 +6,12 @@ import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
+import lejos.pc.comm.NXTConnector;
 import lejos.util.Delay;
 
 public class Main {
+	
+	public static NXTConnector connection;
 
 	public static void main(String[] args) {
 //		Thread t = new Thread(new GUIThread());
@@ -60,6 +63,12 @@ public class Main {
 		
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
+	}
+	
+	private static void connect()
+	{
+		connection = new NXTConnector();
+		connection.co
 	}
 }
 
