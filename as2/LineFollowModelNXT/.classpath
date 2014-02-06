@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/nxt"/>
+	<classpathentry kind="lib" path="/cshome/ds3/leJOS/weka-3-6-10/weka-src.jar"/>
+	<classpathentry kind="lib" path="/cshome/ds3/leJOS/weka-3-6-10/weka.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
