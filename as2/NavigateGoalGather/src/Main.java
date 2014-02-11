@@ -5,9 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
 public class Main {
@@ -23,34 +25,42 @@ public class Main {
 		int rightTacho = 0;
 		int leftTacho = 0;
 
-		LightSensor sensor = new LightSensor(SensorPort.S4);
+		UltrasonicSensor dSensor = new UltrasonicSensor(SensorPort.S4);
+		dSensor.getDistance();
+		Delay.msDelay(1000);
+		LightSensor rightSensor = new LightSensor(SensorPort.S1);
 		MotorPort leftMotor = MotorPort.C;
 		MotorPort rightMotor = MotorPort.A;
 		leftMotor.resetTachoCount();
 		rightMotor.resetTachoCount();
 		oldRightTacho = rightMotor.getTachoCount();
 		oldLeftTacho = leftMotor.getTachoCount();
-		leftMotor.controlMotor(20, MotorPort.FORWARD);
-		rightMotor.controlMotor(20, MotorPort.FORWARD);
+		leftMotor.controlMotor(100, MotorPort.FLOAT);
+		rightMotor.controlMotor(100, MotorPort.FLOAT);
 		ArrayList<Data> data = new ArrayList<Data>();
-		while (time < 5000) {
+		while (true) {
 			Delay.msDelay(delay);
 			time += delay;
 
 			rightTacho = rightMotor.getTachoCount();
 			leftTacho = leftMotor.getTachoCount();
-			data.add(new Data(rightTacho - oldRightTacho, leftTacho
-					- oldLeftTacho, time, sensor.getLightValue()));
+			if(rightTacho - oldRightTacho != 0 && leftTacho - oldLeftTacho != 0)
+			{
+				data.add(new Data(rightTacho - oldRightTacho, leftTacho
+						- oldLeftTacho, time, rightSensor.getLightValue(),
+						dSensor.getDistance()));
+			}
 			oldRightTacho = rightTacho;
 			oldLeftTacho = leftTacho;
+			if(Button.LEFT.isDown())
+				break;
 		}
 
 		DataOutputStream out = null;
 		try {
 			out = new DataOutputStream(
-					new FileOutputStream(new File("log.csv"), true));
+					new FileOutputStream(new File("logp2.csv"), true));
 		} catch (FileNotFoundException e) {
-			System.out.println("1");
 			e.printStackTrace();
 		}
 
@@ -78,17 +88,23 @@ class Data {
 	public int rightTacho;
 	public int leftTacho;
 	public int time;
-	public int intensity;
+	public int rightIntensity;
+	public int distance;
 
-	public Data(int rightTacho, int leftTacho, int time, int intensity) {
+	public Data(int rightTacho, int leftTacho, int time, int rightIntensity, int distance) {
 		this.rightTacho = rightTacho;
 		this.leftTacho = leftTacho;
 		this.time = time;
-		this.intensity = intensity;
+		this.rightIntensity = rightIntensity;
+		this.distance = distance;
 	}
 
 	public String getLine() {
-		String classStr = rightTacho - leftTacho < 0 ? "FALSE" : "TRUE";
-		return intensity + "," + classStr + "\n";
+		String classStr;
+		if(leftTacho < 0 && rightTacho > 0)
+			classStr = "ROTATE";
+		else
+			classStr = rightTacho - leftTacho < 0 ? "LEFT" : "RIGHT";
+		return rightIntensity + "," + distance + "," + classStr + "\n";
 	}
 }
