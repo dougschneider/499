@@ -9,6 +9,7 @@ import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.OpticalDistanceSensor;
 import lejos.util.Delay;
@@ -27,12 +28,11 @@ public class Main {
 		int leftTacho = 0;
 
 		UltrasonicSensor xSensor = new UltrasonicSensor(SensorPort.S4);
-		OpticalDistanceSensor ySensor = new OpticalDistanceSensor(SensorPort.S3);
+		TouchSensor rightTouch = new TouchSensor(SensorPort.S3);
+		TouchSensor leftTouch = new TouchSensor(SensorPort.S2);
 		xSensor.getDistance();
-		ySensor.getDistance();
 		Delay.msDelay(1000);
 		LightSensor rightSensor = new LightSensor(SensorPort.S1);
-		LightSensor leftSensor = new LightSensor(SensorPort.S2);
 		MotorPort leftMotor = MotorPort.C;
 		MotorPort rightMotor = MotorPort.A;
 		leftMotor.resetTachoCount();
@@ -51,8 +51,8 @@ public class Main {
 			if(rightTacho - oldRightTacho != 0 && leftTacho - oldLeftTacho != 0)
 			{
 				data.add(new Data(rightTacho - oldRightTacho, leftTacho
-						- oldLeftTacho, time, rightSensor.getLightValue(), leftSensor.getLightValue(),
-						xSensor.getDistance(), ySensor.getDistance()));
+						- oldLeftTacho, time, rightSensor.getLightValue(),
+						xSensor.getDistance(), rightTouch.isPressed(), leftTouch.isPressed()));
 			}
 			oldRightTacho = rightTacho;
 			oldLeftTacho = leftTacho;
@@ -69,7 +69,7 @@ public class Main {
 		}
 
 		try {
-			out.write("rightIntensity,leftIntensity,xdistance,ydistance,class\n".getBytes());
+			out.write("rightIntensity,xdistance,rightTouch,leftTouch,class\n".getBytes());
 			for (Data d : data) {
 				out.write(d.getLine().getBytes());
 			}
@@ -94,30 +94,30 @@ class Data {
 	public int leftTacho;
 	public int time;
 	public int rightIntensity;
-	public int leftIntensity;
 	public int xdistance;
-	public int ydistance;
+	public boolean rightTouch;
+	public boolean leftTouch;
 
-	public Data(int rightTacho, int leftTacho, int time, int rightIntensity, int leftIntensity, int xdistance, int ydistance) {
+	public Data(int rightTacho, int leftTacho, int time, int rightIntensity, int xdistance, boolean rightTouch, boolean leftTouch) {
 		this.rightTacho = rightTacho;
 		this.leftTacho = leftTacho;
 		this.time = time;
 		this.rightIntensity = rightIntensity;
-		this.leftIntensity = leftIntensity;
 		this.xdistance = xdistance;
-		this.ydistance = ydistance;
+		this.rightTouch = rightTouch;
+		this.leftTouch = leftTouch;
 	}
 
 	public String getLine() {
 		String classStr;
-		if(leftTacho < 0 && rightTacho > 0)
-			classStr = "ROTATELEFT";
-		else if(leftTacho > 0 && rightTacho < 0)
-			classStr = "ROTATERIGHT";
+		if(leftTacho < 0 && rightTacho >= 0)
+			classStr = "BACKLEFT";
+		else if(leftTacho >= 0 && rightTacho < 0)
+			classStr = "BACKRIGHT";
 		else if(leftTacho == rightTacho)
 			classStr = "FORWARD";
 		else
-			classStr = rightTacho - leftTacho < 0 ? "ROTATELEFT" : "ROTATERIGHT";
-		return rightIntensity + "," + leftIntensity + "," + xdistance + "," + ydistance + "," + classStr + "\n";
+			classStr = rightTacho - leftTacho < 0 ? "BACKLEFT" : "BACKRIGHT";
+		return rightIntensity + "," + xdistance + "," + (rightTouch ? "TRUE" : "FALSE") + "," + (leftTouch ? "TRUE" : "FALSE") + "," + classStr + "\n";
 	}
 }

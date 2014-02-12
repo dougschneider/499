@@ -44,11 +44,8 @@ public class Main {
 		UltrasonicSensor leftSensor = new UltrasonicSensor(SensorPort.S4);
 		MotorPort rightMotor = MotorPort.A;
 		MotorPort leftMotor = MotorPort.C;
-		int current = 0;
-		int delta = 3;
-		while(current < 10000)
+		while(true)
 		{
-			current += delta;
 			Instance i = new SparseInstance(3);
 			i.setValue(0, rightSensor.getLightValue());
 			i.setValue(1, leftSensor.getDistance());

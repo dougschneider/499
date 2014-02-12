@@ -3,8 +3,8 @@ import java.io.File;
 import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.OpticalDistanceSensor;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -19,7 +19,7 @@ public class Main {
 		Instances data = null;
 		try {
 			CSVLoader loader = new CSVLoader();
-			loader.setSource(new File("../../logp2.csv"));
+			loader.setSource(new File("../../logp3.csv"));
 			data = loader.getDataSet();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -39,35 +39,32 @@ public class Main {
 		}
 
 		LightSensor rightSensor = new LightSensor(SensorPort.S1);
-		LightSensor leftSensor = new LightSensor(SensorPort.S2);
 		UltrasonicSensor xSensor = new UltrasonicSensor(SensorPort.S4);
-		OpticalDistanceSensor ySensor = new OpticalDistanceSensor(SensorPort.S3);
+		TouchSensor rightTouch = new TouchSensor(SensorPort.S3);
+		TouchSensor leftTouch = new TouchSensor(SensorPort.S2);
 		MotorPort rightMotor = MotorPort.A;
 		MotorPort leftMotor = MotorPort.C;
-		int current = 0;
-		int delta = 3;
-		while(current < 10000)
+		while(true)
 		{
-			current += delta;
 			Instance i = new SparseInstance(3);
-			i.setValue(0, rightSensor.getLightValue());
-			i.setValue(1, leftSensor.getLightValue());
-			i.setValue(2, xSensor.getDistance());
-			i.setValue(3, ySensor.getDistance());
 			i.setDataset(data);
+			i.setValue(0, rightSensor.getLightValue());
+			i.setValue(1, xSensor.getDistance());
+			i.setValue(2, rightTouch.isPressed() ? "TRUE" : "FALSE");
+			i.setValue(3, leftTouch.isPressed() ? "TRUE" : "FALSE");
 			try {
 				double instanceClass = mlp.classifyInstance(i);
 				System.out.println(instanceClass);
-				if (instanceClass == 0.0) {
+				if (instanceClass == 2.0) {// FORWARD
 					leftMotor.controlMotor(30, MotorPort.FORWARD);
-					rightMotor.controlMotor(30, MotorPort.FORWARD);
+					rightMotor.controlMotor(20, MotorPort.FORWARD);
 				}
-				else if (instanceClass == 1.0) {
-					leftMotor.controlMotor(30, MotorPort.FORWARD);
-					rightMotor.controlMotor(30, MotorPort.BACKWARD);
-				} else if(instanceClass == 2.0) {
+				else if (instanceClass == 1.0) {//BACKRIGHT
 					leftMotor.controlMotor(30, MotorPort.BACKWARD);
-					rightMotor.controlMotor(30, MotorPort.FORWARD);
+					rightMotor.controlMotor(100, MotorPort.BACKWARD);
+				} else if(instanceClass == 0.0) {//BACKLEFT
+					leftMotor.controlMotor(100, MotorPort.BACKWARD);
+					rightMotor.controlMotor(30, MotorPort.BACKWARD);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
