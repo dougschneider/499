@@ -56,14 +56,20 @@ public class Main {
 				double instanceClass = mlp.classifyInstance(i);
 				System.out.println(instanceClass);
 				if (instanceClass == 2.0) {// FORWARD
-					leftMotor.controlMotor(30, MotorPort.FORWARD);
+//					leftMotor.controlMotor(30, MotorPort.FORWARD);
+//					rightMotor.controlMotor(20, MotorPort.FORWARD);
+					leftMotor.controlMotor(25, MotorPort.FORWARD);
 					rightMotor.controlMotor(20, MotorPort.FORWARD);
 				}
 				else if (instanceClass == 1.0) {//BACKRIGHT
+//					leftMotor.controlMotor(30, MotorPort.BACKWARD);
+//					rightMotor.controlMotor(100, MotorPort.BACKWARD);
 					leftMotor.controlMotor(30, MotorPort.BACKWARD);
-					rightMotor.controlMotor(100, MotorPort.BACKWARD);
+					rightMotor.controlMotor(70, MotorPort.BACKWARD);
 				} else if(instanceClass == 0.0) {//BACKLEFT
-					leftMotor.controlMotor(100, MotorPort.BACKWARD);
+//					leftMotor.controlMotor(100, MotorPort.BACKWARD);
+//					rightMotor.controlMotor(30, MotorPort.BACKWARD);
+					leftMotor.controlMotor(70, MotorPort.BACKWARD);
 					rightMotor.controlMotor(30, MotorPort.BACKWARD);
 				}
 			} catch (Exception e) {

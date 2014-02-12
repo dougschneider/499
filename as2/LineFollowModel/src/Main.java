@@ -55,7 +55,7 @@ public class Main {
 			try {
 				if (smo.classifyInstance(i) == 1.0) {
 					leftMotor.controlMotor(100, MotorPort.STOP);
-					rightMotor.controlMotor(60, MotorPort.FORWARD);
+					rightMotor.controlMotor(30, MotorPort.FORWARD);
 				} else {
 					leftMotor.controlMotor(30, MotorPort.FORWARD);
 					rightMotor.controlMotor(100, MotorPort.STOP);
