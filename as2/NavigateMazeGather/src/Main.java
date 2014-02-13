@@ -27,18 +27,23 @@ public class Main {
 		int rightTacho = 0;
 		int leftTacho = 0;
 
+        // initialize the sensors
 		UltrasonicSensor xSensor = new UltrasonicSensor(SensorPort.S4);
 		TouchSensor rightTouch = new TouchSensor(SensorPort.S3);
 		TouchSensor leftTouch = new TouchSensor(SensorPort.S2);
 		xSensor.getDistance();
 		Delay.msDelay(1000);
 		LightSensor rightSensor = new LightSensor(SensorPort.S1);
+
+        // initialize the tachometers
 		MotorPort leftMotor = MotorPort.C;
 		MotorPort rightMotor = MotorPort.A;
 		leftMotor.resetTachoCount();
 		rightMotor.resetTachoCount();
 		oldRightTacho = rightMotor.getTachoCount();
 		oldLeftTacho = leftMotor.getTachoCount();
+
+        // float so we can manually get data
 		leftMotor.controlMotor(100, MotorPort.FLOAT);
 		rightMotor.controlMotor(100, MotorPort.FLOAT);
 		ArrayList<Data> data = new ArrayList<Data>();
@@ -48,6 +53,7 @@ public class Main {
 
 			rightTacho = rightMotor.getTachoCount();
 			leftTacho = leftMotor.getTachoCount();
+            // if the tachometers have moved, add a new data point
 			if(rightTacho - oldRightTacho != 0 && leftTacho - oldLeftTacho != 0)
 			{
 				data.add(new Data(rightTacho - oldRightTacho, leftTacho
@@ -56,10 +62,13 @@ public class Main {
 			}
 			oldRightTacho = rightTacho;
 			oldLeftTacho = leftTacho;
+
+            // if left button is pressed stop gathering data
 			if(Button.LEFT.isDown())
 				break;
 		}
 
+        // open a file to write data to
 		DataOutputStream out = null;
 		try {
 			out = new DataOutputStream(
@@ -70,6 +79,7 @@ public class Main {
 
 		try {
 			out.write("rightIntensity,xdistance,rightTouch,leftTouch,class\n".getBytes());
+            // write each data point to file
 			for (Data d : data) {
 				out.write(d.getLine().getBytes());
 			}
@@ -89,6 +99,10 @@ public class Main {
 	}
 }
 
+/**
+ * This is a data class used to store data points gathered
+ * by the Main class.
+ */
 class Data {
 	public int rightTacho;
 	public int leftTacho;
@@ -110,6 +124,7 @@ class Data {
 
 	public String getLine() {
 		String classStr;
+        // get the class for this data point
 		if(leftTacho < 0 && rightTacho >= 0)
 			classStr = "BACKLEFT";
 		else if(leftTacho >= 0 && rightTacho < 0)
@@ -118,6 +133,7 @@ class Data {
 			classStr = "FORWARD";
 		else
 			classStr = rightTacho - leftTacho < 0 ? "BACKLEFT" : "BACKRIGHT";
+        // return the string representing this data point
 		return rightIntensity + "," + xdistance + "," + (rightTouch ? "TRUE" : "FALSE") + "," + (leftTouch ? "TRUE" : "FALSE") + "," + classStr + "\n";
 	}
 }

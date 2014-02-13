@@ -18,9 +18,10 @@ public class Main {
 	public static void main(String[] args) {
 		DataSource source;
 		Instances data = null;
+        // read in the training data
 		try {
 			CSVLoader loader = new CSVLoader();
-			loader.setSource(new File("../../logp3.csv"));
+			loader.setSource(new File("../data/logp3.csv"));
 			data = loader.getDataSet();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -28,18 +29,20 @@ public class Main {
 		
 		data.setClassIndex(data.numAttributes()-1);
 
-//		MultilayerPerceptron mlp = new MultilayerPerceptron();
-		NaiveBayes nb = new NaiveBayes();
+        // uncomment one of the following lines based on what
+        // model we want to use
+		MultilayerPerceptron mlp = new MultilayerPerceptron();
+//		NaiveBayes nb = new NaiveBayes();
 		try {
-//			mlp.buildClassifier(data);
-			nb.buildClassifier(data);
-//			Evaluation eval = new Evaluation(data);
-//			eval.crossValidateModel(mlp, data, 10, new Random(1));
-//			System.out.println(eval.pctCorrect());
+            // uncomment one of the following lines based on what
+            // model we want to use
+			mlp.buildClassifier(data);
+//			nb.buildClassifier(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+        // initialize the sensors
 		LightSensor rightSensor = new LightSensor(SensorPort.S1);
 		UltrasonicSensor xSensor = new UltrasonicSensor(SensorPort.S4);
 		TouchSensor rightTouch = new TouchSensor(SensorPort.S3);
@@ -48,6 +51,7 @@ public class Main {
 		MotorPort leftMotor = MotorPort.C;
 		while(true)
 		{
+            // create a new instance using the sensor data
 			Instance i = new SparseInstance(3);
 			i.setDataset(data);
 			i.setValue(0, rightSensor.getLightValue());
@@ -55,8 +59,10 @@ public class Main {
 			i.setValue(2, rightTouch.isPressed() ? "TRUE" : "FALSE");
 			i.setValue(3, leftTouch.isPressed() ? "TRUE" : "FALSE");
 			try {
-//				double instanceClass = mlp.classifyInstance(i);
-				double instanceClass = nb.classifyInstance(i);
+                // uncomment one of the following lines based on what
+                // model we want to use
+				double instanceClass = mlp.classifyInstance(i);
+//				double instanceClass = nb.classifyInstance(i);
 				if (instanceClass == 2.0) {// FORWARD
 					leftMotor.controlMotor(25, MotorPort.FORWARD);
 					rightMotor.controlMotor(20, MotorPort.FORWARD);
