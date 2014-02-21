@@ -1,104 +1,68 @@
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
+import java.io.File;
 
 import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.pc.comm.NXTConnector;
 import lejos.util.Delay;
+import weka.classifiers.functions.SMO;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.SparseInstance;
+import weka.core.converters.CSVLoader;
+import weka.core.converters.ConverterUtils.DataSource;
+
 
 public class Main {
-	
-	public static NXTConnector connection;
 
 	public static void main(String[] args) {
-//		Thread t = new Thread(new GUIThread());
-//		t.start();
-		Sound.beep();
-		gatherData();
-	}
-	
-	public static void gatherData()
-	{
-		int time = 0;// ms
-		int delay = 10;// ms
-		int oldRightTacho = 0;
-		int oldLeftTacho = 0;
-		int rightTacho = 0;
-		int leftTacho = 0;
+		DataSource source;
+		Instances data = null;
+        // load in the training data
+		try {
+			CSVLoader loader = new CSVLoader();
+			loader.setSource(new File("../data/logp1.csv"));
+			data = loader.getDataSet();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		
-		LightSensor sensor = new LightSensor(SensorPort.S4);
-		MotorPort leftMotor = MotorPort.C;
+		data.setClassIndex(data.numAttributes()-1);
+		
+        // create the model
+		SMO smo = new SMO();
+		String[] options = {"-C 1.0", "-L 0.001", "-P 1.0E-12", "-N 0", "-V -1", "-W 1", "-K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\""};
+		try {
+			smo.setOptions(options);
+            // train the model
+			smo.buildClassifier(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+        // set up the light sensor on the NXT
+		LightSensor sensor = new LightSensor(SensorPort.S1);
 		MotorPort rightMotor = MotorPort.A;
-		leftMotor.resetTachoCount();
-		rightMotor.resetTachoCount();
-		oldRightTacho = rightMotor.getTachoCount();
-		oldLeftTacho = leftMotor.getTachoCount();
-		leftMotor.controlMotor(20, MotorPort.FORWARD);
-		rightMotor.controlMotor(20, MotorPort.FORWARD);
-		ArrayList<Data> data = new ArrayList<Data>();
-		while(time < 2000)
+		MotorPort leftMotor = MotorPort.C;
+        // follow the line forever
+		while(true)
 		{
-			Delay.msDelay(delay);
-			time += delay;
-			System.out.println("FOO");
-			
-			rightTacho = rightMotor.getTachoCount();
-			leftTacho = leftMotor.getTachoCount();
-//			data.add(new Data(
-//					rightTacho - oldRightTacho,
-//					leftTacho - oldLeftTacho,
-//					time,
-//					sensor.getLightValue()));
-//			oldRightTacho = rightTacho;
-//			oldLeftTacho = leftTacho;
+			int val = sensor.getLightValue();
+			Instance i = new SparseInstance(2);
+			i.setValue(0, val);
+			i.setDataset(data);
+			try {
+                // classify the instance and take the corresponding action
+				if (smo.classifyInstance(i) == 1.0) {// RIGHT
+					leftMotor.controlMotor(100, MotorPort.STOP);
+					rightMotor.controlMotor(30, MotorPort.FORWARD);
+				} else {// LEFT
+					leftMotor.controlMotor(30, MotorPort.FORWARD);
+					rightMotor.controlMotor(100, MotorPort.STOP);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
-		for(Data d : data)
-		{
-			d.print();
-		}
-		
-		leftMotor.controlMotor(100, MotorPort.STOP);
-		rightMotor.controlMotor(100, MotorPort.STOP);
 	}
-	
-	private static void connect()
-	{
-		connection = new NXTConnector();
-		connection.co
-	}
-}
 
-class GUIThread implements Runnable
-{
-	@Override
-	public void run() {
-		RemoteControlGUI gui = new RemoteControlGUI();
-		gui.setVisible(true);
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-}
-
-class Data
-{
-	public int rightTacho;
-	public int leftTacho;
-	public int time;
-	public int intensity;
-	
-	public Data(int rightTacho, int leftTacho, int time, int intensity)
-	{
-		this.rightTacho = rightTacho;
-		this.leftTacho = leftTacho;
-		this.time = time;
-		this.intensity = intensity;
-	}
-	
-	public void print()
-	{
-		System.out.println(time + " " + rightTacho + " " + leftTacho + " " + intensity);
-	}
 }
