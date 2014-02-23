@@ -1,4 +1,9 @@
+# virtualenv
 bin/
 lib/
 local/
 include/
+
+# other files
+Thumbs.db
+*.swp
