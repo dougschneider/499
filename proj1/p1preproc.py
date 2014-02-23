@@ -3,7 +3,7 @@ from scipy import ndimage
 import os
 
 def outputTrainingData():
-    outputFeatures("p1train.arff", "training-data")
+    outputFeatures("p1train.arff", "part-1-training-data")
 
 def outputPredictingData():
     outputFeatures("p1predict.arff", "predicting-data", includeClass=False)
