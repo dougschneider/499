@@ -1,3 +1,21 @@
+License Plate Identification using Machine Learning.
+
+PART 1:
+
+Idenfity whether a plate is class ALP (Alberta License Plate) or NON-ALP.
+
+PART 2:
+
+Identify whether an ALP is class A (ends in 4), class B (ends in 5), or class OTHER.
+
+DATA:
+
+Data for part 1 is in part-1-data/
+Data for part 2 is in part-2-data/
+These paths can be configured in the Makefile
+
+
+
 Running part 1:
 
 The images in this part must have a certain naming convention. Any image
