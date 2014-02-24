@@ -26,8 +26,8 @@ P2_B = '^b.*'
 P2_OTHER = '^\d+.*'
 
 # intermediate files that can be cleaned up
-P1_TMP_FILES = p1train.arff p1classes.out p1test.out
-P2_TMP_FILES = p2train.arff p2classes.out p2test.out
+P1_TMP_FILES = p1train.arff p1_train_classes.out p1test.arff p1_test_classes.out
+P2_TMP_FILES = p2train.arff p2_train_classes.out p2test.arff p2_test_classes.out
 
 # filenames for utilities
 PREPROCESSOR = preprocess.py
@@ -48,9 +48,11 @@ split_p2: $(SPLITTER)
 
 preprocess_p1: $(PREPROCESSOR)
 	python $+ 1 --train $(P1_TRAIN_PATH)
+	python $+ 1 --test $(P1_TEST_PATH)
 
 preprocess_p2: $(PREPROCESSOR)
-	# python $+ 2 --train $(P2_TRAIN_PATH)
+	python $+ 2 --train $(P2_TRAIN_PATH)
+	python $+ 2 --test $(P2_TEST_PATH)
 
 clean: clean_p1 clean_p2
 

@@ -108,10 +108,9 @@ if __name__ == "__main__":
     Parse arguments and split data according to paramaters.
     """
     usage = "Usage:\n"\
-            "{} [1|2] [--train|--class|--test] data_dir\n\n"\
+            "{} [1|2] [--train|--test] data_dir\n\n"\
             "First parameter is required. Give 1 for part 1, 2 for part 2.\n"\
             "Use --train option to generate arff file with training data\n"\
-            "Use --class option to generate CSV file with filenames and class label\n"\
             "USe --test option to generate arff file with test data (no class labels)\n".format(sys.argv[0])
 
     p = None
@@ -134,11 +133,11 @@ if __name__ == "__main__":
 
         if sys.argv[2] == "--train":
             transform(data_dir)
+            outputClass("p{}_train_classes.out".format(str(p)), data_dir)
             outputFeatures("p{}train.arff".format(str(p)), data_dir)
-        elif sys.argv[2] == "--class":
-            outputClass("p{}classes.out".format(str(p)), data_dir)
         elif sys.argv[2] == "--test":
             transform(data_dir)
+            outputClass("p{}_test_classes.out".format(str(p)), data_dir)
             outputFeatures("p{}test.arff".format(str(p)), data_dir, includeClass=False)
         else:
             raise Exception(sys.argv[2] + " is not a valid argument.")
