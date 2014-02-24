@@ -2,12 +2,6 @@ import sys
 from scipy import ndimage
 import os
 
-def outputTrainingData():
-    outputFeatures("p1train.arff", "part-1-training-data")
-
-def outputPredictingData():
-    outputFeatures("p1predict.arff", "predicting-data", includeClass=False)
-
 def outputFeatures(fileName, folder, includeClass=True):
     first = True
     with open(fileName, "w+") as f:
@@ -51,12 +45,30 @@ def outputClass(fileName, folder):
                         f.write("ALP\n")
 
 if __name__ == "__main__":
+    """
+    Parse arguments and split data according to paramaters.
+    """
+    usage = "Usage:\n"\
+            "{} [1|2] [--train|--class|--test] data_dir\n\n"\
+            "First parameter is required. Give 1 for part 1, 2 for part 2.\n"\
+            "Use --train option to generate arff file with training data\n"\
+            "Use --class option to generate CSV file with filenames and class label\n"\
+            "USe --test option to generate arff file with trest data (no class labels)\n".format(sys.argv[0])
+
+    p = None
+    data_dir = None
     if len(sys.argv) > 1:
-        if sys.argv[1] == "--train":
-            outputTrainingData()
-        elif sys.argv[1] == "--class":
-            outputClass("classes.out", "predicting-data")
+        p = int(sys.argv[1])
+        data_dir = sys.argv[-1]
+        if sys.argv[2] == "--train":
+            outputFeatures("p{}train.arff".format(str(p)), data_dir)
+        elif sys.argv[2] == "--class":
+            outputClass("p{}classes.out".format(str(p)), data_dir)
+        elif sys.argv[2] == "--test":
+            outputFeatures("p{}test.arff".format(str(p)), data_dir, includeClass=False)
         else:
-            raise Exception(sys.argv[1] + " is not a valid argument.")
+            raise Exception(sys.argv[2] + " is not a valid argument.")
     else:
-        outputPredictingData()
+        print usage
+        sys.exit(2)
+
