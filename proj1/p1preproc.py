@@ -33,6 +33,7 @@ def _p1_outputFeatures(fileName, folder, includeClass=True):
                     s += "\n"
                     f.write(s)
 
+
 def _p1_outputClass(fileName, folder):
     with open(fileName, "w+") as f:
         for _, _, filenames in os.walk(folder):
@@ -43,6 +44,7 @@ def _p1_outputClass(fileName, folder):
                         f.write("NON-ALP\n");
                     else:
                         f.write("ALP\n")
+
 
 if __name__ == "__main__":
     """
