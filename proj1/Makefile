@@ -33,6 +33,9 @@ P2_TMP_FILES = p2train.arff p2_train_classes.out p2test.arff p2_test_classes.out
 PREPROCESSOR = preprocess.py
 SPLITTER = test_train_split.py
 
+# java compiler arguments
+CLASSPATH = ../weka-3-6-10/weka.jar
+
 # run part 1 and part 2
 all: part1 part2
 
@@ -53,6 +56,12 @@ preprocess_p1: $(PREPROCESSOR)
 preprocess_p2: $(PREPROCESSOR)
 	python $+ 2 --train $(P2_TRAIN_PATH)
 	python $+ 2 --test $(P2_TEST_PATH)
+
+Learner.class: P1BuiildModel/src/Learner.java
+	javac -d ./ -classpath $(CLASSPATH) $+
+
+Classifier.class: P1Classify/src/Classifier.java
+	javac -d ./ -classpath $(CLASSPATH) $+
 
 clean: clean_p1 clean_p2
 

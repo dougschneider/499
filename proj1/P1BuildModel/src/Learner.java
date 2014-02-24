@@ -11,7 +11,7 @@ import weka.core.converters.CSVLoader;
 import weka.core.converters.ConverterUtils.DataSource;
 
 
-public class Main {
+public class Learner {
 
 	public static void main(String[] args) {
 		DataSource source;
