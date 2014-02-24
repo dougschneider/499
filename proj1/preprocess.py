@@ -112,7 +112,7 @@ if __name__ == "__main__":
             "First parameter is required. Give 1 for part 1, 2 for part 2.\n"\
             "Use --train option to generate arff file with training data\n"\
             "Use --class option to generate CSV file with filenames and class label\n"\
-            "USe --test option to generate arff file with trest data (no class labels)\n".format(sys.argv[0])
+            "USe --test option to generate arff file with test data (no class labels)\n".format(sys.argv[0])
 
     p = None
     data_dir = None
