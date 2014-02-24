@@ -1,7 +1,7 @@
 import sys
 from scipy import ndimage
 import os
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageEnhance
 
 def _p1_outputFeatures(fileName, folder, includeClass=True):
     first = True
@@ -94,6 +94,16 @@ def _p2_outputClass(fileName, folder):
                         f.write("OTHER\n")
 
 
+def _p1_transform(folder):
+    for _, _, filenames in os.walk(folder):
+        for filename in filenames:
+            if filename.endswith(".jpg"):
+                full_name = folder + "/" + filename
+                image = Image.open(full_name)
+                editor = ImageEnhance.Contrast(image)
+                image = editor.enhance(1.5)
+                image.save(full_name);
+
 def _p2_transform(folder):
     for _, _, filenames in os.walk(folder):
         for filename in filenames:
@@ -101,6 +111,7 @@ def _p2_transform(folder):
                 full_name = folder + "/" + filename
                 image = Image.open(full_name)
                 image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+                #image = image.convert('L')
                 image.save(full_name);
 
 
@@ -124,7 +135,7 @@ if __name__ == "__main__":
         if p == 1:
             outputFeatures = _p1_outputFeatures
             outputClass = _p1_outputClass
-            transform = lambda path: None
+            transform = _p1_transform
         elif p == 2:
             outputFeatures = _p2_outputFeatures
             outputClass = _p2_outputClass
