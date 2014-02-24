@@ -13,12 +13,20 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 public class Learner {
 
+	/**
+	 * Learn and save a model from the given data
+	 * 
+	 * @param arffFileName: the arff file with input data
+	 * @param modelFileName: the filename to which to save the generated model
+	 */
 	public static void main(String[] args) {
 		DataSource source;
 		Instances data = null;
+		String arffFileName = args[0];
+		String modelFileNameame = args[1];
         // load in the training data
 		try {
-			source = new DataSource("../p1train.arff");
+			source = new DataSource(arffFileName);
 			data = source.getDataSet();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -38,7 +46,7 @@ public class Learner {
 		
 		ObjectOutputStream out;
 		try {
-			out = new ObjectOutputStream(new FileOutputStream("../p1model.ser"));
+			out = new ObjectOutputStream(new FileOutputStream(modelFileNameame));
 			out.writeObject(smo);
 			out.flush();
 			out.close();

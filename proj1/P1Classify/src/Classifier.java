@@ -11,11 +11,19 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 public class Classifier {
 
+	/**
+	 * Classify given data using the given model
+	 * 
+	 * @param arffFileName: the arff file with input data
+	 * @param modelFileName: the filename from which to load model
+	 */
 	public static void main(String[] args) {
 		SMO smo = null;
 		ObjectInputStream in = null;
+		String arffFileName = args[0];
+		String modelFileNameame = args[1];
 		try {
-			in = new ObjectInputStream(new FileInputStream("../p1model.ser"));
+			in = new ObjectInputStream(new FileInputStream(modelFileNameame));
 			smo = (SMO) in.readObject();
 			in.close();
 		} catch (FileNotFoundException e) {
@@ -28,7 +36,7 @@ public class Classifier {
 
 		Instances predictable = null;
 		try {
-			DataSource source = new DataSource("../p1predict.arff");
+			DataSource source = new DataSource(arffFileName);
 			predictable = source.getDataSet();
 		} catch (Exception e) {
 			e.printStackTrace();
