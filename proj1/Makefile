@@ -45,6 +45,9 @@ P2_TEST_ARFF = p2test.arff
 P1_MODEL = p1model.se
 P2_MODEL = p2model.se
 
+# classifier generated files
+WEKA_FILES = Classifier.class Learner.class
+
 # intermediate files that can be cleaned up
 P1_TMP_FILES = $(P1_TRAIN_CLASSES) $(P1_TEST_CLASSES) $(P1_TRAIN_ARFF) $(P1_TEST_ARFF) $(P1_MODEL) $(P1_TRAIN_OUT) $(P1_TEST_OUT)
 P2_TMP_FILES = $(P2_TRAIN_CLASSES) $(P2_TEST_CLASSES) $(P2_TRAIN_ARFF) $(P2_TEST_ARFF) $(P2_MODEL) $(P2_TRAIN_OUT) $(P2_TEST_OUT)
@@ -108,8 +111,11 @@ clean_p1:
 	-rm -rf $(P1_TRAIN_PATH)/*.jpg
 	-rm -rf $(P1_TEST_PATH)/*.jpg
 	-rm -f $(P1_TMP_FILES)
+	-rm -f $(WEKA_FILES)
 
 clean_p2:
 	-rm -rf $(P2_TRAIN_PATH)/*.jpg
 	-rm -rf $(P2_TEST_PATH)/*.jpg
 	-rm -f $(P2_TMP_FILES)
+	-rm -f $(WEKA_FILES)
+
