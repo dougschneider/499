@@ -2,7 +2,7 @@ import sys
 from scipy import ndimage
 import os
 
-def outputFeatures(fileName, folder, includeClass=True):
+def _p1_outputFeatures(fileName, folder, includeClass=True):
     first = True
     with open(fileName, "w+") as f:
         for _, _, filenames in os.walk(folder):
@@ -33,7 +33,7 @@ def outputFeatures(fileName, folder, includeClass=True):
                     s += "\n"
                     f.write(s)
 
-def outputClass(fileName, folder):
+def _p1_outputClass(fileName, folder):
     with open(fileName, "w+") as f:
         for _, _, filenames in os.walk(folder):
             for filename in filenames:
@@ -60,11 +60,24 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         p = int(sys.argv[1])
         data_dir = sys.argv[-1]
+        
+        # monkey-patch in the correct functions
+        if p == 1:
+            outputFeatures = _p1_outputFeatures
+            outputClass = _p1_outputClass
+            transform = lambda path: None
+        elif p == 2:
+            pass
+        else:
+            raise Exception(str(p) + " is not a valid value as the first argument.")
+
         if sys.argv[2] == "--train":
+            transform(data_dir)
             outputFeatures("p{}train.arff".format(str(p)), data_dir)
         elif sys.argv[2] == "--class":
             outputClass("p{}classes.out".format(str(p)), data_dir)
         elif sys.argv[2] == "--test":
+            transform(data_dir)
             outputFeatures("p{}test.arff".format(str(p)), data_dir, includeClass=False)
         else:
             raise Exception(sys.argv[2] + " is not a valid argument.")
