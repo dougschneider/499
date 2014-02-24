@@ -94,9 +94,7 @@ def _p2_outputClass(fileName, folder):
 
 
 def _p2_transform(folder):
-    for _, _, filenames in os.walk(outputFeatures = _p1_outputFeatures
-            outputClass = _p1_outputClass
-            transform = lambda path: None):
+    for _, _, filenames in os.walk(folder):
         for filename in filenames:
             if filename.endswith(".jpg"):
                 full_name = folder + "/" + filename
