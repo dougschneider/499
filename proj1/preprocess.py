@@ -1,6 +1,7 @@
 import sys
 from scipy import ndimage
 import os
+from PIL import Image, ImageFilter
 
 def _p1_outputFeatures(fileName, folder, includeClass=True):
     first = True
