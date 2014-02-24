@@ -13,6 +13,13 @@ using the Makefile. Parameters for splitting and the data
 paths can be configured in the Makefile.
 
 
+REQUIREMENTS
+============
+Python requirements listed in requirements.pip.txt
+Pillow image library is used, and must be compiled with jpg support (requires libjpeg)
+Requires java and javac
+
+
 PART 1
 ======
 
@@ -20,19 +27,16 @@ Idenfity whether a plate is class ALP (Alberta License Plate) or NON-ALP.
 
 
 1. Image data should be in part-1-data/
-2. run `make part1`
-2. run python p1preproc.py --train
-3. Place the images to be classified in a folder called predicting-data
-4. run python p1preproc.py
-5. run python p1preproc.py --class
-6. run the java project P1BuildModel
-7. run the java project P1Classify, the classifications are output
-8. the output from 7 can be compared to the output from 
-   5 (classes.out) for correctness
+2. Run `make part1`
+3. Training and test accuracies are shown.
 
 
 PART 2
 ======
 
 Identify whether an ALP is class A (ends in 4), class B (ends in 5), or class OTHER.
+
+1. Image data should be in part-2-data/
+2. Run `make part2`
+3. Training and test accuracies are shown.
 
