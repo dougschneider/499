@@ -106,16 +106,15 @@ p2_classify: Classifier
 	java -classpath $(CLASSPATH) $+ $(P2_TEST_ARFF)  $(P2_MODEL) > $(P2_TEST_OUT)
 
 clean: clean_p1 clean_p2
+	-rm -f $(WEKA_FILES)
 
 clean_p1:
 	-rm -rf $(P1_TRAIN_PATH)/*.jpg
 	-rm -rf $(P1_TEST_PATH)/*.jpg
 	-rm -f $(P1_TMP_FILES)
-	-rm -f $(WEKA_FILES)
 
 clean_p2:
 	-rm -rf $(P2_TRAIN_PATH)/*.jpg
 	-rm -rf $(P2_TEST_PATH)/*.jpg
 	-rm -f $(P2_TMP_FILES)
-	-rm -f $(WEKA_FILES)
 
