@@ -18,15 +18,17 @@ def _p1_outputFeatures(fileName, folder, includeClass=True):
                             num += 1
                         s += str(pixel) + ","
                     if title != "@RELATION plate\n\n":
-                        title += "@ATTRIBUTE class {ALP, NON-ALP}\n\n"
+                        title += "@ATTRIBUTE class {ALP, NON, NON-ALP}\n\n"
                         title += "@DATA\n"
                         f.write(title)
                         title = ""
                         first = False
                     last = filename.split("/")[-1]
                     if includeClass:
-                        if last[0] == "n" or last[0] == "N":
+                        if last[0] == "n":
                             s += "NON-ALP"
+                        elif last[0] == "N":
+                            s += "NON"
                         else:
                             s += "ALP"
                     else:
@@ -41,8 +43,10 @@ def _p1_outputClass(fileName, folder):
             for filename in filenames:
                 if filename.endswith(".jpg"):
                     last = filename.split("/")[-1]
-                    if last[0] == "n" or last[0] == "N":
-                        f.write("NON-ALP\n");
+                    if last[0] == "n":
+                        f.write("NON-ALP\n")
+                    elif last[0] == "N":
+                        f.write("NON\n")
                     else:
                         f.write("ALP\n")
 
