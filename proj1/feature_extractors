@@ -1,1 +1,15 @@
 python preprocess.py 1 --train TRAIN_PATH && python preprocess.py 1 --test TEST_PATH
+java -jar JFeatureLib.jar -D CEDD -c classA -d p24-test -o 4-1.csv
+java -jar JFeatureLib.jar -D CEDD -c classA -d p25-test -o 5-1.csv
+java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-test -o o-1.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p24-test -o 4-2.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p25-test -o 5-2.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-test -o o-2.csv
+python createARFF.py --test
+java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
+java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
+java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-train -o o-1.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-2.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-2.csv
+java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-train -o o-2.csv
+python createARFF.py

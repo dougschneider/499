@@ -114,6 +114,7 @@ def _p2_transform(folder):
             if filename.endswith(".jpg"):
                 full_name = folder + "/" + filename
                 image = Image.open(full_name)
+                image = image.crop((36, 0, 72, 43))
                 image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
                 #image = image.convert('L')
                 image.save(full_name);
@@ -135,7 +136,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         p = int(sys.argv[1])
         data_dir = sys.argv[-1]
-        
+
         # monkey-patch in the correct functions
         if p == 1:
             outputFeatures = _p1_outputFeatures
