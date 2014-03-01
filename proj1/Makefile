@@ -87,11 +87,15 @@ split_p2: $(SPLITTER)
 	python $+ $(TRAIN_SPLIT) $(P2_DATA_PATH) $(P2_TRAIN_PATH) $(P2_TEST_PATH) $(P2_A) $(P2_B) $(P2_OTHER)
 
 preprocess_p1: $(PREPROCESSOR)
+	python $+ 1 --preprocess $(P1_TRAIN_PATH)
 	python $+ 1 --train $(P1_TRAIN_PATH)
+	python $+ 1 --preprocess $(P1_TEST_PATH)
 	python $+ 1 --test $(P1_TEST_PATH)
 
 preprocess_p2: $(PREPROCESSOR)
+	python $+ 2 --preprocess $(P2_TRAIN_PATH)
 	python $+ 2 --train $(P2_TRAIN_PATH)
+	python $+ 2 --preprocess $(P2_TEST_PATH)
 	python $+ 2 --test $(P2_TEST_PATH)
 
 part1_nfold: clean split_p1 Classifier Learner

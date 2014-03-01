@@ -150,11 +150,9 @@ if __name__ == "__main__":
             raise Exception(str(p) + " is not a valid value as the first argument.")
 
         if sys.argv[2] == "--train":
-            transform(data_dir)
             outputClass("p{}_train_classes.out".format(str(p)), data_dir)
             outputFeatures("p{}train.arff".format(str(p)), data_dir)
         elif sys.argv[2] == "--test":
-            transform(data_dir)
             outputClass("p{}_test_classes.out".format(str(p)), data_dir)
             outputFeatures("p{}test.arff".format(str(p)), data_dir, includeClass=False)
         elif sys.argv[2] == "--preprocess":
