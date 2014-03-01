@@ -71,7 +71,7 @@ def clear_dir(folder):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         try:
-            if os.path.isfile(file_path):
+            if os.path.isfile(file_path) and the_file != '.gitkeep':
                 os.unlink(file_path)
         except Exception, e:
             print e
@@ -146,12 +146,13 @@ def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
                 feature_cmd = feature_cmd.replace("TEST_PATH", test_dir)
                 feature_cmd = feature_cmd.replace("TRAIN_PATH", train_dir)
                 print "Feature Extractor: " + feature_cmd
-                _ = subprocess.Popen(
+                output = subprocess.Popen(
                         [feature_cmd],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
+		print output
 
                 # run learning
                 print "Running Learner...."
@@ -161,12 +162,12 @@ def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
                         "CMD_LINE_MODEL={}"\
                         .format("foo", "bar")
                 output = subprocess.Popen(
-                        ["make p1_learn"],
+                        ["make p2_learn"],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-                
+                print output
                 # run test
                 print "Classifying Test Data...."
                 output = subprocess.Popen(
@@ -175,7 +176,7 @@ def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
                         stderr = subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-
+		print output
                 match = re.search(r'\d+\.\d+', output)
                 accuracy = float(match.group(0))
                 print "Holdout Fold: {}\t, Accuracy: {}".format(k, accuracy)

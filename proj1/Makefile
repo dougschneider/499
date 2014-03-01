@@ -80,6 +80,12 @@ part1_train_acc:
 part1_test_acc:
 	python $(ACCURACY) Test $(P1_TEST_CLASSES) $(P1_TEST_OUT)
 
+part2_train_acc:
+	python $(ACCURACY) Train $(P2_TRAIN_CLASSES) $(P2_TRAIN_OUT)
+
+part2_test_acc:
+	python $(ACCURACY) Test $(P2_TEST_CLASSES) $(P2_TEST_OUT)
+
 split_p1: $(SPLITTER)
 	python $+ $(TRAIN_SPLIT) $(P1_DATA_PATH) $(P1_TRAIN_PATH) $(P1_TEST_PATH) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
 
@@ -99,7 +105,36 @@ preprocess_p2: $(PREPROCESSOR)
 	python $+ 2 --test $(P2_TEST_PATH)
 
 part1_nfold: clean split_p1 Classifier Learner
-	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors 'make p1_classify && make part1_test_acc' part-1-train/ cv_train/ cv_test/ $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors_p1 'make p1_classify && make part1_test_acc' part-1-train/ cv_train/ cv_test/ $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+
+part2_nfold: clean split_p2 Classifier Learner
+	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors_p2 'make p2_classify && make part2_test_acc' part-2-train/ cv_train/ cv_test/ $(P2_A) $(P2_B) $(P2_OTHER)
+
+part2_cp_files_for_extraction: clean_part2_tmp
+	python split_classes_into_dirs.py cv_train/ $(P2_A) p24-train $(P2_B) p25-train $(P2_OTHER) p2o-train
+	python split_classes_into_dirs.py cv_test/ $(P2_A) p24-test $(P2_B) p25-test $(P2_OTHER) p2o-test
+
+# various feature extraction methods
+part2_feat_1:
+	make part2_cp_files_for_extraction
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-test -o 4-1.csv
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-test -o 5-1.csv
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-test -o o-1.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-test -o 4-2.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-test -o 5-2.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-test -o o-2.csv
+	python createARFF.py --test
+	mv out.arff p2test.arff
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
+	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-train -o o-1.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-2.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-2.csv
+	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-train -o o-2.csv
+	python createARFF.py
+	mv out.arff p2train.arff
+	python $(PREPROCESSOR) 2 --classes cv_train/
+	python $(PREPROCESSOR) 2 --classes cv_test/
 
 Learner: P1BuildModel/src/Learner.java
 	javac -d ./ -classpath $(CLASSPATH) $+
@@ -124,7 +159,7 @@ p2_classify: Classifier
 	java -classpath $(CLASSPATH) $+ $(P2_TRAIN_ARFF)  $(P2_MODEL) > $(P2_TRAIN_OUT)
 	java -classpath $(CLASSPATH) $+ $(P2_TEST_ARFF)  $(P2_MODEL) > $(P2_TEST_OUT)
 
-clean: clean_p1 clean_p2
+clean: clean_p1 clean_p2 clean_part2_tmp
 	-rm -f $(WEKA_FILES)
 	-rm -rf $(CV_TRAIN_PATH)/*.jpg
 	-rm -rf $(CV_TEST_PATH)/*.jpg
@@ -138,4 +173,14 @@ clean_p2:
 	-rm -rf $(P2_TRAIN_PATH)/*.jpg
 	-rm -rf $(P2_TEST_PATH)/*.jpg
 	-rm -f $(P2_TMP_FILES)
+
+clean_part2_tmp:
+	-rm -rf p24-test/*.jpg
+	-rm -rf p25-test/*.jpg
+	-rm -rf p2o-test/*.jpg
+	-rm -rf p24-train/*.jpg
+	-rm -rf p25-train/*.jpg
+	-rm -rf p2o-train/*.jpg
+	-rm -f *.csv
+	-rm -f jFeatureLib.log
 

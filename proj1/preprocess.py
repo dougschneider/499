@@ -129,6 +129,7 @@ if __name__ == "__main__":
             "First parameter is required. Give 1 for part 1, 2 for part 2.\n"\
             "Use --train option to generate arff file with training data\n"\
             "Use --test option to generate arff file with test data (no class labels)\n"\
+            "Use --classes option to generate class file\n"\
             "Use --preprocess option to only run preprocessing\n".format(sys.argv[0])
 
     p = None
@@ -157,6 +158,10 @@ if __name__ == "__main__":
             outputFeatures("p{}test.arff".format(str(p)), data_dir, includeClass=False)
         elif sys.argv[2] == "--preprocess":
             transform(data_dir)
+        elif sys.argv[2] == "--classes":
+            filename = "p{}_{}_classes.out".format(str(p), data_dir.replace('/', '').split('_')[-1])
+            print filename
+            outputClass(filename, data_dir)
         else:
             raise Exception(sys.argv[2] + " is not a valid argument.")
     else:
