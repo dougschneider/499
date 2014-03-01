@@ -85,7 +85,7 @@ def cp_files_to_dir(files, src, dst):
                 )
 
 
-def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
+def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
         src_dir, train_dir, test_dir, classes):
     """
     Do n-fold cross-validation to determine the best combination of all
@@ -156,13 +156,8 @@ def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
 
                 # run learning
                 print "Running Learner...."
-                learner_cmd = \
-                        "make cmd_line_learn "\
-                        "CMD_LINE_ARFF={} "\
-                        "CMD_LINE_MODEL={}"\
-                        .format("foo", "bar")
                 output = subprocess.Popen(
-                        ["make p2_learn"],
+                        ["make p{}_learn".format(p)],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
@@ -196,7 +191,7 @@ def do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback,
     # sort out the top accuracy
     averages.sort(key=lambda tup: tup[2])
 
-    return (averages[0][0], averages[0][1])
+    return (averages[-1][0], averages[-1][1], averages[-1][2])
 
 
 if __name__ == "__main__":
@@ -205,7 +200,8 @@ if __name__ == "__main__":
     """
     argv = sys.argv[1:]
     usage = "Usage:\n"\
-            "{} n preprocess_methods arff_generator_methods accuracy_callback src_dir train_dir test_dir class_1_label class_2_label ... class_n_label\n\n"\
+            "{} p n preprocess_methods arff_generator_methods accuracy_callback src_dir train_dir test_dir class_1_label class_2_label ... class_n_label\n\n"\
+            "p: part 1 or 2\n"\
             "n: number of folds\n"\
             "preprocess_methods: file containing list of command line calls to do any image preprocessing you'd like to try.\n"\
             "arff_generator_methods: file containing list of command line calls to generate arff files.\n"\
@@ -229,18 +225,19 @@ if __name__ == "__main__":
             sys.exit()
     
     # pull arguments from argv
-    n = int(argv[0])
-    preprocess_file = argv[1]
-    arff_generator_file = argv[2]
-    accuracy_callback = argv[3].replace("'","")
-    src_dir = argv[4]
-    train_dir = argv[5]
-    test_dir = argv[6]
-    classes = argv[7:]
+    p = int(argv[0])
+    n = int(argv[1])
+    preprocess_file = argv[2]
+    arff_generator_file = argv[3]
+    accuracy_callback = argv[4].replace("'","")
+    src_dir = argv[5]
+    train_dir = argv[6]
+    test_dir = argv[7]
+    classes = argv[8:]
 
-    best = do_n_fold(n, preprocess_file, arff_generator_file, accuracy_callback, src_dir, train_dir, test_dir, classes)
+    best = do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback, src_dir, train_dir, test_dir, classes)
 
-    print "Best Combo:"
+    print "Best Combo (with {} accuracy)".format(best[2])
     print "Preprocessor: " + best[0]
     print "Feature Extraction: " + best[1]
 

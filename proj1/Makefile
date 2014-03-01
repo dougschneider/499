@@ -105,10 +105,10 @@ preprocess_p2: $(PREPROCESSOR)
 	python $+ 2 --test $(P2_TEST_PATH)
 
 part1_nfold: clean split_p1 Classifier Learner
-	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors_p1 'make p1_classify && make part1_test_acc' part-1-train/ cv_train/ cv_test/ $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+	python nfoldcv.py 1 $(N_FOLDS) preprocessors feature_extractors_p1 'make p1_classify && make part1_test_acc' part-1-train/ cv_train/ cv_test/ $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
 
 part2_nfold: clean split_p2 Classifier Learner
-	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors_p2 'make p2_classify && make part2_test_acc' part-2-train/ cv_train/ cv_test/ $(P2_A) $(P2_B) $(P2_OTHER)
+	python nfoldcv.py 2 $(N_FOLDS) preprocessors feature_extractors_p2 'make p2_classify && make part2_test_acc' part-2-train/ cv_train/ cv_test/ $(P2_A) $(P2_B) $(P2_OTHER)
 
 part2_cp_files_for_extraction: clean_part2_tmp
 	python split_classes_into_dirs.py cv_train/ $(P2_A) p24-train $(P2_B) p25-train $(P2_OTHER) p2o-train
