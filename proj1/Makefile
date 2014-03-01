@@ -12,6 +12,10 @@ P2_TRAIN_PATH = part-2-train
 P1_TEST_PATH = part-1-test
 P2_TEST_PATH = part-2-test
 
+# preprocessor_selection_path
+CV_TEST_PATH = cv_test
+CV_TRAIN_PATH = cv_train
+
 # classifier output filenames
 P1_TRAIN_CLASSES = p1_train_classes.out
 P2_TRAIN_CLASSES = p2_train_classes.out
@@ -24,6 +28,7 @@ P2_TEST_OUT = p2_test_classes_predicted.out
 
 # train/test split EG for 80-20 split use 80
 TRAIN_SPLIT = 80
+N_FOLDS = 5
 
 # regular expressions to match classes for P1
 P1_NON_ALP = '^n\d+.*'
@@ -63,13 +68,17 @@ CLASSPATH = .:../weka-3-6-10/weka.jar
 # run part 1 and part 2
 all: part1 part2
 
-part1: clean_p1 split_p1 preprocess_p1 p1_learn p1_classify
-	python $(ACCURACY) Train $(P1_TRAIN_CLASSES) $(P1_TRAIN_OUT)
-	python $(ACCURACY) Test $(P1_TEST_CLASSES) $(P1_TEST_OUT)
+part1: clean_p1 split_p1 preprocess_p1 p1_learn p1_classify part1_train_acc part1_test_acc
 
 part2: clean_p2 split_p2 preprocess_p2 p2_learn p2_classify
 	python $(ACCURACY) Train $(P2_TRAIN_CLASSES) $(P2_TRAIN_OUT)
 	python $(ACCURACY) Test $(P2_TEST_CLASSES) $(P2_TEST_OUT)
+
+part1_train_acc:
+	python $(ACCURACY) Train $(P1_TRAIN_CLASSES) $(P1_TRAIN_OUT)
+
+part1_test_acc:
+	python $(ACCURACY) Test $(P1_TEST_CLASSES) $(P1_TEST_OUT)
 
 split_p1: $(SPLITTER)
 	python $+ $(TRAIN_SPLIT) $(P1_DATA_PATH) $(P1_TRAIN_PATH) $(P1_TEST_PATH) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
@@ -85,11 +94,17 @@ preprocess_p2: $(PREPROCESSOR)
 	python $+ 2 --train $(P2_TRAIN_PATH)
 	python $+ 2 --test $(P2_TEST_PATH)
 
+part1_nfold: clean split_p1 Classifier Learner
+	python nfoldcv.py $(N_FOLDS) preprocessors feature_extractors 'make p1_classify && make part1_test_acc' part-1-train/ cv_train/ cv_test/ $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+
 Learner: P1BuildModel/src/Learner.java
 	javac -d ./ -classpath $(CLASSPATH) $+
 
 Classifier: P1Classify/src/Classifier.java
 	javac -d ./ -classpath $(CLASSPATH) $+
+
+cmd_line_learn:
+	java -classpath $(CLASSPATH) $+ $(CMD_LINE_ARFF) $(CMD_LINE_MODEL)
 
 p1_learn: Learner
 	java -classpath $(CLASSPATH) $+ $(P1_TRAIN_ARFF) $(P1_MODEL)
@@ -107,6 +122,8 @@ p2_classify: Classifier
 
 clean: clean_p1 clean_p2
 	-rm -f $(WEKA_FILES)
+	-rm -rf $(CV_TRAIN_PATH)/*.jpg
+	-rm -rf $(CV_TEST_PATH)/*.jpg
 
 clean_p1:
 	-rm -rf $(P1_TRAIN_PATH)/*.jpg
