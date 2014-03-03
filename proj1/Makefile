@@ -123,7 +123,7 @@ part2_feat_1:
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
@@ -131,7 +131,7 @@ part2_feat_1:
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -144,7 +144,7 @@ part2_feat_2:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
@@ -152,7 +152,7 @@ part2_feat_2:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -165,7 +165,7 @@ part2_feat_3:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-1.csv
@@ -173,7 +173,7 @@ part2_feat_3:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -186,7 +186,7 @@ part2_feat_4:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-1.csv
@@ -194,7 +194,7 @@ part2_feat_4:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -207,7 +207,7 @@ part2_feat_5:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D JCD -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p25-train -o 5-1.csv
@@ -215,7 +215,7 @@ part2_feat_5:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -228,7 +228,7 @@ part2_feat_6:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-1.csv
@@ -236,7 +236,7 @@ part2_feat_6:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
@@ -249,7 +249,7 @@ part2_feat_7:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p24-test -o 4-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p25-test -o 5-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-test -o o-2.csv
-	python createARFF.py --test
+	python createARFF.py -n 2 --test
 	mv out.arff p2test.arff
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
 	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
@@ -257,7 +257,7 @@ part2_feat_7:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-train -o o-2.csv
-	python createARFF.py
+	python createARFF.py -n 2
 	mv out.arff p2train.arff
 	python $(PREPROCESSOR) 2 --classes cv_train/
 	python $(PREPROCESSOR) 2 --classes cv_test/
