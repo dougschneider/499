@@ -223,9 +223,9 @@ split_p2: $(SPLITTER)
 	python $+ $(TRAIN_SPLIT) $(P2_DATA_PATH) $(P2_TRAIN_PATH) $(P2_TEST_PATH) $(P2_A) $(P2_B) $(P2_OTHER)
 
 # copy files from $(P2_TRAIN_PATH) and $(P2_TEST_PATH) to temporary directores
-part2_cp_files_for_extraction: $(SPLIT_CLASSES) clean_part2_intermediate
-	python $(SPLIT_CLASSES) $(CV_TRAIN_PATH)/ $(P2_A) $(P24_TRAIN) $(P2_B) $(P25_TRAIN) $(P2_OTHER) $(P2O_TRAIN)
-	python $(SPLIT_CLASSES) $(CV_TEST_PATH)/ $(P2_A) $(P24_TEST) $(P2_B) $(P25_TEST) $(P2_OTHER) $(P2O_TEST)
+part2_cp_files_for_extraction: clean_part2_intermediate
+	python $(SPLIT_CLASSES) $(EXTRACTION_TRAIN_PATH)/ $(P2_A) $(P24_TRAIN) $(P2_B) $(P25_TRAIN) $(P2_OTHER) $(P2O_TRAIN)
+	python $(SPLIT_CLASSES) $(EXTRACTION_TEST_PATH)/ $(P2_A) $(P24_TEST) $(P2_B) $(P25_TEST) $(P2_OTHER) $(P2O_TEST)
 
 $(LEARNER_CLASS).class: $(LEARNER_JAVA)
 	javac -d ./ -classpath $(CLASSPATH) $+
@@ -363,47 +363,61 @@ part1_feat_0_base:
 ################################################################################
 
 # use each pixel RGB as a feature
-part2_feat_0: $(PIXEL_ARFF)
-	python $+ 2 --include-labels $(P2_TRAIN_ARFF) $(CV_TRAIN_PATH)/
-	python $+ 2 $(P2_TEST_ARFF) $(CV_TEST_PATH)/
+part2_feat_0: FEATURE_TRAIN_PATH = $(CV_TRAIN_PATH)/
+part2_feat_0: FEATURE_TEST_PATH = $(CV_TEST_PATH)/
+part2_feat_0: part2_feat_0_base
 
-part2_feat_1:
-	make part2_cp_files_for_extraction
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-test -o 4-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-test -o 5-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-test -o o-1.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-test -o 4-2.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-test -o 5-2.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-test -o o-2.csv
-	python createARFF.py -n 2 --test
-	mv out.arff p2test.arff
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-train -o o-1.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p24-train -o 4-2.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p25-train -o 5-2.csv
-	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-train -o o-2.csv
-	python createARFF.py -n 2
-	mv out.arff p2train.arff
+part2_feat_0_test: FEATURE_TRAIN_PATH = $(P2_TRAIN_PATH)/
+part2_feat_0_test: FEATURE_TEST_PATH = $(P2_TEST_PATH)/
+part2_feat_0_test: part2_feat_0_base
 
-part2_feat_2:
-	make part2_cp_files_for_extraction
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-test -o 4-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-test -o 5-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-test -o o-1.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
+part2_feat_0_base:
+	python $(PIXEL_ARFF) 2 --include-labels $(P2_TRAIN_ARFF) $(FEATURE_TRAIN_PATH)
+	python $(PIXEL_ARFF) 2 $(P1_TEST_ARFF) $(FEATURE_TEST_PATH)
+
+part2_feat_1: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_1: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_1: part2_feat_1_base
+
+part2_feat_1_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_1_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_1_test: part2_feat_1_base
+
+part2_feat_1_base: part2_cp_files_for_extraction
+part2_feat_1_base: EX1 = CEDD
+part2_feat_1_base: EX2 = PHOG
+part2_feat_1_base: part2_2extractors_base
+
+part2_feat_2: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_2: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_2: part2_feat_2_base
+
+part2_feat_2_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_2_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_2_test: part2_feat_2_base
+
+part2_feat_2_base: part2_cp_files_for_extraction
+part2_feat_2_base: EX1 = CEDD
+part2_feat_2_base: EX2 = FCTH
+part2_feat_2_base: part2_2extractors_base
+
+part2_2extractors_base:
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-test -o 4-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-test -o 5-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p2o-test -o o-1.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-test -o 4-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-test -o 5-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-test -o o-2.csv
 	python createARFF.py -n 2 --test
-	mv out.arff p2test.arff
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p24-train -o 4-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p25-train -o 5-1.csv
-	java -jar JFeatureLib.jar -D CEDD -c classA -d p2o-train -o o-1.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
+	mv out.arff $(P2_TEST_ARFF)
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-train -o 4-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-train -o 5-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p2o-train -o o-1.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-train -o 4-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-train -o 5-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-train -o o-2.csv
 	python createARFF.py -n 2
-	mv out.arff p2train.arff
+	mv out.arff $(P2_TRAIN_ARFF)
 
 part2_feat_3:
 	make part2_cp_files_for_extraction
