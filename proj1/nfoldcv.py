@@ -263,7 +263,7 @@ if __name__ == "__main__":
     # write selected combo to file
     with open(chosen_preproc, 'w') as f:
         cmd = best[0].split(' ')
-        cmd[1] = 'part{}_'.format(p) + cmd[1] + 'test'
+        cmd[1] = 'part{}_'.format(p) + cmd[1] + '_test'
         cmd = cmd[1]
         f.write(cmd)
     with open(chosen_feature, 'w') as f:
