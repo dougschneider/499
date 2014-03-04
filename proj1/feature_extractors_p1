@@ -1,2 +1,2 @@
-python preprocess.py 1 --train TRAIN_PATH && python preprocess.py 1 --test TEST_PATH
+make part1_feat_0
 
