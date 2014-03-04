@@ -45,9 +45,9 @@ CV_DATA_PATH = cv_data
 P24_TEST = p24-test
 P25_TEST = p25-test
 P2O_TEST = p2o-test
-P24_TEST = p24-train
-P25_TEST = p25-train
-P2O_TEST = p2o-train
+P24_TRAIN = p24-train
+P25_TRAIN = p25-train
+P2O_TRAIN = p2o-train
 
 
 ################################################################################
@@ -163,8 +163,8 @@ part1_cv_class_label_files: clean_p1_out
 	python $(CLASS_FILE_GEN) 1 $(P1_TEST_CLASSES) $(CV_TEST_PATH)
 
 part2_cv_class_label_files: clean_p2_out
-	python $(CLASS_FILE_GEN) 2 $(P2_TRAIN_CLASSES) $(CV_TRAIN)
-	python $(CLASS_FILE_GEN) 2 $(P2_TREST_CLASSES) $(CV_TEST)
+	python $(CLASS_FILE_GEN) 2 $(P2_TRAIN_CLASSES) $(CV_TRAIN_PATH)
+	python $(CLASS_FILE_GEN) 2 $(P2_TREST_CLASSES) $(CV_TEST_PATH)
 
 # print training accuracies
 part1_train_acc:
@@ -189,8 +189,8 @@ split_p2: $(SPLITTER)
 
 # copy files from $(P2_TRAIN_PATH) and $(P2_TEST_PATH) to temporary directores
 part2_cp_files_for_extraction: $(SPLIT_CLASSES) clean_part2_intermediate
-	python $+ $(CV_TRAIN_PATH)/ $(P2_A) $(P24_TRAIN) $(P2_B) $(P25_TRAIN) $(P2_OTHER) $(P2O_TRAIN)
-	python $+ $(CV_TEST_PATH)/ $(P2_A) $(P24_TEST) $(P2_B) $(P25_TEST) $(P2_OTHER) $(P2O_TEST)
+	python $(SPLIT_CLASSES) $(CV_TRAIN_PATH)/ $(P2_A) $(P24_TRAIN) $(P2_B) $(P25_TRAIN) $(P2_OTHER) $(P2O_TRAIN)
+	python $(SPLIT_CLASSES) $(CV_TEST_PATH)/ $(P2_A) $(P24_TEST) $(P2_B) $(P25_TEST) $(P2_OTHER) $(P2O_TEST)
 
 $(LEARNER_CLASS).class: $(LEARNER_JAVA)
 	javac -d ./ -classpath $(CLASSPATH) $+
