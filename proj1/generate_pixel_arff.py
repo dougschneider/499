@@ -84,9 +84,9 @@ if __name__ == "__main__":
     p = -1
 
     if len(sys.argv) > 1:
-        p = sys.argv[1]
+        p = int(sys.argv[1])
         include_classes = True if sys.argv[2] == '--include-labels' else False
-	    output_filename = sys.argv[-2]
+        output_file_name = sys.argv[-2]
         data_dir = sys.argv[-1]
 
         # monkey-patch in the correct functions
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         else:
             raise Exception(str(p) + " is not a valid value as the first argument.")
 
-        outputFeaturs(output_file_name, data_dir, includeClass=include_classes)
+        outputFeatures(output_file_name, data_dir, includeClass=include_classes)
     else:
         print usage
         sys.exit(2)

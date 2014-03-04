@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         p = int(sys.argv[1])
-        output_filename = sys.argv[-2]
+        output_file_name = sys.argv[-2]
         data_dir = sys.argv[-1]
 
         # monkey-patch in the correct functions

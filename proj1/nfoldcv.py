@@ -85,8 +85,8 @@ def cp_files_to_dir(files, src, dst):
                 )
 
 
-def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
-        src_dir, train_dir, test_dir, classes):
+def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
+        accuracy_cmd, src_dir, data_dir, train_dir, test_dir, classes):
     """
     Do n-fold cross-validation to determine the best combination of all
     preprocessing methods in preprocess_file and all the feature extraction
@@ -105,12 +105,21 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
     # hold out the first fold first, then the second, and so on
     holdout_fold = 0
 
-    # split data into n folds:
-    folds = make_folds(n, src_dir, classes)
+    # get list of all files in the src_dir
+    all_files = get_instances_of_class('.*\.jpg', src_dir)
 
     for i in xrange(len(preproc_commands)):
+        # clear out the temporary data directory
+        clear_dir(data_dir)
+        
+        # copy all the data into the tmp directory
+        cp_files_to_dir(all_files, src_dir, data_dir)
+
+        # split data into n folds:
+        folds = make_folds(n, data_dir, classes)
+
+        # apply the image preprocessor to the data
         preproc_cmd = preproc_commands[i]
-        preproc_cmd = preproc_cmd.replace('PATH', src_dir)
         print "Preprocessor: " + preproc_cmd
 
         # run preprocessor
@@ -134,13 +143,13 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
                 # put holdout fold in test dir
                 print "Placing fold {} files in test dir..."\
                         .format(holdout_fold)
-                cp_files_to_dir(folds[holdout_fold], src_dir, test_dir)
+                cp_files_to_dir(folds[holdout_fold], data_dir, test_dir)
                 
                 # put other folds in training dir
                 for f in xrange(len(folds)):
                     if f == holdout_fold:
                         continue
-                    cp_files_to_dir(folds[f], src_dir, train_dir)
+                    cp_files_to_dir(folds[f], data_dir, train_dir)
                 
                 # run feature extractor
                 #feature_cmd = feature_cmd.replace("TEST_PATH", test_dir)
@@ -152,12 +161,12 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
                         stderr=subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-		print output
+                print output
 
                 # run learning
                 print "Running Learner...."
                 output = subprocess.Popen(
-                        ["make p{}_learn".format(p)],
+                        [learner_cmd],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
@@ -166,12 +175,12 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
                 # run test
                 print "Classifying Test Data...."
                 output = subprocess.Popen(
-                        [accuracy_callback],
+                        [accuracy_cmd],
                         stdout = subprocess.PIPE,
                         stderr = subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-		print output
+                print output
                 match = re.search(r'\d+\.\d+', output)
                 accuracy = float(match.group(0))
                 print "Holdout Fold: {}\t, Accuracy: {}".format(k, accuracy)
@@ -200,13 +209,15 @@ if __name__ == "__main__":
     """
     argv = sys.argv[1:]
     usage = "Usage:\n"\
-            "{} p n preprocess_methods arff_generator_methods accuracy_callback src_dir train_dir test_dir class_1_label class_2_label ... class_n_label\n\n"\
+            "{} p n preprocess_methods arff_generator_methods learner_cmd accuracy_cmd src_dir data_dir train_dir test_dir class_1_label class_2_label ... class_n_label\n\n"\
             "p: part 1 or 2\n"\
             "n: number of folds\n"\
             "preprocess_methods: file containing list of command line calls to do any image preprocessing you'd like to try.\n"\
             "arff_generator_methods: file containing list of command line calls to generate arff files.\n"\
-            "accuracy_callback: command that prints out testing accuracy.\n"\
+            "learner_cmd: command to perform learning.\n"\
+            "accuracy_cmd: command that prints out testing accuracy.\n"\
             "src_dir: the directory where the data files are located\n"\
+            "data_dir: a temporary directory where this program can store data files\n"\
             "train_dir: the directory where to place training examples\n"\
             "test_dir: the directory where to place testing examples\n"\
             "class_n_label: a regex for the files in the class, in single quites (EG '^n.*' or '^')\n".format(sys.argv[0])
@@ -229,13 +240,15 @@ if __name__ == "__main__":
     n = int(argv[1])
     preprocess_file = argv[2]
     arff_generator_file = argv[3]
-    accuracy_callback = argv[4].replace("'","")
-    src_dir = argv[5]
-    train_dir = argv[6]
-    test_dir = argv[7]
-    classes = argv[8:]
+    learner_cmd = argv[4].replace("'","")
+    accuracy_cmd = argv[5].replace("'","")
+    src_dir = argv[6]
+    data_dir = argv[7]
+    train_dir = argv[8]
+    test_dir = argv[9]
+    classes = argv[10:]
 
-    best = do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback, src_dir, train_dir, test_dir, classes)
+    best = do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd, accuracy_cmd, src_dir, data_dir, train_dir, test_dir, classes)
 
     print "Best Combo (with {} accuracy)".format(best[2])
     print "Preprocessor: " + best[0]
