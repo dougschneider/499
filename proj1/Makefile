@@ -159,6 +159,10 @@ part2_train: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLA
 	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_SELECTED_PREPROC) $(P2_SELECTED_FEATURE) $(P2_A) $(P2_B) $(P2_OTHER)
 
 part1_test:
+	TMP = `cat $(P1_SELECTED_PREPROC)`
+	make $(TMP)
+	TMP = `cat $(P1_SELECTED_FEATURE)`
+	make $(TMP)
 
 part2_test:
 
@@ -226,26 +230,93 @@ p2_classify: $(CLASSIFIER_CLASS).class
 # Image Preprocessor Make Commands
 ################################################################################
 
-preproc_0: $(PREPROCESSOR)
-	python $+ 0 $(CV_DATA_PATH)/
+preproc_0: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_0: T = 0
+preproc_0: preproc_base
 
-preproc_1: $(PREPROCESSOR)
-	python $+ 1 $(CV_DATA_PATH)/
+part1_preproc_0_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_0_test: T = 0
+part1_preproc_0_test: preproc_base
 
-preproc_2: $(PREPROCESSOR)
-	python $+ 2 $(CV_DATA_PATH)/
+part2_preproc_0_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_0_test: T = 0
+part2_preproc_0_test: preproc_base
 
-preproc_3: $(PREPROCESSOR)
-	python $+ 3 $(CV_DATA_PATH)/
+preproc_1: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_1: T = 1
+preproc_1: preproc_base
 
-preproc_4: $(PREPROCESSOR)
-	python $+ 4 $(CV_DATA_PATH)/
+part1_preproc_1_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_1_test: T = 1
+part1_preproc_1_test: preproc_base
 
-preproc_5: $(PREPROCESSOR)
-	python $+ 5 $(CV_DATA_PATH)/
+part2_preproc_1_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_1_test: T = 1
+part2_preproc_1_test: preproc_base
 
-preproc_6: $(PREPROCESSOR)
-	python $+ 6 $(CV_DATA_PATH)/
+preproc_2: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_2: T = 2
+preproc_2: preproc_base
+
+part1_preproc_2_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_2_test: T = 2
+part1_preproc_2_test: preproc_base
+
+part2_preproc_2_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_2_test: T = 2
+part2_preproc_2_test: preproc_base
+
+preproc_3: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_3: T = 3
+preproc_3: preproc_base
+
+part1_preproc_3_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_3_test: T = 3
+part1_preproc_3_test: preproc_base
+
+part2_preproc_3_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_3_test: T = 3
+part2_preproc_3_test: preproc_base
+
+preproc_4: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_4: T = 4
+preproc_4: preproc_base
+
+part1_preproc_4_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_4_test: T = 4
+part1_preproc_4_test: preproc_base
+
+part2_preproc_4_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_4_test: T = 4
+part2_preproc_4_test: preproc_base
+
+preproc_5: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_5: T = 5
+preproc_5: preproc_base
+
+part1_preproc_5_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_5_test: T = 5
+part1_preproc_5_test: preproc_base
+
+part2_preproc_5_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_5_test: T = 5
+part2_preproc_5_test: preproc_base
+
+preproc_6: PREPROC_PATH = $(CV_DATA_PATH)/
+preproc_6: T = 6
+preproc_6: preproc_base
+
+part1_preproc_6_test: PREPROC_PATH = $(P1_TEST_PATH)/
+part1_preproc_6_test: T = 6
+part1_preproc_6_test: preproc_base
+
+part2_preproc_6_test: PREPROC_PATH = $(P2_TEST_PATH)/
+part2_preproc_6_test: T = 6
+part2_preproc_6_test: preproc_base
+
+preproc_base:
+	python $(PREPROCESSOR) $(T) $(PREPROC_PATH)
+
 
 ################################################################################
 # Feature Extractors for Part 1
