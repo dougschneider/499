@@ -55,7 +55,7 @@ def get_instances_of_class(cls, folder):
 
 def get_command_list(filename):
     """
-    Extract list of lines from filename)
+    Extract list of lines from filename
     """
     commands = list()
     with open(filename, 'r') as fp:
@@ -92,8 +92,8 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
     preprocessing methods in preprocess_file and all the feature extraction
     methods in arff_generator_file.
 
-    Returns a touple containing the string for the best preprocessing method
-    and the string for the best arff generation method.
+    Returns a 3-touple containing the string for the best preprocessing method,
+    the string for the best arff generation method, and the test accuracy.
     """
     # get list of commands out of each file
     preproc_commands = get_command_list(preprocess_file)
@@ -143,8 +143,8 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, accuracy_callback,
                     cp_files_to_dir(folds[f], src_dir, train_dir)
                 
                 # run feature extractor
-                feature_cmd = feature_cmd.replace("TEST_PATH", test_dir)
-                feature_cmd = feature_cmd.replace("TRAIN_PATH", train_dir)
+                #feature_cmd = feature_cmd.replace("TEST_PATH", test_dir)
+                #feature_cmd = feature_cmd.replace("TRAIN_PATH", train_dir)
                 print "Feature Extractor: " + feature_cmd
                 output = subprocess.Popen(
                         [feature_cmd],
