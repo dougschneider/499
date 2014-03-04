@@ -13,10 +13,8 @@ imgs = dict()
 def handleCSVs(classID, className):
     for i in range(1, numFiles+1):
         with open("%s-%d.csv" % (classID, i), "r") as f:
-            first = True
             for line in f:
-                if first:
-                    first = False
+                if line == "\n" or line.startswith('class, filename,'):
                     continue
                 attrs = line.rstrip("\n").split(", ")
                 if i == 1:
