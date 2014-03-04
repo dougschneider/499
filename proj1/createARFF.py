@@ -14,6 +14,7 @@ def handleCSVs(classID, className):
     for i in range(1, numFiles+1):
         with open("%s-%d.csv" % (classID, i), "r") as f:
             for line in f:
+                # skip empty lines and the line with column headers
                 if line == "\n" or line.startswith('class, filename,'):
                     continue
                 attrs = line.rstrip("\n").split(", ")
