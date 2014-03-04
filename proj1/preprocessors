@@ -1,2 +1,3 @@
-python preprocess.py 1 --preprocess PATH
-python preprocess.py 2 --preprocess PATH
+make preproc_0
+make preproc_1
+make preproc_2
