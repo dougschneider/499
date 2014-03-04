@@ -158,13 +158,27 @@ part1_train: $(N_FOLD_CV) clean split_p1 $(LEARNER_CLASS).class $(CLASSIFIER_CLA
 part2_train: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
 	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_SELECTED_PREPROC) $(P2_SELECTED_FEATURE) $(P2_A) $(P2_B) $(P2_OTHER)
 
-part1_test:
-	TMP = `cat $(P1_SELECTED_PREPROC)`
+part1_test: TMP = `cat $(P1_SELECTED_PREPROC)`
+part1_test: TMP2 = `cat $(P1_SELECTED_FEATURE)`
+part1_test: clean_p1_model
 	make $(TMP)
-	TMP = `cat $(P1_SELECTED_FEATURE)`
-	make $(TMP)
+	make $(TMP2)
+	make part1_class_label_files
+	make p1_learn
+	make p1_classify
+	make part1_train_acc
+	make part1_test_acc
 
-part2_test:
+part2_test: TMP = `cat $(P2_SELECTED_PREPROC)`
+part2_test: TMP2 = `cat $(P2_SELECTED_FEATURE)`
+part2_test: clean_p2_model
+	make $(TMP)
+	make $(TMP2)
+	make part2_class_label_files
+	make p2_learn
+	make p2_classify
+	make part2_train_acc
+	make part2_test_acc
 
 ################################################################################
 # Helper Make Commands
@@ -178,6 +192,14 @@ part1_cv_class_label_files: clean_p1_out
 part2_cv_class_label_files: clean_p2_out
 	python $(CLASS_FILE_GEN) 2 $(P2_TRAIN_CLASSES) $(CV_TRAIN_PATH)
 	python $(CLASS_FILE_GEN) 2 $(P2_TEST_CLASSES) $(CV_TEST_PATH)
+
+part1_class_label_files: clean_p1_out
+	python $(CLASS_FILE_GEN) 1 $(P1_TRAIN_CLASSES) $(P1_TRAIN_PATH)
+	python $(CLASS_FILE_GEN) 1 $(P1_TEST_CLASSES) $(P1_TEST_PATH)
+
+part2_class_label_files: clean_p2_out
+	python $(CLASS_FILE_GEN) 2 $(P2_TRAIN_CLASSES) $(P2_TRAIN_PATH)
+	python $(CLASS_FILE_GEN) 2 $(P2_TEST_CLASSES) $(P2_TEST_PATH)
 
 # print training accuracies
 part1_train_acc:
@@ -323,9 +345,17 @@ preproc_base:
 ################################################################################
 
 # use each pixel RGB as a feature
-part1_feat_0: $(PIXEL_ARFF)
-	python $+ 1 --include-labels $(P1_TRAIN_ARFF) $(CV_TRAIN_PATH)/
-	python $+ 1 $(P1_TEST_ARFF) $(CV_TEST_PATH)/
+part1_feat_0: FEATURE_TRAIN_PATH = $(CV_TRAIN_PATH)/
+part1_feat_0: FEATURE_TEST_PATH = $(CV_TEST_PATH)/
+part1_feat_0: part1_feat_0_base
+
+part1_feat_0_test: FEATURE_TRAIN_PATH = $(P1_TRAIN_PATH)/
+part1_feat_0_test: FEATURE_TEST_PATH = $(P1_TEST_PATH)/
+part1_feat_0_test: part1_feat_0_base
+
+part1_feat_0_base:
+	python $(PIXEL_ARFF) 1 --include-labels $(P1_TRAIN_ARFF) $(FEATURE_TRAIN_PATH)
+	python $(PIXEL_ARFF) 1 $(P1_TEST_ARFF) $(FEATURE_TEST_PATH)
 
 
 ################################################################################
