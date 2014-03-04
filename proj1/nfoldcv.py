@@ -123,12 +123,13 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
         print "Preprocessor: " + preproc_cmd
 
         # run preprocessor
-        _ = subprocess.Popen(
+        output = subprocess.Popen(
                 [preproc_cmd],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 shell=True
             ).communicate()[0]
+        print output
 
         for j in xrange(len(feature_commands)):
             feature_cmd = feature_commands[j]
