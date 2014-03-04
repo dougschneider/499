@@ -212,18 +212,6 @@ p2_classify: $(CLASSIFIER_CLASS).class
 	java -classpath $(CLASSPATH) $(CLASSIFIER_CLASS) $(P2_TRAIN_ARFF)  $(P2_MODEL) > $(P2_TRAIN_OUT)
 	java -classpath $(CLASSPATH) $(CLASSIFIER_CLASS) $(P2_TEST_ARFF)  $(P2_MODEL) > $(P2_TEST_OUT)
 
-#preprocess_p1: $(PREPROCESSOR)
-#	python $+ 1 --preprocess $(P1_TRAIN_PATH)
-#	python $+ 1 --train $(P1_TRAIN_PATH)
-#	python $+ 1 --preprocess $(P1_TEST_PATH)
-#	python $+ 1 --test $(P1_TEST_PATH)
-
-#preprocess_p2: $(PREPROCESSOR)
-#	python $+ 2 --preprocess $(P2_TRAIN_PATH)
-#	python $+ 2 --train $(P2_TRAIN_PATH)
-#	python $+ 2 --preprocess $(P2_TEST_PATH)
-#	python $+ 2 --test $(P2_TEST_PATH)
-
 
 ################################################################################
 # Image Preprocessor Make Commands
