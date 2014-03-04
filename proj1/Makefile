@@ -64,6 +64,12 @@ P2_TRAIN_OUT = p2_train_classes_predicted.out
 P1_TEST_OUT = p1_test_classes_predicted.out
 P2_TEST_OUT = p2_test_classes_predicted.out
 
+# training will write selected preprocessor to these files
+P1_SELECTED_PREPROC = p1_selected_preproc
+P1_SELECTED_FEATURE = p1_selected_feature
+P2_SELECTED_PREPROC = p2_selected_preproc
+P2_SELECTED_FEATURE = p2_selected_feature
+
 # generated arff filenames
 P1_TRAIN_ARFF = p1train.arff
 P1_TEST_ARFF = p1test.arff
@@ -147,11 +153,14 @@ part1: part1_train part1_test
 part2: part2_train part2_test
 
 part1_train: $(N_FOLD_CV) clean split_p1 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
-	python nfoldcv.py 1 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P1_FEATURE_EXTRACTORS) 'make part1_cv_class_label_files && make p1_learn' 'make p1_classify && make part1_test_acc' $(P1_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+	python nfoldcv.py 1 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P1_FEATURE_EXTRACTORS) 'make part1_cv_class_label_files && make p1_learn' 'make p1_classify && make part1_test_acc' $(P1_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P1_SELECTED_PREPROC) $(P1_SELECTED_FEATURE) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
 
 part2_train: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
-	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_A) $(P2_B) $(P2_OTHER)
+	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_SELECTED_PREPROC) $(P2_SELECTED_FEATURE) $(P2_A) $(P2_B) $(P2_OTHER)
 
+part1_test:
+
+part2_test:
 
 ################################################################################
 # Helper Make Commands

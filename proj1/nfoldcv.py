@@ -210,7 +210,7 @@ if __name__ == "__main__":
     """
     argv = sys.argv[1:]
     usage = "Usage:\n"\
-            "{} p n preprocess_methods arff_generator_methods learner_cmd accuracy_cmd src_dir data_dir train_dir test_dir class_1_label class_2_label ... class_n_label\n\n"\
+            "{} p n preprocess_methods arff_generator_methods learner_cmd accuracy_cmd src_dir data_dir train_dir test_dir chosen_preproc chosen_feature class_1_label class_2_label ... class_n_label\n\n"\
             "p: part 1 or 2\n"\
             "n: number of folds\n"\
             "preprocess_methods: file containing list of command line calls to do any image preprocessing you'd like to try.\n"\
@@ -221,6 +221,8 @@ if __name__ == "__main__":
             "data_dir: a temporary directory where this program can store data files\n"\
             "train_dir: the directory where to place training examples\n"\
             "test_dir: the directory where to place testing examples\n"\
+            "chosen_preproc: file to which to print the command of the selected best preprocessor\n"\
+            "chosen_feature: file to which to print the command of the selected best feature extractor\n"\
             "class_n_label: a regex for the files in the class, in single quotes (EG '^n.*' or '^')\n".format(sys.argv[0])
 
     try:
@@ -247,11 +249,20 @@ if __name__ == "__main__":
     data_dir = argv[7]
     train_dir = argv[8]
     test_dir = argv[9]
-    classes = argv[10:]
+    chosen_preproc = argv[10]
+    chosen_feature = argv[11]
+    classes = argv[12:]
 
     best = do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd, accuracy_cmd, src_dir, data_dir, train_dir, test_dir, classes)
 
-    print "Best Combo (with {} accuracy)".format(best[2])
+    print "Best Combo (with {} average accuracy on training set accross {} folds)"\
+        .format(best[2], n)
     print "Preprocessor: " + best[0]
     print "Feature Extraction: " + best[1]
+
+    # write selected combo to file
+    with open(chosen_preproc, 'w') as f:
+        f.write(best[0])
+    with open(chosen_feature, 'w') as f:
+        f.write(best[1])
 
