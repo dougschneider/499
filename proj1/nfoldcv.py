@@ -221,7 +221,7 @@ if __name__ == "__main__":
             "data_dir: a temporary directory where this program can store data files\n"\
             "train_dir: the directory where to place training examples\n"\
             "test_dir: the directory where to place testing examples\n"\
-            "class_n_label: a regex for the files in the class, in single quites (EG '^n.*' or '^')\n".format(sys.argv[0])
+            "class_n_label: a regex for the files in the class, in single quotes (EG '^n.*' or '^')\n".format(sys.argv[0])
 
     try:
         opts, args = getopt.getopt(argv, "h?")
