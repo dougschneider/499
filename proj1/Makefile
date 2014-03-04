@@ -501,7 +501,6 @@ clean_p1: clean_p1_out clean_p1_model
 	-rm -f $(P1_SELECTED_PREPROC)
 	-rm -f $(P1_SELECTED_FEATURE)
 
-
 clean_p1_out:
 	-rm -f $(P1_OUT_FILES)
 
