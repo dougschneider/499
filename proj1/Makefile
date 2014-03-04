@@ -142,14 +142,14 @@ P2_FEATURE_EXTRACTORS = feature_extractors_p2
 # run part 1 and part 2
 all: part1 part2
 
-part1: clean_p1 split_p1 preprocess_p1 p1_learn p1_classify part1_train_acc part1_test_acc
+part1: part1_train part1_test
 
-part2: clean_p2 split_p2 preprocess_p2 p2_learn p2_classify part2_train_acc part2_test_acc
+part2: part2_train part2_test
 
-part1_nfold: $(N_FOLD_CV) clean split_p1 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
+part1_train: $(N_FOLD_CV) clean split_p1 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
 	python nfoldcv.py 1 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P1_FEATURE_EXTRACTORS) 'make part1_cv_class_label_files && make p1_learn' 'make p1_classify && make part1_test_acc' $(P1_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
 
-part2_nfold: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
+part2_train: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
 	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_A) $(P2_B) $(P2_OTHER)
 
 
