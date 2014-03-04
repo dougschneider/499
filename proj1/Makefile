@@ -514,6 +514,9 @@ clean: clean_p1 clean_p2 clean_part2_intermediate
 clean_p1: clean_p1_out clean_p1_model
 	-rm -rf $(P1_TRAIN_PATH)/*.jpg
 	-rm -rf $(P1_TEST_PATH)/*.jpg
+	-rm -f $(P1_SELECTED_PREPROC)
+	-rm -f $(P1_SELECTED_FEATURE)
+
 
 clean_p1_out:
 	-rm -f $(P1_OUT_FILES)
@@ -524,6 +527,8 @@ clean_p1_model:
 clean_p2: clean_p2_out clean_p2_model
 	-rm -rf $(P2_TRAIN_PATH)/*.jpg
 	-rm -rf $(P2_TEST_PATH)/*.jpg
+	-rm -f $(P2_SELECTED_PREPROC)
+	-rm -f $(P2_SELECTED_FEATURE)
 
 clean_p2_out:
 	-rm -f $(P2_OUT_FILES)
