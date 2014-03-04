@@ -226,6 +226,17 @@ preproc_1: $(PREPROCESSOR)
 preproc_2: $(PREPROCESSOR)
 	python $+ 2 $(CV_DATA_PATH)/
 
+preproc_3: $(PREPROCESSOR)
+	python $+ 3 $(CV_DATA_PATH)/
+
+preproc_4: $(PREPROCESSOR)
+	python $+ 4 $(CV_DATA_PATH)/
+
+preproc_5: $(PREPROCESSOR)
+	python $+ 5 $(CV_DATA_PATH)/
+
+preproc_6: $(PREPROCESSOR)
+	python $+ 6 $(CV_DATA_PATH)/
 
 ################################################################################
 # Feature Extractors for Part 1
