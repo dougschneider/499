@@ -276,8 +276,6 @@ part2_feat_1:
 	java -jar JFeatureLib.jar -D PHOG -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_2:
 	make part2_cp_files_for_extraction
@@ -297,8 +295,6 @@ part2_feat_2:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_3:
 	make part2_cp_files_for_extraction
@@ -318,8 +314,6 @@ part2_feat_3:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_4:
 	make part2_cp_files_for_extraction
@@ -339,8 +333,6 @@ part2_feat_4:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_5:
 	make part2_cp_files_for_extraction
@@ -360,8 +352,6 @@ part2_feat_5:
 	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_6:
 	make part2_cp_files_for_extraction
@@ -381,8 +371,6 @@ part2_feat_6:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 part2_feat_7:
 	make part2_cp_files_for_extraction
@@ -402,8 +390,6 @@ part2_feat_7:
 	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-train -o o-2.csv
 	python createARFF.py
 	mv out.arff p2train.arff
-	python $(PREPROCESSOR) 2 --classes cv_train/
-	python $(PREPROCESSOR) 2 --classes cv_test/
 
 
 ################################################################################
