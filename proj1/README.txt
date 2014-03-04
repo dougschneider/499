@@ -16,8 +16,13 @@ paths can be configured in the Makefile.
 REQUIREMENTS
 ============
 Python requirements listed in requirements.pip.txt
-Pillow image library is used, and must be compiled with jpg support (requires libjpeg)
-Requires java (and javac) version 1.7
+Pillow image library is used, and must be compiled with jpg support (requires
+libjpeg8 and libjpeg8-dev).
+Requires java (and javac) version 1.7.
+
+localsetup.sh will install the dependancies and create a python virtualenv.
+However, we were having trouble installing scipy through pip, so using the system
+package manager for scipy and numpy is likely easier.
 
 
 EXPECTED DATA LABELS
