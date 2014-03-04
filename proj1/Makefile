@@ -39,6 +39,7 @@ P2_TEST_PATH = part-2-test
 # path where n-fold CV places data
 CV_TEST_PATH = cv_test
 CV_TRAIN_PATH = cv_train
+CV_DATA_PATH = cv_data
 
 # some feature extractors need extra temp space
 P24_TEST = p24-test
