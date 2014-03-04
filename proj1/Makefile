@@ -164,7 +164,7 @@ part1_cv_class_label_files: clean_p1_out
 
 part2_cv_class_label_files: clean_p2_out
 	python $(CLASS_FILE_GEN) 2 $(P2_TRAIN_CLASSES) $(CV_TRAIN_PATH)
-	python $(CLASS_FILE_GEN) 2 $(P2_TREST_CLASSES) $(CV_TEST_PATH)
+	python $(CLASS_FILE_GEN) 2 $(P2_TEST_CLASSES) $(CV_TEST_PATH)
 
 # print training accuracies
 part1_train_acc:
@@ -233,10 +233,10 @@ preproc_0: $(PREPROCESSOR)
 	python $+ 0 $(CV_DATA_PATH)/
 
 preproc_1: $(PREPROCESSOR)
-	python $+ 0 $(CV_DATA_PATH)/
+	python $+ 1 $(CV_DATA_PATH)/
 
 preproc_2: $(PREPROCESSOR)
-	python $+ 0 $(CV_DATA_PATH)/
+	python $+ 2 $(CV_DATA_PATH)/
 
 
 ################################################################################
@@ -255,8 +255,8 @@ part1_feat_0: $(PIXEL_ARFF)
 
 # use each pixel RGB as a feature
 part2_feat_0: $(PIXEL_ARFF)
-	python $+ 2 --include-labels $(P1_TRAIN_ARFF) $(CV_TRAIN_PATH)/
-	python $+ 2 $(P1_TEST_ARFF) $(CV_TEST_PATH)/
+	python $+ 2 --include-labels $(P2_TRAIN_ARFF) $(CV_TRAIN_PATH)/
+	python $+ 2 $(P2_TEST_ARFF) $(CV_TEST_PATH)/
 
 part2_feat_1:
 	make part2_cp_files_for_extraction
