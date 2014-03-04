@@ -37,8 +37,10 @@ if __name__ == "__main__":
     usage = "Usage:\n"\
             "{} n data_dir\n\n"\
             "First parameter is required. Specify one of the following:\n"\
-            "1:\t"
-            "\n".format(sys.argv[0])
+            "0:\tNo Transformations\n"\
+            "1:\tIncrease Contrast\n"\
+            "2:\tCrop and Edge Enhance\n"\
+            "".format(sys.argv[0])
 
     n = None
     # all transforms available keyed by n
@@ -53,12 +55,15 @@ if __name__ == "__main__":
         data_dir = sys.argv[-1]
 
         # check if we have an action for n
-        f = getattr(options, n, None)
+        try:
+            f = options[n]
+        except Exception:
+            f = None
 
-        if n:
-            apply_transform(data_dir)
+        if f:
+            apply_transform(f, data_dir)
         else:
-            raise Exception(str(p) + " is not a valid value as the first argument.")
+            raise Exception(str(n) + " is not a valid value as the first argument.")
     else:
         print usage
         sys.exit(2)
