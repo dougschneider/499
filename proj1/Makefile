@@ -427,6 +427,19 @@ part2_feat_4_base: EX1 = PHOG
 part2_feat_4_base: EX2 = FCTH
 part2_feat_4_base: part2_2extractors_base
 
+part2_feat_5: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_5: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_5: part2_feat_5_base
+
+part2_feat_5_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_5_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_5_test: part2_feat_5_base
+
+part2_feat_5_base: part2_cp_files_for_extraction
+part2_feat_5_base: EX1 = JCD
+part2_feat_5_base: EX2 = FCTH
+part2_feat_5_base: part2_2extractors_base
+
 part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-test -o 4-1.csv
 	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-test -o 5-1.csv
@@ -444,25 +457,6 @@ part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-train -o o-2.csv
 	python createARFF.py -n 2
 	mv out.arff $(P2_TRAIN_ARFF)
-
-part2_feat_5:
-	make part2_cp_files_for_extraction
-	java -jar JFeatureLib.jar -D JCD -c classA -d p24-test -o 4-1.csv
-	java -jar JFeatureLib.jar -D JCD -c classA -d p25-test -o 5-1.csv
-	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-test -o o-1.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-test -o 4-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-test -o 5-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-test -o o-2.csv
-	python createARFF.py -n 2 --test
-	mv out.arff p2test.arff
-	java -jar JFeatureLib.jar -D JCD -c classA -d p24-train -o 4-1.csv
-	java -jar JFeatureLib.jar -D JCD -c classA -d p25-train -o 5-1.csv
-	java -jar JFeatureLib.jar -D JCD -c classA -d p2o-train -o o-1.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p24-train -o 4-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p25-train -o 5-2.csv
-	java -jar JFeatureLib.jar -D FCTH -c classA -d p2o-train -o o-2.csv
-	python createARFF.py -n 2
-	mv out.arff p2train.arff
 
 part2_feat_6:
 	make part2_cp_files_for_extraction
