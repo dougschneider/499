@@ -417,8 +417,8 @@ part2_feat_4_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
 part2_feat_4_test: part2_feat_4_base
 
 part2_feat_4_base: part2_cp_files_for_extraction
-part2_feat_4_base: EX1 = PHOG
-part2_feat_4_base: EX2 = FCTH
+part2_feat_4_base: EX1 = CEDD
+part2_feat_4_base: EX2 = JCD
 part2_feat_4_base: part2_2extractors_base
 
 part2_feat_5: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
@@ -446,19 +446,6 @@ part2_feat_6_base: part2_cp_files_for_extraction
 part2_feat_6_base: EX1 = PHOG
 part2_feat_6_base: EX2 = JCD
 part2_feat_6_base: part2_2extractors_base
-
-part2_feat_7: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
-part2_feat_7: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
-part2_feat_7: part2_feat_7_base
-
-part2_feat_7_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
-part2_feat_7_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
-part2_feat_7_test: part2_feat_7_base
-
-part2_feat_7_base: part2_cp_files_for_extraction
-part2_feat_7_base: EX1 = CEDD
-part2_feat_7_base: EX2 = JCD
-part2_feat_7_base: part2_2extractors_base
 
 part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-test -o 4-1.csv
