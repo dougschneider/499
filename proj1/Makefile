@@ -367,7 +367,7 @@ part2_feat_0_test: part2_feat_0_base
 
 part2_feat_0_base:
 	python $(PIXEL_ARFF) 2 --include-labels $(P2_TRAIN_ARFF) $(FEATURE_TRAIN_PATH)
-	python $(PIXEL_ARFF) 2 $(P1_TEST_ARFF) $(FEATURE_TEST_PATH)
+	python $(PIXEL_ARFF) 2 $(P2_TEST_ARFF) $(FEATURE_TEST_PATH)
 
 part2_feat_1: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
 part2_feat_1: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
@@ -518,7 +518,7 @@ part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-train -o o-2.csv
-	python createARFF.py -n 3
+	python createARFF.py -n 2
 	mv out.arff $(P2_TRAIN_ARFF)
 
 part2_3extractors_base:
