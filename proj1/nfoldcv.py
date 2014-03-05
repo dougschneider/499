@@ -6,7 +6,7 @@ import shutil
 import re
 import subprocess
 
-DEBUG = True
+DEBUG = False
 
 
 def make_folds(n, src_dir, classes):
@@ -100,6 +100,10 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
     # get list of commands out of each file
     preproc_commands = get_command_list(preprocess_file)
     feature_commands = get_command_list(arff_generator_file)
+
+    # display progress
+    curr_progress = 0
+    total_progress = len(preproc_commands) * len(feature_commands) * n
 
     # keep track of accuracy for combos
     averages = list()
@@ -203,6 +207,8 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
 
                 if DEBUG:
                     print ""
+                curr_progress += 1
+                print "Working...{}%".format(int(curr_progress/float(total_progress) * 100))
 
             # reset holdout fold
             holdout_fold = 0
