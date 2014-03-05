@@ -148,34 +148,42 @@ P2_FEATURE_EXTRACTORS = feature_extractors_p2
 # run part 1 and part 2
 all: part1 part2
 
-part1: part1_train part1_test
+part1: clean split_p1 part1_preprocessor_select part1_preprocess part1_train part1_test
 
-part2: part2_train part2_test
+part2: clean split_p2 part2_preprocessor_select part2_preprocess part2_train part2_test
 
-part1_train: $(N_FOLD_CV) clean split_p1 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
-	python nfoldcv.py 1 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P1_FEATURE_EXTRACTORS) 'make part1_cv_class_label_files && make p1_learn' 'make p1_classify && make part1_test_acc' $(P1_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P1_SELECTED_PREPROC) $(P1_SELECTED_FEATURE) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
+part1_preprocessor_select: $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
+	python $(N_FOLD_CV) 1 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P1_FEATURE_EXTRACTORS) 'make part1_cv_class_label_files && make p1_learn' 'make p1_classify && make part1_test_acc' $(P1_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P1_SELECTED_PREPROC) $(P1_SELECTED_FEATURE) $(P1_NON_ALP) $(P1_ALP_INTERPOLATED) $(P1_ALP)
 
-part2_train: $(N_FOLD_CV) clean split_p2 $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
-	python nfoldcv.py 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_SELECTED_PREPROC) $(P2_SELECTED_FEATURE) $(P2_A) $(P2_B) $(P2_OTHER)
+part2_preprocessor_select: $(LEARNER_CLASS).class $(CLASSIFIER_CLASS).class
+	python $(N_FOLD_CV) 2 $(N_FOLDS) $(PREPROCESSOR_OPTIONS) $(P2_FEATURE_EXTRACTORS) 'make part2_cv_class_label_files && make p2_learn' 'make p2_classify && make part2_test_acc' $(P2_TRAIN_PATH) $(CV_DATA_PATH) $(CV_TRAIN_PATH) $(CV_TEST_PATH) $(P2_SELECTED_PREPROC) $(P2_SELECTED_FEATURE) $(P2_A) $(P2_B) $(P2_OTHER)
 
-part1_test: TMP = `cat $(P1_SELECTED_PREPROC)`
-part1_test: TMP2 = `cat $(P1_SELECTED_FEATURE)`
-part1_test: clean_p1_model
+part1_preprocess: TMP = `cat $(P1_SELECTED_PREPROC)`
+part1_preprocess: TMP2 = `cat $(P1_SELECTED_FEATURE)`
+part1_preprocess: clean_p1_model
 	make $(TMP)
 	make $(TMP2)
 	make part1_class_label_files
+
+part1_train:
 	make p1_learn
+
+part1_test:
 	make p1_classify
 	make part1_train_acc
 	make part1_test_acc
 
-part2_test: TMP = `cat $(P2_SELECTED_PREPROC)`
-part2_test: TMP2 = `cat $(P2_SELECTED_FEATURE)`
-part2_test: clean_p2_model
+part2_preprocess: TMP = `cat $(P2_SELECTED_PREPROC)`
+part2_preprocess: TMP2 = `cat $(P2_SELECTED_FEATURE)`
+part2_preprocess: clean_p2_model
 	make $(TMP)
 	make $(TMP2)
 	make part2_class_label_files
+
+part2_train:	
 	make p2_learn
+
+part2_test:
 	make p2_classify
 	make part2_train_acc
 	make part2_test_acc

@@ -50,20 +50,41 @@ PART 1
 
 Idenfity whether a plate is class ALP (Alberta License Plate) or NON-ALP.
 
+The steps below are combined into `make part1`.
 
 1. Image data should be in part-1-data/
-2. Run `make part1_train`
+
+2. Run `make split_p1`
+	This will split the data into randomly selected balanced partitions.
+	The training portion is placed in part-1-train/ and the test portion
+	in part-1-test/. The sizes of the partitions can be configured in the
+	Makefile.
+	Skip this step and manually place the train and test set in their
+	appropriate folders if you would like to specify test and train
+	partitions manually.
+
+3. Run `make part1_preprocessor_select'
 	This will perform n-fold cross-validation of combinations of preprocessors
 	listed in 'preprocessors' and feature extraction techniques listed in
 	'p1_feature_extractors'. The number of folds can be configured in the
 	Makefile.
 	This command will display the optimal combination of preprocessing
 	and feature selection given the dataset. Only the training partition of
-	the data is used for cross-validation.
-3. Run `make part1_test`
-	This will use the previously selected image preprocessing and feature
-	extraction methods and run these on the test data.
-4. The training and testing accuracy will be printed.
+	the data is used for cross-validation. The selected preprocessor and
+	feature extraction are also written to file for use in later steps.
+
+4. Run `make part1_preprocess`
+	This applies the selected preprocessing to the training and testing
+	partitions. It also generates the .arff file used to build the models
+	using the selected feature extraction method.
+
+5. Run `make part1_train`
+	This will build the model.
+	
+6. Run `make part1_test`
+	This will use the previously built model and classify the training and
+	testing data. The accuracy of classifying the test and train data
+	will be printed.
 
 
 PART 2
@@ -71,17 +92,39 @@ PART 2
 
 Identify whether an ALP is class A (ends in 4), class B (ends in 5), or class OTHER.
 
+The steps below are combined into `make part2`.
+
 1. Image data should be in part-2-data/
-2. Run `make part2_train`
+
+2. Run `make split_p2`
+	This will split the data into randomly selected balanced partitions.
+	The training portion is placed in part-2-train/ and the test portion
+	in part-2-test/. The sizes of the partitions can be configured in the
+	Makefile.
+	Skip this step and manually place the train and test set in their
+	appropriate folders if you would like to specify test and train
+	partitions manually.
+
+3. Run `make part2_preprocessor_select'
 	This will perform n-fold cross-validation of combinations of preprocessors
 	listed in 'preprocessors' and feature extraction techniques listed in
 	'p2_feature_extractors'. The number of folds can be configured in the
 	Makefile.
 	This command will display the optimal combination of preprocessing
 	and feature selection given the dataset. Only the training partition of
-	the data is used for cross-validation.
-3. Run `make part1_test`
-	This will use the previously selected image preprocessing and feature
-	extraction methods and run these on the test data.
-4. The training and testing accuracy will be printed.
+	the data is used for cross-validation. The selected preprocessor and
+	feature extraction are also written to file for use in later steps.
+
+4. Run `make part2_preprocess`
+	This applies the selected preprocessing to the training and testing
+	partitions. It also generates the .arff file used to build the models
+	using the selected feature extraction method.
+
+5. Run `make part2_train`
+	This will build the model.
+	
+6. Run `make part2_test`
+	This will use the previously built model and classify the training and
+	testing data. The accuracy of classifying the test and train data
+	will be printed.
 
