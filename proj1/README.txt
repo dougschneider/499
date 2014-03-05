@@ -1,6 +1,8 @@
 License Plate Identification using Machine Learning
 ===================================================
 
+CMPUT 499 WINTER 2014
+
 
 DATA
 ====
