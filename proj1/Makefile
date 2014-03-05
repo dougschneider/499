@@ -447,6 +447,62 @@ part2_feat_6_base: EX1 = PHOG
 part2_feat_6_base: EX2 = JCD
 part2_feat_6_base: part2_2extractors_base
 
+part2_feat_7: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_7: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_7: part2_feat_7_base
+
+part2_feat_7_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_7_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_7_test: part2_feat_7_base
+
+part2_feat_7_base: part2_cp_files_for_extraction
+part2_feat_7_base: EX1 = CEDD
+part2_feat_7_base: EX2 = PHOG
+part2_feat_7_base: EX3 = FCTH
+part2_feat_7_base: part2_3extractors_base
+
+part2_feat_8: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_8: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_8: part2_feat_8_base
+
+part2_feat_8_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_8_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_8_test: part2_feat_8_base
+
+part2_feat_8_base: part2_cp_files_for_extraction
+part2_feat_8_base: EX1 = CEDD
+part2_feat_8_base: EX2 = PHOG
+part2_feat_8_base: EX3 = JCD
+part2_feat_8_base: part2_3extractors_base
+
+part2_feat_9: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_9: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_9: part2_feat_9_base
+
+part2_feat_9_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_9_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_9_test: part2_feat_9_base
+
+part2_feat_9_base: part2_cp_files_for_extraction
+part2_feat_9_base: EX1 = CEDD
+part2_feat_9_base: EX2 = FCTH
+part2_feat_9_base: EX3 = JCD
+part2_feat_9_base: part2_3extractors_base
+
+part2_feat_10: EXTRACTION_TRAIN_PATH = $(CV_TRAIN_PATH)
+part2_feat_10: EXTRACTION_TEST_PATH = $(CV_TEST_PATH)
+part2_feat_10: part2_feat_10_base
+
+part2_feat_10_test: EXTRACTION_TRAIN_PATH = $(P2_TRAIN_PATH)
+part2_feat_10_test: EXTRACTION_TEST_PATH = $(P2_TEST_PATH)
+part2_feat_10_test: part2_feat_10_base
+
+part2_feat_10_base: part2_cp_files_for_extraction
+part2_feat_10_base: EX1 = PHOG
+part2_feat_10_base: EX2 = FCTH
+part2_feat_10_base: EX3 = JCD
+part2_feat_10_base: part2_3extractors_base
+
 part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-test -o 4-1.csv
 	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-test -o 5-1.csv
@@ -462,7 +518,31 @@ part2_2extractors_base:
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-train -o 4-2.csv
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-train -o 5-2.csv
 	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-train -o o-2.csv
-	python createARFF.py -n 2
+	python createARFF.py -n 3
+	mv out.arff $(P2_TRAIN_ARFF)
+
+part2_3extractors_base:
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-test -o 4-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-test -o 5-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p2o-test -o o-1.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-test -o 4-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-test -o 5-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-test -o o-2.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p24-test -o 4-3.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p25-test -o 5-3.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p2o-test -o o-3.csv
+	python createARFF.py -n 3 --test
+	mv out.arff $(P2_TEST_ARFF)
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p24-train -o 4-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p25-train -o 5-1.csv
+	java -jar JFeatureLib.jar -D $(EX1) -c classA -d p2o-train -o o-1.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p24-train -o 4-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p25-train -o 5-2.csv
+	java -jar JFeatureLib.jar -D $(EX2) -c classA -d p2o-train -o o-2.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p24-train -o 4-3.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p25-train -o 5-3.csv
+	java -jar JFeatureLib.jar -D $(EX3) -c classA -d p2o-train -o o-3.csv
+	python createARFF.py -n 3
 	mv out.arff $(P2_TRAIN_ARFF)
 
 
