@@ -83,7 +83,7 @@ P2_MODEL = p2model.se
 # classifier generated files
 CLASSIFIER_CLASS = Classifier
 LEARNER_CLASS = Learner
-WEKA_FILES = $(CLASSIFIER_CLASS) $(LEARNER_CLASS)
+WEKA_FILES = $(CLASSIFIER_CLASS).class $(LEARNER_CLASS).class
 
 
 ################################################################################
@@ -256,85 +256,79 @@ preproc_0: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_0: T = 0
 preproc_0: preproc_base
 
-part1_preproc_0_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_0_test: T = 0
-part1_preproc_0_test: preproc_base
+part1_preproc_0_test: part1_preproc_base
 
-part2_preproc_0_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_0_test: T = 0
-part2_preproc_0_test: preproc_base
+part2_preproc_0_test: part2_preproc_base
 
 preproc_1: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_1: T = 1
 preproc_1: preproc_base
 
-part1_preproc_1_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_1_test: T = 1
-part1_preproc_1_test: preproc_base
+part1_preproc_1_test: part1_preproc_base
 
-part2_preproc_1_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_1_test: T = 1
-part2_preproc_1_test: preproc_base
+part2_preproc_1_test: part2_preproc_base
 
 preproc_2: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_2: T = 2
 preproc_2: preproc_base
 
-part1_preproc_2_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_2_test: T = 2
-part1_preproc_2_test: preproc_base
+part1_preproc_2_test: part1_preproc_base
 
-part2_preproc_2_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_2_test: T = 2
-part2_preproc_2_test: preproc_base
+part2_preproc_2_test: part2_preproc_base
 
 preproc_3: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_3: T = 3
 preproc_3: preproc_base
 
-part1_preproc_3_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_3_test: T = 3
-part1_preproc_3_test: preproc_base
+part1_preproc_3_test: part1_preproc_base
 
-part2_preproc_3_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_3_test: T = 3
-part2_preproc_3_test: preproc_base
+part2_preproc_3_test: part2_preproc_base
 
 preproc_4: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_4: T = 4
 preproc_4: preproc_base
 
-part1_preproc_4_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_4_test: T = 4
-part1_preproc_4_test: preproc_base
+part1_preproc_4_test: part1_preproc_base
 
-part2_preproc_4_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_4_test: T = 4
-part2_preproc_4_test: preproc_base
+part2_preproc_4_test: part2_preproc_base
 
 preproc_5: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_5: T = 5
 preproc_5: preproc_base
 
-part1_preproc_5_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_5_test: T = 5
-part1_preproc_5_test: preproc_base
+part1_preproc_5_test: part1_preproc_base
 
-part2_preproc_5_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_5_test: T = 5
-part2_preproc_5_test: preproc_base
+part2_preproc_5_test: part2_preproc_base
 
 preproc_6: PREPROC_PATH = $(CV_DATA_PATH)/
 preproc_6: T = 6
 preproc_6: preproc_base
 
-part1_preproc_6_test: PREPROC_PATH = $(P1_TEST_PATH)/
 part1_preproc_6_test: T = 6
-part1_preproc_6_test: preproc_base
+part1_preproc_6_test: part1_preproc_base
 
-part2_preproc_6_test: PREPROC_PATH = $(P2_TEST_PATH)/
 part2_preproc_6_test: T = 6
-part2_preproc_6_test: preproc_base
+part2_preproc_6_test: part2_preproc_base
+
+part1_preproc_base:
+	make preproc_base PREPROC_PATH=$(P1_TRAIN_PATH)/ T=$(T)
+	make preproc_base PREPROC_PATH=$(P1_TEST_PATH)/ T=$(T)
+
+part2_preproc_base:
+	make preproc_base PREPROC_PATH=$(P2_TRAIN_PATH)/ T=$(T)
+	make preproc_base PREPROC_PATH=$(P2_TEST_PATH)/ T=$(T)
 
 preproc_base:
 	python $(PREPROCESSOR) $(T) $(PREPROC_PATH)
