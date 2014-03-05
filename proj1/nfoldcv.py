@@ -6,6 +6,8 @@ import shutil
 import re
 import subprocess
 
+DEBUG = True
+
 
 def make_folds(n, src_dir, classes):
     folds = dict()
@@ -120,7 +122,8 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
 
         # apply the image preprocessor to the data
         preproc_cmd = preproc_commands[i]
-        print "Preprocessor: " + preproc_cmd
+        if DEBUG:
+            print "Preprocessor: " + preproc_cmd
 
         # run preprocessor
         output = subprocess.Popen(
@@ -129,7 +132,8 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
                 stderr=subprocess.STDOUT,
                 shell=True
             ).communicate()[0]
-        print output
+        if DEBUG:
+            print output
 
         for j in xrange(len(feature_commands)):
             feature_cmd = feature_commands[j]
@@ -137,12 +141,14 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
 
             for k in xrange(n):
                 # clear test data and training data
-                print "Clearing test and train dirs..."
+                if DEBUG:
+                    print "Clearing test and train dirs..."
                 clear_dir(train_dir)
                 clear_dir(test_dir)
 
                 # put holdout fold in test dir
-                print "Placing fold {} files in test dir..."\
+                if DEBUG:
+                    print "Placing fold {} files in test dir..."\
                         .format(holdout_fold)
                 cp_files_to_dir(folds[holdout_fold], data_dir, test_dir)
                 
@@ -153,44 +159,50 @@ def do_n_fold(p, n, preprocess_file, arff_generator_file, learner_cmd,
                     cp_files_to_dir(folds[f], data_dir, train_dir)
                 
                 # run feature extractor
-                #feature_cmd = feature_cmd.replace("TEST_PATH", test_dir)
-                #feature_cmd = feature_cmd.replace("TRAIN_PATH", train_dir)
-                print "Feature Extractor: " + feature_cmd
+                if DEBUG:
+                    print "Feature Extractor: " + feature_cmd
                 output = subprocess.Popen(
                         [feature_cmd],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-                print output
+                if DEBUG:
+                    print output
 
                 # run learning
-                print "Running Learner...."
+                if DEBUG:
+                    print "Running Learner...."
                 output = subprocess.Popen(
                         [learner_cmd],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-                print output
+                if DEBUG:
+                    print output
                 # run test
-                print "Classifying Test Data...."
+                if DEBUG:
+                    print "Classifying Test Data...."
                 output = subprocess.Popen(
                         [accuracy_cmd],
                         stdout = subprocess.PIPE,
                         stderr = subprocess.STDOUT,
                         shell=True
                     ).communicate()[0]
-                print output
+                if DEBUG:
+                    print output
                 match = re.search(r'\d+\.\d+', output)
                 accuracy = float(match.group(0))
-                print "Holdout Fold: {}\t, Accuracy: {}".format(k, accuracy)
+                if DEBUG:
+                    print "Holdout Fold: {}\t, Accuracy: {}".format(k, accuracy)
                 accuracies.append(accuracy)
 
                 # change holdout fold
                 holdout_fold += 1
 
-                print ""
+                if DEBUG:
+                    print ""
 
             # reset holdout fold
             holdout_fold = 0
