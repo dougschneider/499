@@ -14,22 +14,52 @@ public class RoboAgent extends LoneAgent {
 	@Override
 	public IAction act()
 	{
+        // assume we're always facing straight to begin with
 		RoboAction action = (RoboAction) super.act();
 		if(action.direction == RoboAction.STRAIGHT)
 		{
-			SensorController.controlLeftMotor(40, MotorPort.FORWARD);
-			SensorController.controlRightMotor(40, MotorPort.FORWARD);
+            goStraight();
 		}
 		else if(action.direction == RoboAction.LEFT)
 		{
-			SensorController.controlLeftMotor(40, MotorPort.FORWARD);
-			SensorController.controlRightMotor(20, MotorPort.FORWARD);
+            angleLeft();
+            goStraight();
+            angleRight();
 		}
 		else// RIGHT
 		{
-			SensorController.controlLeftMotor(20, MotorPort.FORWARD);
-			SensorController.controlRightMotor(40, MotorPort.FORWARD);
+            angleRight();
+            goStraight();
+            angleLeft();
 		}
+        stop();
 		return action;
 	}
+
+    private void goStraight()
+    {
+        SensorController.controlLeftMotor(20, MotorPort.FORWARD);
+        SensorController.controlRightMotor(20, MotorPort.FORWARD);
+        Delay.msDelay(100);
+    }
+
+    private void angleLeft()
+    {
+        SensorController.controlLeftMotor(20, MotorPort.FORWARD);
+        SensorController.controlRightMotor(20, MotorPort.BACKWARD);
+        Delay.msDelay(50);
+    }
+
+    private void angleRight()
+    {
+        SensorController.controlLeftMotor(20, MotorPort.BACKWARD);
+        SensorController.controlRightMotor(20, MotorPort.FORWARD);
+        Delay.msDelay(50);
+    }
+
+    private void stop()
+    {
+        SensorController.controlLeftMotor(100, MotorPort.STOP);
+        SensorController.controlRightMotor(100, MotorPort.STOP);
+    }
 }
