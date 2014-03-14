@@ -1,18 +1,28 @@
+import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
-import lejos.nxt.addon.OpticalDistanceSensor;
+import lejos.nxt.UltrasonicSensor;
 
 
 public class SensorController {
 
 	public static int getFrontDist()
 	{
-		return new OpticalDistanceSensor(SensorPort.S3).getDistance();
+		int distance = new UltrasonicSensor(SensorPort.S3).getDistance();
+		System.out.println("Front: " + distance);
+		return distance;
 	}
 
 	public static int getBackDist()
 	{
-		return new OpticalDistanceSensor(SensorPort.S2).getDistance();
+		int distance = new UltrasonicSensor(SensorPort.S2).getDistance();
+		System.out.println("Back: " + distance);
+		return distance;
+	}
+	
+	public static int getLightValue()
+	{
+		return new LightSensor(SensorPort.S1).getLightValue();
 	}
 	
 	public static void controlRightMotor(int power, int mode)
