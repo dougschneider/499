@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -42,6 +44,29 @@ public class NavigateTerrain {
 
 		// gather data
 		doGatherData(pilot, tracker, topRight, bottomLeft);
+
+		generateArff(data);
+	}
+
+	private static void generateArff(
+			ArrayList<Triple<Double, Double, Integer>> data) {
+		FileWriter out = null;
+		try {
+			out = new FileWriter(new File("../p2data.arff"));
+
+			out.write("@RELATION distance\n\n");
+			out.write("@ATTRIBUTE distance NUMERIC\n\n");
+			out.write("@DATA\n");
+
+			for (int i = 0; i < data.size(); i++) {
+				out.write(data.get(i).x + "," + data.get(i).y + ","
+						+ data.get(i).data + "\n");
+			}
+
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void doGatherData(DifferentialPilot pilot,
