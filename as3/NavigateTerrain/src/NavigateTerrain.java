@@ -46,6 +46,8 @@ public class NavigateTerrain {
 		doGatherData(pilot, tracker, topRight, bottomLeft);
 
 		generateArff(data);
+		
+		System.exit(0);
 	}
 
 	private static void generateArff(
