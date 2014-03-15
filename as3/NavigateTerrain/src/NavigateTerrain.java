@@ -1,12 +1,17 @@
 import java.io.IOException;
 
 import lejos.nxt.Motor;
-import lejos.nxt.MotorPort;
-import lejos.util.Delay;
+import lejos.robotics.navigation.DifferentialPilot;
 
 public class NavigateTerrain {
 
 	public static int NUM_SWEEPS = 1;
+	
+	public static int SPEED = 20;
+	public static int STEP_TIME = 20;
+	public static int PIVOT_TIME = 1000;
+	
+	public static DifferentialPilot pilot;
 
 	public static TrackerReader tracker;
 	public static Tuple<Double, Double> topRight;
@@ -15,53 +20,89 @@ public class NavigateTerrain {
 	public static void main(String[] args) {
 		tracker = new TrackerReader();
 		tracker.start();
+		
+		pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
+		pilot.setTravelSpeed(SPEED);
+		pilot.setRotateSpeed(SPEED);
+		
+		// set up the tracker
+		pauseAndPrompt("Select the robot's marker to track it");
 
 		// get corner references
 		topRight = getCorner(tracker, "top right");
+		System.out.println("Top Right: " + topRight.x + ", " + topRight.y);
 		bottomLeft = getCorner(tracker, "bottom left");
-
-		// tell user to place robot
-		pauseAndPrompt("Place robot in top right corner, aimed left");
-
+		System.out.println("Bottom Left: " + bottomLeft.x + ", " + bottomLeft.y);
+		
 		// gather data
-		doGatherData(tracker, topRight, bottomLeft);
+		doGatherData(pilot, tracker, topRight, bottomLeft);
 
 	}
 
-	public static void doGatherData(TrackerReader tracker,
+	public static void doGatherData(
+			DifferentialPilot pilot, TrackerReader tracker,
 			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
 		int numSweeps = 0;
 		while (numSweeps < NUM_SWEEPS) {
-			doSingleSweep(tracker, topRight, bottomLeft);
+			doSingleSweep(pilot, tracker, topRight, bottomLeft);
 			numSweeps++;
 		}
 	}
 
-	private static void doSingleSweep(TrackerReader tracker,
+	private static void doSingleSweep(
+			DifferentialPilot pilot, TrackerReader tracker,
 			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
-		// TODO implement full grid sweep
-		doPass(Direction.LEFT, topRight, bottomLeft);
+		Boolean sweepComplete = false;
+		
+		// tell user to place robot
+		pauseAndPrompt("Place robot in top right corner, aimed left");
 
-	}
-
-	private static void doPass(Direction direction,
-			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
-		// TODO implement direction
-		while (tracker.x < bottomLeft.x) {
-			driveForward(20);
+		while (sweepComplete == false) {
+			doPass(pilot, Direction.LEFT, topRight, bottomLeft);
+			pivot(pilot, Direction.LEFT);
+			doPass(pilot, Direction.RIGHT, topRight, bottomLeft);
+			pivot(pilot, Direction.RIGHT);
+			sweepComplete = isSweepComplete(tracker, topRight, bottomLeft);
 		}
-		System.out.println("Done");
+		System.out.println("Sweep Complete");
+	}
+
+	private static Boolean isSweepComplete(TrackerReader tracker,
+			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
+		if (tracker.y > bottomLeft.y) {
+			return true;
+		}
+		return false;
+	}
+
+	private static void doPass(
+			DifferentialPilot pilot, Direction direction,
+			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
+		System.out.println("Robot: " + tracker.x + ", " + tracker.y + "\tCorner: " + bottomLeft.x + ", " + bottomLeft.y);
+		if (direction == Direction.RIGHT) {
+			while (tracker.x < topRight.x) {
+				driveForward(pilot, STEP_TIME);
+			}
+		} else {
+			while (tracker.x > bottomLeft.x) {
+				driveForward(pilot, STEP_TIME);
+			}
+		}
+		System.out.println("Done Pass");
 
 	}
-	
-	private static void driveForward(int time) {
-		MotorPort.A.controlMotor(60, MotorPort.FORWARD);
-		MotorPort.C.controlMotor(60, MotorPort.FORWARD);
+
+	private static void driveForward(DifferentialPilot pilot, int time) {
+		pilot.forward();
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void pivot(DifferentialPilot pilot, Direction direction) {
+		pauseAndPrompt("Please align the robot for the next pass");
 	}
 
 	/**
