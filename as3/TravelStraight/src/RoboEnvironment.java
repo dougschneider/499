@@ -46,12 +46,6 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public double getReward(IState s1, IState s2, IAction a) {
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		// 45 cm is centre
 		int front = SensorController.getFrontDist();
 		int back = SensorController.getBackDist();

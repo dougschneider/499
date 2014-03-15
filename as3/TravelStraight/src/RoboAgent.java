@@ -1,4 +1,8 @@
+import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.util.Delay;
 import agents.LoneAgent;
 import algorithms.ISelector;
 import environment.IAction;
@@ -6,6 +10,8 @@ import environment.IEnvironmentSingle;
 
 
 public class RoboAgent extends LoneAgent {
+	
+	private DifferentialPilot pilot;
 
 	public RoboAgent(IEnvironmentSingle s, ISelector al) {
 		super(s, al);
@@ -32,34 +38,28 @@ public class RoboAgent extends LoneAgent {
             goStraight();
             angleLeft();
 		}
-        stop();
 		return action;
 	}
 
     private void goStraight()
     {
-        SensorController.controlLeftMotor(20, MotorPort.FORWARD);
-        SensorController.controlRightMotor(20, MotorPort.FORWARD);
-        Delay.msDelay(100);
+    	SensorController.goStraight();
     }
 
     private void angleLeft()
     {
-        SensorController.controlLeftMotor(20, MotorPort.FORWARD);
-        SensorController.controlRightMotor(20, MotorPort.BACKWARD);
-        Delay.msDelay(50);
+    	SensorController.rotateLeft();
     }
 
     private void angleRight()
     {
-        SensorController.controlLeftMotor(20, MotorPort.BACKWARD);
-        SensorController.controlRightMotor(20, MotorPort.FORWARD);
-        Delay.msDelay(50);
+    	SensorController.rotateRight();
     }
 
     private void stop()
     {
         SensorController.controlLeftMotor(100, MotorPort.STOP);
         SensorController.controlRightMotor(100, MotorPort.STOP);
+        Delay.msDelay(10);
     }
 }

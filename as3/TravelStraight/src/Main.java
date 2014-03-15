@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileInputStream;
+
 import referees.OnePlayerReferee;
 import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
@@ -17,23 +20,31 @@ public class Main {
 
 		QLearningSelector sel = null;
 		IEnvironmentSingle env = new RoboEnvironment();
+		
+		if(new File("../p3.agt").exists())
+		{
+			agent = RoboAgent.readAgent("../p3", env);
+			sel = (QLearningSelector) agent.getAlgorithm();
+		}
+		else
+		{
+			sel = new QLearningSelector();
+			agent = new RoboAgent(env, sel);
+		}
+		
 		if(args.length == 0)
 		{
 			System.out.println("learning");
-			sel = new QLearningSelector();
 			sel.setEpsilonGreedy();
-			sel.setGamma(0.3);
-			sel.setEpsilon(0.8);
-			sel.setAlpha(0.1);
-			agent = new RoboAgent(env, sel);
+			sel.setGamma(0.7);
+			sel.setEpsilon(0.5);
+			sel.setAlpha(0.05);
 			agent.enableLearning();
 		}
 		else
 		{
 			System.out.println("testing");
 			learning = false;
-			agent = RoboAgent.readAgent(args[0], env);
-			sel = (QLearningSelector) agent.getAlgorithm();
 			sel.setEpsilonGreedy();
 			sel.setEpsilon(0);
 			sel.setAlpha(0);
@@ -75,7 +86,7 @@ public class Main {
 		
 		if(learning)
 		{
-			agent.saveAgent("../test");
+			agent.saveAgent("../p3");
 			System.out.println("done writing agent.");
 		}
 	}

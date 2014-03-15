@@ -46,7 +46,11 @@ public class SensorState extends AbstractState
 	public boolean equals(Object other)
 	{
 		SensorState ss = (SensorState)other;
-		return (this.frontDistance == ss.frontDistance && this.backDistance == ss.backDistance);
+		
+		int dist1 = (int) (frontDistance+backDistance)/2;
+		int dist2 = (int) (ss.frontDistance+ss.backDistance)/2;
+		
+		return dist1 == dist2;
 	}
 	
 //	@Override
