@@ -54,8 +54,10 @@ public class NavigateTerrain {
 		try {
 			out = new FileWriter(new File("../p2data.arff"));
 
-			out.write("@RELATION distance\n\n");
-			out.write("@ATTRIBUTE distance NUMERIC\n\n");
+			out.write("@RELATION elevation\n\n");
+			out.write("@ATTRIBUTE x NUMERIC\n");
+			out.write("@ATTRIBUTE y NUMERIC\n");
+			out.write("@ATTRIBUTE elevation NUMERIC\n\n");
 			out.write("@DATA\n");
 
 			for (int i = 0; i < data.size(); i++) {
@@ -126,8 +128,9 @@ public class NavigateTerrain {
 	private static void doPassActions(TrackerReader tracker,
 			DifferentialPilot pilot, LightSensor lightsensor) {
 		driveForward(pilot, STEP_TIME);
+		// 100 - lightValue so that it represents elevation
 		data.add(new Triple<Double, Double, Integer>(tracker.x, tracker.y,
-				lightsensor.getLightValue()));
+				100 - lightsensor.getLightValue()));
 	}
 
 	private static void driveForward(DifferentialPilot pilot, int time) {
