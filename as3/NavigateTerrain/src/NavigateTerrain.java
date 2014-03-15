@@ -115,7 +115,8 @@ public class NavigateTerrain {
 	}
 
 	private static void pivot(DifferentialPilot pilot, Direction direction) {
-		pauseAndPrompt("Please align the robot for the next pass");
+		pilot.stop();
+		pauseAndPrompt("Please rotate robot 180 degrees");
 	}
 
 	/**
