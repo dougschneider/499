@@ -80,8 +80,9 @@ public class NavigateTerrain {
 		return false;
 	}
 
-	private static void doPass(TrackerReader tracker, DifferentialPilot pilot, Direction direction,
-			Tuple<Double, Double> topRight, Tuple<Double, Double> bottomLeft) {
+	private static void doPass(TrackerReader tracker, DifferentialPilot pilot,
+			Direction direction, Tuple<Double, Double> topRight,
+			Tuple<Double, Double> bottomLeft) {
 		System.out.println("Robot: " + tracker.x + ", " + tracker.y
 				+ "\tCorner: " + bottomLeft.x + ", " + bottomLeft.y);
 		LightSensor lightsensor = new LightSensor(SensorPort.S1);
@@ -96,11 +97,12 @@ public class NavigateTerrain {
 		}
 		System.out.println("Done Pass");
 	}
-	
-	private static void doPassActions(TrackerReader tracker, DifferentialPilot pilot, LightSensor lightsensor) {
+
+	private static void doPassActions(TrackerReader tracker,
+			DifferentialPilot pilot, LightSensor lightsensor) {
 		driveForward(pilot, STEP_TIME);
-		data.add(new Triple<Double, Double, Integer>(tracker.x,
-				tracker.y, lightsensor.getLightValue()));
+		data.add(new Triple<Double, Double, Integer>(tracker.x, tracker.y,
+				lightsensor.getLightValue()));
 	}
 
 	private static void driveForward(DifferentialPilot pilot, int time) {
