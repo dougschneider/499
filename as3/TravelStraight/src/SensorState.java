@@ -7,18 +7,21 @@ public class SensorState extends AbstractState
 {
 	public int frontDistance;// cm
 	public int backDistance;// cm
+	public int lightValue;
+	
 	private IEnvironment ct;
 	
-	public SensorState(IEnvironment ct, int frontDistance, int backDistance) {
+	public SensorState(IEnvironment ct, int frontDistance, int backDistance, int lightValue) {
 		super(ct);
 		this.ct = ct;
 		this.frontDistance = frontDistance;
 		this.backDistance = backDistance;
+		this.lightValue = lightValue;
 	}
 
 	@Override
 	public IState copy() {
-		return new SensorState(this.ct, frontDistance, backDistance);
+		return new SensorState(this.ct, frontDistance, backDistance, lightValue);
 	}
 
 	@Override
@@ -43,17 +46,21 @@ public class SensorState extends AbstractState
 	public boolean equals(Object other)
 	{
 		SensorState ss = (SensorState)other;
-		return (this.frontDistance == ss.frontDistance && this.backDistance == ss.backDistance);
+		
+		int dist1 = (int) (frontDistance+backDistance)/2;
+		int dist2 = (int) (ss.frontDistance+ss.backDistance)/2;
+		
+		return dist1 == dist2;
 	}
 	
-	@Override
-	public String toString()
-	{
-		if(this.frontDistance - this.backDistance < 0)
-			return "too far left";
-		else if(this.frontDistance - this.backDistance > 0)
-			return "too far right";
-		else
-			return "dead on";
-	}
+//	@Override
+//	public String toString()
+//	{
+//		if(this.frontDistance - this.backDistance < 0)
+//			return "too far left";
+//		else if(this.frontDistance - this.backDistance > 0)
+//			return "too far right";
+//		else
+//			return "dead on";
+//	}
 }

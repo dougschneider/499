@@ -1,4 +1,8 @@
+import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.util.Delay;
 import agents.LoneAgent;
 import algorithms.ISelector;
 import environment.IAction;
@@ -6,6 +10,8 @@ import environment.IEnvironmentSingle;
 
 
 public class RoboAgent extends LoneAgent {
+	
+	private DifferentialPilot pilot;
 
 	public RoboAgent(IEnvironmentSingle s, ISelector al) {
 		super(s, al);
@@ -14,22 +20,46 @@ public class RoboAgent extends LoneAgent {
 	@Override
 	public IAction act()
 	{
+        // assume we're always facing straight to begin with
 		RoboAction action = (RoboAction) super.act();
 		if(action.direction == RoboAction.STRAIGHT)
 		{
-			SensorController.controlLeftMotor(40, MotorPort.FORWARD);
-			SensorController.controlRightMotor(40, MotorPort.FORWARD);
+            goStraight();
 		}
 		else if(action.direction == RoboAction.LEFT)
 		{
-			SensorController.controlLeftMotor(40, MotorPort.FORWARD);
-			SensorController.controlRightMotor(20, MotorPort.FORWARD);
+            angleLeft();
+            goStraight();
+            angleRight();
 		}
 		else// RIGHT
 		{
-			SensorController.controlLeftMotor(20, MotorPort.FORWARD);
-			SensorController.controlRightMotor(40, MotorPort.FORWARD);
+            angleRight();
+            goStraight();
+            angleLeft();
 		}
 		return action;
 	}
+
+    private void goStraight()
+    {
+    	SensorController.goStraight();
+    }
+
+    private void angleLeft()
+    {
+    	SensorController.rotateLeft();
+    }
+
+    private void angleRight()
+    {
+    	SensorController.rotateRight();
+    }
+
+    private void stop()
+    {
+        SensorController.controlLeftMotor(100, MotorPort.STOP);
+        SensorController.controlRightMotor(100, MotorPort.STOP);
+        Delay.msDelay(10);
+    }
 }
