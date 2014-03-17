@@ -17,6 +17,8 @@ import environment.IState;
 
 @SuppressWarnings("serial")
 public class RoboEnvironment extends AbstractEnvironmentSingle {
+	public static final int CENTER_CM = 55;
+
 	public RoboEnvironment() {
 		super();
 	}
@@ -44,14 +46,17 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 	public double getReward(IState s1, IState s2, IAction a) {
 		int front = SensorController.getFrontDist();
 		int back = SensorController.getBackDist();
+		int bucket = SensorState.bucketDists(front, back);
+		int reward = -1000;
 		
-		System.out.println("Front: " + front + "\tBack: " + back);
+		if (bucket > CENTER_CM) {
+			reward = CENTER_CM - bucket;
+		} else {
+			reward = bucket - CENTER_CM;
+		}
 		
-		int frontFromCentre = Math.abs(front-45);
-		int backFromCentre = Math.abs(back-45);
-		int fromCentre = (int) (backFromCentre+frontFromCentre)/2;
-		
-		return -fromCentre;
+		System.out.println("Front: " + front + "\tBack: " + back + "\tBucket: " + bucket + "\tReward: " + reward);
+		return reward;
 	}
 
 	@Override
