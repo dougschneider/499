@@ -45,7 +45,8 @@ public class SensorController {
 	
 	public static void rotateLeft()
 	{
-		getPilot().rotate(45);
+		// adjust this for battery life
+		getPilot().rotate(44.5);
 	}
 	
 	public static void rotateRight()
