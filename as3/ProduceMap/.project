@@ -16,6 +16,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>graphs</name>
+			<type>2</type>
+			<location>/cshome/ds3/leJOS/as3/DijkstraAlgorithm/src/graphs</location>
+		</link>
+		<link>
 			<name>java</name>
 			<type>2</type>
 			<location>/cshome/ds3/leJOS/weka-3-7-10/SelfOrganizingMap/src/main/java</location>
