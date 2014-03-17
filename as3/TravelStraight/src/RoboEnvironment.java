@@ -15,14 +15,10 @@ import environment.IAction;
 import environment.IState;
 
 
+@SuppressWarnings("serial")
 public class RoboEnvironment extends AbstractEnvironmentSingle {
-
-    private SMO smo;
-    private Instances data;
-	
 	public RoboEnvironment() {
 		super();
-        buildClassifier();
 	}
 	
 	@Override
@@ -46,9 +42,10 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public double getReward(IState s1, IState s2, IAction a) {
-		// 45 cm is centre
 		int front = SensorController.getFrontDist();
 		int back = SensorController.getBackDist();
+		
+		System.out.println("Front: " + front + "\tBack: " + back);
 		
 		int frontFromCentre = Math.abs(front-45);
 		int backFromCentre = Math.abs(back-45);
@@ -59,56 +56,17 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public boolean isFinal(IState s) {
-        // set up the light sensor on the NXT
-		MotorPort rightMotor = MotorPort.A;
-		MotorPort leftMotor = MotorPort.C;
-
         SensorState st = (SensorState) s;
-        Instance i = new SparseInstance(2);
-        i.setValue(0, st.lightValue);
-        i.setDataset(data);
-        try {
-            // classify the instance and take the corresponding action
-            if (smo.classifyInstance(i) == 1.0) {// end episode
-                System.out.println("TERMINAL");
-                return true;
-            } else {// continue
+        
+        // magic value of 30 when light sensor is over tape
+        if (st.lightValue > 30) {
+        	System.out.println("TERMINAL");
+            return true;
+        } else {
                 System.out.println("NOT TERMINAL");
                 return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        System.out.println("NOT TERMINAL");
-        return false;
 	}
-
-    private void buildClassifier()
-    {
-		DataSource source;
-		data = null;
-        // load in the training data
-		try {
-			CSVLoader loader = new CSVLoader();
-			loader.setSource(new File("../p3data.csv"));
-			data = loader.getDataSet();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-		data.setClassIndex(data.numAttributes()-1);
-		
-        // create the model
-		smo = new SMO();
-		String[] options = {"-C 1.0", "-L 0.001", "-P 1.0E-12", "-N 0", "-V -1", "-W 1", "-K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\""};
-		try {
-			smo.setOptions(options);
-            // train the model
-			smo.buildClassifier(data);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
 
 	@Override
 	public int whoWins(IState s) {
