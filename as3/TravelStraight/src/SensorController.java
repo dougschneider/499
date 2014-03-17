@@ -16,14 +16,15 @@ public class SensorController {
 	public static int getFrontDist()
 	{
 		int distance = new OpticalDistanceSensor(SensorPort.S3).getDistance();
-		System.out.println("Front: " + distance/10);
+		//System.out.println("Front: " + distance/10);
 		return distance/10;
 	}
 
 	public static int getBackDist()
 	{
-		int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance() + 50;
-		System.out.println("Back: " + distance/10);
+		//int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance() + 50;
+		int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance();
+		//System.out.println("Back: " + distance/10);
 		return distance/10;
 	}
 	
