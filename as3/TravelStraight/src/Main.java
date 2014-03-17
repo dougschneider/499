@@ -60,7 +60,7 @@ public class Main {
 			int length = ref.episode(env.defaultInitialState());
 			SensorController.controlLeftMotor(100, MotorPort.STOP);
 			SensorController.controlRightMotor(100, MotorPort.STOP);
-			System.out.println(ref.getRewardForEpisode()/(length*1.0));
+			System.out.println("Episode Reward: " + ref.getRewardForEpisode()/(length*1.0));
 			while(true)
 			{
 				if(Button.RIGHT.isDown())
