@@ -45,7 +45,7 @@ public class SensorController {
 	
 	public static void rotateLeft()
 	{
-		getPilot().rotate(45.3);
+		getPilot().rotate(45);
 	}
 	
 	public static void rotateRight()

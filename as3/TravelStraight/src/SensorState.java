@@ -54,12 +54,9 @@ public class SensorState extends AbstractState
 	}
 	
 	public static int bucketDists(int dist1, int dist2) {
-		int distance_from_wall = (dist1 + dist2)/2;
-		if (distance_from_wall % 10 < 5) {
-			return distance_from_wall - (distance_from_wall % 10);
-		} else {
-			return distance_from_wall - (distance_from_wall % 10) + 10;
-		}
+		float distance_from_wall = (dist1 + dist2)/2;
+		return (int)(Math.round((distance_from_wall/10) * 2) / 2.0 * 10);
+		//return (int)(Math.floor(((float)distance_from_wall) / 10.0)*10)+5;
 	}
 	
 //	@Override

@@ -44,9 +44,7 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public double getReward(IState s1, IState s2, IAction a) {
-		int front = SensorController.getFrontDist();
-		int back = SensorController.getBackDist();
-		int bucket = SensorState.bucketDists(front, back);
+		int bucket = s2.hashCode();
 		int reward = -1000;
 		
 		if (bucket > CENTER_CM) {
@@ -55,7 +53,7 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 			reward = bucket - CENTER_CM;
 		}
 		
-		System.out.println("Front: " + front + "\tBack: " + back + "\tBucket: " + bucket + "\tReward: " + reward);
+		System.out.println("\tBucket: "	+ bucket + "\tReward: " + reward + "\tAction: " + a.toString());
 		return reward;
 	}
 
