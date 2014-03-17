@@ -2,7 +2,10 @@ import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
-import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.addon.GyroDirectionFinder;
+import lejos.nxt.addon.GyroSensor;
+import lejos.nxt.addon.OpticalDistanceSensor;
+import lejos.robotics.navigation.CompassPilot;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
@@ -12,16 +15,16 @@ public class SensorController {
 
 	public static int getFrontDist()
 	{
-		int distance = new UltrasonicSensor(SensorPort.S3).getDistance();
-		System.out.println("Front: " + distance);
-		return distance;
+		int distance = new OpticalDistanceSensor(SensorPort.S3).getDistance();
+		System.out.println("Front: " + distance/10);
+		return distance/10;
 	}
 
 	public static int getBackDist()
 	{
-		int distance = new UltrasonicSensor(SensorPort.S2).getDistance();
-		System.out.println("Back: " + distance);
-		return distance;
+		int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance() + 50;
+		System.out.println("Back: " + distance/10);
+		return distance/10;
 	}
 	
 	public static int getLightValue()
@@ -56,8 +59,10 @@ public class SensorController {
 	
 	public static DifferentialPilot getPilot()
 	{
+		
 		if(pilot == null)
 		{
+//			pilot = new CompassPilot(new GyroDirectionFinder(new GyroSensor(SensorPort.S4)), 56, 120, Motor.C, Motor.A);
 			pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
 			pilot.setRotateSpeed(60);
 			pilot.setTravelSpeed(120);
