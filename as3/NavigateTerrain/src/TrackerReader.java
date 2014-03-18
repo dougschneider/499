@@ -1,9 +1,10 @@
 //http://www.binarytides.com/java-socket-programming-tutorial/
-import java.io.*;
-import java.util.Map;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

@@ -3,7 +3,9 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
+		// create a robot with x = 17, y = 17, facing south
 		Robot robot = new Robot(17, 17, Robot.SOUTH);
+		// make the robot travel along the road
 		robot.travel(17, 16);
 		robot.travel(17, 15);
 		robot.travel(17, 14);
