@@ -1,20 +1,17 @@
 import java.io.File;
 
-import weka.clusterers.Clusterer;
-import weka.clusterers.SimpleKMeans;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.converters.ArffLoader;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.GyroDirectionFinder;
-import lejos.nxt.addon.GyroSensor;
 import lejos.nxt.addon.OpticalDistanceSensor;
-import lejos.robotics.navigation.CompassPilot;
 import lejos.robotics.navigation.DifferentialPilot;
+import weka.clusterers.Clusterer;
+import weka.clusterers.SimpleKMeans;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 
 
 public class SensorController {
@@ -34,15 +31,12 @@ public class SensorController {
 	public static int getFrontDist()
 	{
 		int distance = new OpticalDistanceSensor(SensorPort.S3).getDistance();
-		//System.out.println("Front: " + distance/10);
 		return distance/10;
 	}
 
 	public static int getBackDist()
 	{
-		//int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance() + 50;
 		int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance();
-		//System.out.println("Back: " + distance/10);
 		return distance/10;
 	}
 	
@@ -79,8 +73,10 @@ public class SensorController {
 	
 	public static void goStraight()
 	{
+		// adjust the speed based on the distance from pedestrians
 		double speed = cluster(getPedestrianDistance());
 		getPilot().setTravelSpeed(speed);
+		
     	getPilot().travel(40, false);
 	}
 	
@@ -89,7 +85,6 @@ public class SensorController {
 		
 		if(pilot == null)
 		{
-//			pilot = new CompassPilot(new GyroDirectionFinder(new GyroSensor(SensorPort.S4)), 56, 120, Motor.C, Motor.A);
 			pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
 			pilot.setRotateSpeed(60);
 			pilot.setTravelSpeed(120);

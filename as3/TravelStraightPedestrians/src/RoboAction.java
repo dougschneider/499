@@ -23,6 +23,7 @@ public class RoboAction implements IAction{
 	@Override
 	public int hashCode()
 	{
+		// this is used to make actions equivalent in hashtables
 		return this.direction;
 	}
 
@@ -33,19 +34,18 @@ public class RoboAction implements IAction{
 
 	@Override
 	public int nnCodingSize() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double[] nnCoding() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public String toString()
 	{
+		// print the corresponding direction string
 		switch (this.direction) {
 		case STRAIGHT:
 			return "straight";

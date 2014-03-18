@@ -1,14 +1,3 @@
-import java.io.File;
-
-import lejos.nxt.LightSensor;
-import lejos.nxt.MotorPort;
-import lejos.nxt.SensorPort;
-import weka.classifiers.functions.SMO;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.SparseInstance;
-import weka.core.converters.CSVLoader;
-import weka.core.converters.ConverterUtils.DataSource;
 import environment.AbstractEnvironmentSingle;
 import environment.ActionList;
 import environment.IAction;
@@ -25,6 +14,7 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 	
 	@Override
 	public ActionList getActionList(IState s) {
+		// all actions are always available
 		ActionList l = new ActionList(s);
 		l.add(new RoboAction(RoboAction.STRAIGHT));
 		l.add(new RoboAction(RoboAction.LEFT));
@@ -43,6 +33,8 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 	}
 	
 	private static int getDiff(int distance, int middle) {
+		// get the difference from the robots current location and the middle
+		// of the map
 		if (distance > middle) {
 			return middle - distance;
 		} else {
@@ -114,7 +106,6 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public int whoWins(IState s) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

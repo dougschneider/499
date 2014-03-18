@@ -26,19 +26,18 @@ public class SensorState extends AbstractState
 
 	@Override
 	public int nnCodingSize() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double[] nnCoding() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public int hashCode()
 	{
+		// this is used to make actions equivalent in hashtables
 		return bucketDists(this.frontDistance, this.backDistance);
 	}
 	
@@ -50,23 +49,13 @@ public class SensorState extends AbstractState
 		int dist1 = bucketDists(ss.frontDistance, ss.backDistance);
 		int dist2 = bucketDists(this.frontDistance, this.backDistance);
 		
+		// two states in the same distance bucket are considered equal
 		return dist1 == dist2;
 	}
 	
 	public static int bucketDists(int dist1, int dist2) {
+		// a new bucket begins every 5 cm
 		float distance_from_wall = (dist1 + dist2)/2;
 		return (int)(Math.round((distance_from_wall/10) * 2) / 2.0 * 10);
-		//return (int)(Math.floor(((float)distance_from_wall) / 10.0)*10)+5;
 	}
-	
-//	@Override
-//	public String toString()
-//	{
-//		if(this.frontDistance - this.backDistance < 0)
-//			return "too far left";
-//		else if(this.frontDistance - this.backDistance > 0)
-//			return "too far right";
-//		else
-//			return "dead on";
-//	}
 }
