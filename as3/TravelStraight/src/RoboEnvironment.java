@@ -44,6 +44,20 @@ public class RoboEnvironment extends AbstractEnvironmentSingle {
 
 	@Override
 	public double getReward(IState s1, IState s2, IAction a) {
+		// Return a reward.
+		//
+		// Rewards are based on the previous state s1, the new state s2
+		// and the action a that transitioned from s1 to s2.
+		//
+		// The base reward is the number of centimeters from the center.
+		// However, if the action was incorrect (ie brings the robot away
+		// from the center, even if it stays in the same state) then
+		// the reward is made more negative.
+		// Further, the robot is given a bigger reward for going straight
+		// in the center, since this is the desired move once the center
+		// is found.
+		
+		// init reward
 		int reward = -1000;
 		int oldbucket = s1.hashCode();
 		int newbucket = s2.hashCode();
