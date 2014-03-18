@@ -39,7 +39,7 @@ public class SensorState extends AbstractState
 	@Override
 	public int hashCode()
 	{
-		return this.frontDistance + this.backDistance;
+		return bucketDists(this.frontDistance, this.backDistance);
 	}
 	
 	@Override
@@ -47,10 +47,16 @@ public class SensorState extends AbstractState
 	{
 		SensorState ss = (SensorState)other;
 		
-		int dist1 = (int) (frontDistance+backDistance)/2;
-		int dist2 = (int) (ss.frontDistance+ss.backDistance)/2;
+		int dist1 = bucketDists(ss.frontDistance, ss.backDistance);
+		int dist2 = bucketDists(this.frontDistance, this.backDistance);
 		
 		return dist1 == dist2;
+	}
+	
+	public static int bucketDists(int dist1, int dist2) {
+		float distance_from_wall = (dist1 + dist2)/2;
+		return (int)(Math.round((distance_from_wall/10) * 2) / 2.0 * 10);
+		//return (int)(Math.floor(((float)distance_from_wall) / 10.0)*10)+5;
 	}
 	
 //	@Override

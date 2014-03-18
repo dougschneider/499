@@ -18,7 +18,7 @@
 		<link>
 			<name>piqle</name>
 			<type>2</type>
-			<location>/cshome/ds3/leJOS/as3/piqle</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/piqle</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

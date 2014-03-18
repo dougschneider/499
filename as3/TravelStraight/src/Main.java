@@ -18,17 +18,17 @@ public class Main {
 		IAgent agent = null;
 		boolean learning = true;
 
-		QLearningSelector sel = null;
+		WatkinsSelector sel = null;
 		IEnvironmentSingle env = new RoboEnvironment();
 		
 		if(new File("../p3.agt").exists())
 		{
 			agent = RoboAgent.readAgent("../p3", env);
-			sel = (QLearningSelector) agent.getAlgorithm();
+			sel = (WatkinsSelector) agent.getAlgorithm();
 		}
 		else
 		{
-			sel = new QLearningSelector();
+			sel = new WatkinsSelector(0.7);
 			agent = new RoboAgent(env, sel);
 		}
 		
@@ -38,7 +38,8 @@ public class Main {
 			sel.setEpsilonGreedy();
 			sel.setGamma(0.7);
 			sel.setEpsilon(0.5);
-			sel.setAlpha(0.05);
+			sel.setAlpha(0.1);
+			((WatkinsSelector)sel).setlambda(0.7);
 			agent.enableLearning();
 		}
 		else
@@ -60,7 +61,7 @@ public class Main {
 			int length = ref.episode(env.defaultInitialState());
 			SensorController.controlLeftMotor(100, MotorPort.STOP);
 			SensorController.controlRightMotor(100, MotorPort.STOP);
-			System.out.println(ref.getRewardForEpisode()/(length*1.0));
+			System.out.println("Episode Reward: " + ref.getRewardForEpisode()/(length*1.0));
 			while(true)
 			{
 				if(Button.RIGHT.isDown())
@@ -89,6 +90,7 @@ public class Main {
 			agent.saveAgent("../p3");
 			System.out.println("done writing agent.");
 		}
+		System.exit(0);
 	}
 
 }
