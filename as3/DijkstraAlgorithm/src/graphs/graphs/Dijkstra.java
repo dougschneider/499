@@ -35,6 +35,7 @@ public class Dijkstra {
 			for (Edge e: n.getOutGoingEdges()){
 				GraphNode adjNode = e.getNode();
 				Integer newPossiblePathCost = e.getCost()+n.getDistance();
+				System.out.println("update: " + newPossiblePathCost.toString());
 				if (newPossiblePathCost<adjNode.getDistance()){
 					adjNode.setDistance(newPossiblePathCost);
                     parents.put(adjNode, n);
@@ -62,6 +63,8 @@ public class Dijkstra {
         path.add(current);
 
         Collections.reverse(path);
+        
+        return path;
     }
 	
 }

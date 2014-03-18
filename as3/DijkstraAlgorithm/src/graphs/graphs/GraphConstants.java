@@ -7,6 +7,6 @@ package graphs;
 public class GraphConstants {
 
 	
-	public static final Integer INFINITY =999999;
+	public static final Integer INFINITY = Integer.MAX_VALUE;
 	
 }

@@ -45,6 +45,8 @@ public class GraphNode implements Comparable<GraphNode> {
 	private Integer ID;
 	private boolean visited;
 	private Integer distance = GraphConstants.INFINITY;
+	public int row;
+	public int col;
 	
 	/**
 	 * 
@@ -133,6 +135,13 @@ public class GraphNode implements Comparable<GraphNode> {
 	 */
 	public void setDistance(Integer distance) {
 		this.distance = distance;
+	}
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		GraphNode gn = (GraphNode) other;
+		return gn.ID == this.ID;
 	}
 
 
