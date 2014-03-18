@@ -1,4 +1,4 @@
-package environment; 
+package environment;
 
 /*
  *    This program is free software; you can redistribute it and/or modify
@@ -22,61 +22,50 @@ package environment;
  *
  */
 
+/**
+ * Wrapping Interface State and define some common behaviors.
+ * 
+ * @author Francesco De Comite
+ * @version $Revision: 1.0 $
+ */
 
+abstract public class AbstractState implements IState {
 
+	/** The game's rules */
+	protected IEnvironment myEnvironment;
 
-/** Wrapping Interface State and define some common behaviors.
+	public AbstractState(IEnvironment ct) {
+		this.myEnvironment = ct;
+	}
 
-@author Francesco De Comite 
- @version $Revision: 1.0 $ 
+	public boolean isFinal() {
+		return this.myEnvironment.isFinal(this);
+	}
 
-*/
+	public void setEnvironment(IEnvironment ct) {
+		this.myEnvironment = ct;
+	}
 
-abstract public class AbstractState implements IState{
+	public ActionList getActionList() {
+		return myEnvironment.getActionList(this);
+	}
 
-    /** The game's rules */
-    protected IEnvironment myEnvironment; 
-   
+	public IState modify(IAction a) {
+		return this.myEnvironment.successorState(this, a);
+	}
 
-    
-    public AbstractState(IEnvironment ct){
-	this.myEnvironment=ct; 
-    }
+	public IEnvironment getEnvironment() {
+		return myEnvironment;
+	}
 
-    public boolean isFinal(){
-	return this.myEnvironment.isFinal(this); 
-    }
+	public double getReward(IState old, IAction a) {
+		return this.myEnvironment.getReward(old, this, a);
+	}
 
-    public void setEnvironment(IEnvironment ct){this.myEnvironment=ct;}
-    
-    
-    public ActionList getActionList(){
-	return myEnvironment.getActionList(this); 
-    }
-	
-       
-    public IState modify(IAction a){
-	return this.myEnvironment.successorState(this,a); 
-    }
+	abstract public IState copy();
 
-    public IEnvironment getEnvironment(){return myEnvironment;}
+	abstract public int nnCodingSize();
 
-    public double getReward(IState old,IAction a){
-	return this.myEnvironment.getReward(old,this,a); 
-}
-
-    abstract public IState copy(); 
-  
-    abstract public int nnCodingSize(); 
-
-    abstract public double[] nnCoding(); 
-
-   
-  
+	abstract public double[] nnCoding();
 
 }
-
-
-
-
-    

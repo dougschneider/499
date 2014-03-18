@@ -5,17 +5,15 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.navigation.DifferentialPilot;
 import weka.clusterers.Clusterer;
-import weka.clusterers.EM;
 import weka.clusterers.SimpleKMeans;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.SparseInstance;
 import weka.core.converters.ArffLoader;
-import weka.core.converters.CSVLoader;
 
 
 public class Main {
 	
+	// the speeds our robot can go (in mm/second)
 	private static final double VERY_FAST = 250;
 	private static final double FAST = 200;
 	private static final double SLOW = 150;
@@ -29,8 +27,10 @@ public class Main {
 		buildClusterer();
 		distanceSensor = new UltrasonicSensor(SensorPort.S3);
 
+		// create a pilot to move the robot
 		DifferentialPilot pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
 		
+		// travel until the program is killed
 		while(true)
 		{
 			double speed = cluster(distanceSensor.getDistance());
@@ -39,6 +39,9 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Get the cluster that the given distance belongs to.
+	 */
 	private static double cluster(double distance)
 	{
 		Instance i = data.firstInstance();
