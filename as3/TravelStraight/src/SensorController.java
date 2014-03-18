@@ -15,16 +15,15 @@ public class SensorController {
 
 	public static int getFrontDist()
 	{
+		// get distance for front sensor in cm
 		int distance = new OpticalDistanceSensor(SensorPort.S3).getDistance();
-		//System.out.println("Front: " + distance/10);
 		return distance/10;
 	}
 
 	public static int getBackDist()
 	{
-		//int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance() + 50;
+		// get distance for front sensor in cm
 		int distance = new OpticalDistanceSensor(SensorPort.S2).getDistance();
-		//System.out.println("Back: " + distance/10);
 		return distance/10;
 	}
 	
@@ -64,7 +63,6 @@ public class SensorController {
 		
 		if(pilot == null)
 		{
-//			pilot = new CompassPilot(new GyroDirectionFinder(new GyroSensor(SensorPort.S4)), 56, 120, Motor.C, Motor.A);
 			pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
 			pilot.setRotateSpeed(60);
 			pilot.setTravelSpeed(120);

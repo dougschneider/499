@@ -34,16 +34,14 @@ public class Main {
 		// create a 21 by 21 set of color points to represent the clusters of the map
 		// in a course way
 		int[] colours = {0x0000FF, 0x00FF00, 0xFF0000, 0xFFFFFF, 0x00FFFF, 0xFF00FF, 0xFFFF00, 0xDDDDDD, 0xAAAAAA};
-		int row = 0;
 		for(int x = 125; x <= 500; x += (500-125)/20)
 		{
-			int col = 0;
 			for(int y = 80; y <= 345; y += (345-80)/20)
 			{
 				try {
                     int cluster = getClosestCluster(x, y, som);
                     
-                    // draw a point for the cluster
+                    // draw a block of points for the cluster
                     for(int i = -2; i <= 2; ++i)
                     {
                         for(int j = -2; j <= 2; ++j)
@@ -54,13 +52,10 @@ public class Main {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				++col;
 			}
-            System.out.println();
-            ++row;
 		}
 		
-		// save the map
+		// save the map WITHOUT the path
 		File out = new File("../map.png");
 		try {
 			ImageIO.write(image, "png", out);
@@ -69,8 +64,8 @@ public class Main {
 		}
 		
 		// create the path by hand
-		// (17, 17) is the start, 
-		// (1, 10) is the end.
+		// (17, 17) is the start(A), 
+		// (1, 10) is the end(B).
 		ArrayList<Node> path = new ArrayList<Node>();
 		path.add(new Node(17, 17));
 		path.add(new Node(17, 16));

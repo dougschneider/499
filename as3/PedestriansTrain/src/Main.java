@@ -25,11 +25,14 @@ public class Main {
 	public static void main(String[] args) {
 		
 		buildClassifier();
+		// get the light sensor to record the end of training episodes
 		lightSensor = new LightSensor(SensorPort.S1);
 		lightSensor.setFloodlight(true);
 		
+		// get the distance sensor to record data points
 		distanceSensor = new UltrasonicSensor(SensorPort.S3);
 		
+		// use a pilot to travel forward
 		DifferentialPilot pilot = new DifferentialPilot(56, 120, Motor.C, Motor.A);
 		pilot.setTravelSpeed(120);
 	
@@ -37,29 +40,39 @@ public class Main {
 		try {
 			out = new FileWriter(new File("../p1data.arff"));
 			
+			// add the header for the arff file
 			out.write("@RELATION distance\n\n");
 			out.write("@ATTRIBUTE distance NUMERIC\n\n");
 			out.write("@DATA\n");
 			
+			// run a set of training episodes until termination
 			boolean done = false;
 			while(true)
 			{
+				// move forward at a constant speed
 				pilot.forward();
+				
+				// collect sensor data until we reach the tape
 				while(!shouldStop())
 				{
+					// store another data point
 					out.write(new Integer(distanceSensor.getDistance()).toString());
 					out.write("\n");
 
+					// wait a little before recording another data point
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
+				// stop at the end of the training episode
 				pilot.stop();
 				
+				// wait at the end of an episode for further instructions
 				while(true)
 				{
+					// if right button is down, new episode
 					if(Button.RIGHT.isDown())
 						break;
 					try {
@@ -67,16 +80,21 @@ public class Main {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					
+					// if left button is down, we're done training
 					if(Button.LEFT.isDown())
 					{
 						done = true;
 						break;
 					}
 				}
+				
+				// if we're done, break out
 				if(done)
 					break;
 			}
 
+			// flush the written data
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -84,13 +102,16 @@ public class Main {
 	}
 
 
+	/**
+	 * Build the classifier for use in detecting episode termination
+	 */
     private static void buildClassifier()
     {
 		data = null;
         // load in the training data
 		try {
 			CSVLoader loader = new CSVLoader();
-			loader.setSource(new File("../p3data.csv"));
+			loader.setSource(new File("../p1data.csv"));
 			data = loader.getDataSet();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -110,6 +131,9 @@ public class Main {
 		}
     }
 	
+    /**
+     * Return true if the episode of training should end (if we see tape)
+     */
 	private static boolean shouldStop()
 	{
         // set up the light sensor on the NXT

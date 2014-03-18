@@ -49,6 +49,7 @@ public class Main {
         try {
         	int cluster = clusterer.clusterInstance(i);
         	System.out.println(cluster);
+        	// uncomment the lines corresponding to k-means or EM
         	// k-means
         	if(cluster == 0)
         		return VERY_SLOW;
@@ -89,13 +90,16 @@ public class Main {
 		}
 		
         // create the model
+    	// uncomment the lines corresponding to k-means or EM
 		clusterer = new SimpleKMeans();
 //		clusterer = new EM();
+    	// uncomment the lines corresponding to k-means or EM
 		// k-means
 		String[] options = {"-N 4", "-A \"weka.core.EuclideanDistance -R first-last\"", "-I 500", "-S 10"};
 		// EM
 //		String[] options = {"-I 100", "-N 4", "-M 1.0E-6", "-S 100"};
 		try {
+        	// uncomment the lines corresponding to k-means or EM
 			// k-means
 			((SimpleKMeans)clusterer).setOptions(options);
 			((SimpleKMeans)clusterer).setNumClusters(4);
