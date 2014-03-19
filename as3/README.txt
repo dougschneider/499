@@ -5,6 +5,15 @@ Aaron Krebs
 Dough Schneider
 
 
+Requirements
+============
+
+We have not included the required WEKA verions to save space.
+WEKA 3.6.10 is required in ../weka-3-6-10
+WEKA 3.7.10 is required in ../weka-3-7-10
+To use other locations modify the .classpath files for each java project.
+
+
 Part 1
 ======
 
@@ -16,12 +25,13 @@ model. See the source code for switching between EM and K-Means methods.
 Part 2
 ======
 
-To collect data for part 2, run the NavigateTerrain project. It will give you
-instructions as to when to select the colour to track for the robot. This will
+To collect data for part 2, run the NavigateTerrain project. After it starts,
+start the python tracker and follow the instructions given by NavigateTerrain
+as to when to select the colour to track for the robot and so on. This will
 generate p2data.arff.
 
-Generate the model using WEKA with the parameters provided in the report. Our
-model p2.model is provided.
+Generate the model using WEKA with the parameters provided in our report
+(3x3 lattice, etc). Our model p2.model is provided.
 
 Generate the images (using the generated model) by running the ProduceMap project.
 
@@ -32,4 +42,5 @@ Part 3
 ======
 
 To train the model, run the TravelStraight project. This will produce the p3.agt
-agent file. To run the model, run TravelStraight with the --test option.
+agent file. Our p3.agt agent is provided.
+To run the model, run TravelStraight with the --test option.
