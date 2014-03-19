@@ -9,6 +9,8 @@ Part 1
 ======
 
 To run part 1, run the PedestriansTrain and PedestriansRun java projects.
+These will generate the data files and model, and then run according to the 
+model. See the source code for switching between EM and K-Means methods.
 
 
 Part 2
