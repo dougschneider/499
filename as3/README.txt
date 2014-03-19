@@ -44,3 +44,10 @@ Part 3
 To train the model, run the TravelStraight project. This will produce the p3.agt
 agent file. Our p3.agt agent is provided.
 To run the model, run TravelStraight with the --test option.
+
+
+Part 4
+======
+
+Using the data generated in parts 1 and 3, run TravelStraightPedestrians to
+combine the behaviour of those parts.
