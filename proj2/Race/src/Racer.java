@@ -31,47 +31,37 @@ public class Racer
 		this.pilot.setTravelSpeed(100);
 		this.poseProvider = new OdometryPoseProvider(this.pilot);
 		this.poseProvider.setPose(new Pose(748, 150, 180));
-		
 		this.path = new Path();
-		System.out.println(path.getNextAngle());
-		System.out.println(path.getNextDistance());
-		path.goToNext();
-		System.out.println(path.getNextAngle());
-		System.out.println(path.getNextDistance());
-		System.exit(0);
 	}
 	
 	public void race()
 	{
 		int c = 0;
-		Pose finalPose = this.poseProvider.getPose();
-		System.out.println(finalPose.getX());
-		System.out.println(finalPose.getY());
-		System.out.println(finalPose.getHeading());
-		this.pilot.arc(-300, 90);
-		finalPose = this.poseProvider.getPose();
-		System.out.println(finalPose.getX());
-		System.out.println(finalPose.getY());
-		System.out.println(finalPose.getHeading());
-		return;
-//		while(c < 200)
-//		{
-//			c++;
-//			if(this.lightSensor.getLightValue() > 30)
-//			{
-//				this.arcLeft();
-//			}
-//			else
-//			{
-//				this.arcRight();
-//			}
-//			Delay.msDelay(20);
-//		}
-//		this.stop();
-//		Pose finalPose = this.poseProvider.getPose();
-//		System.out.println(finalPose.getX());
-//		System.out.println(finalPose.getY());
-//		System.out.println(finalPose.getHeading());
+		while(c < 10)
+		{
+			++c;
+			Pose currentPose = this.poseProvider.getPose();
+			double heading = (currentPose.getHeading() + 360) % 360;
+			System.out.println("current: " + heading);
+			System.out.println("next: " + this.path.getNextAngle());
+
+			double rotation = 0;
+			if(heading - this.path.getNextAngle() > 0)
+			{
+				rotation = -(heading-this.path.getNextAngle());
+				if(this.path.getNextAngle()+360 - heading < rotation)
+					rotation = this.path.getNextAngle()+360 - heading;
+			}
+			else
+			{
+				rotation = this.path.getNextAngle()-heading;
+				if(heading+360 - this.path.getNextAngle() < rotation)
+					rotation = -(heading+360 - this.path.getNextAngle());
+			}
+			this.pilot.rotate(rotation);
+			this.pilot.travel(this.path.getNextDistance());
+			this.path.goToNext();
+		}
 	}
 	
 	public void stop()
