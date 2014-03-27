@@ -1,3 +1,4 @@
+import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -11,9 +12,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Robot agent = new Robot(56, 120, Motor.C, Motor.A,
-				                new UltrasonicSensor(SensorPort.S4),
+				                new UltrasonicSensor(SensorPort.S2),
+				                new OpticalDistanceSensor(SensorPort.S4),
 				                new OpticalDistanceSensor(SensorPort.S3),
-				                new OpticalDistanceSensor(SensorPort.S2));
+				                new LightSensor(SensorPort.S1));
 		agent.run();
 	}
 

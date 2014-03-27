@@ -1,3 +1,4 @@
+import lejos.nxt.LightSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.OpticalDistanceSensor;
 import lejos.nxt.remote.RemoteMotor;
@@ -6,83 +7,81 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 public class Robot {
 	
-	private static final int obstacleDist = 20;// mm (distance to obstacle from sensors facing down)
-	private static final int midDist = 50;// cm (dist to wall from middle)
-	private static final int obstacleWidth = 100;// mm
+	private static final int obstacleDist = 160;// mm (distance to obstacle from sensors facing down)
+	private static final int midDist = 37;// cm (dist to wall from middle)
+	private static final int obstacleWidth = 200;// mm
 	private static final int farDistance = 90;// cm (dist to wall from far tape
+	private static final int groundColor = 35;// a little above ground light value
 	
 	private DifferentialPilot pilot;
 	
 	private UltrasonicSensor wallSensor;
 	private OpticalDistanceSensor leftObstacleSensor;
 	private OpticalDistanceSensor rightObstacleSensor;
+	private LightSensor lightSensor;
 	
 	public Robot(int wheelDiameter, int trackWidth, RemoteMotor leftMotor, RemoteMotor rightMotor, UltrasonicSensor wallSensor,
-			     OpticalDistanceSensor leftObstacleSensor, OpticalDistanceSensor rightObstacleSensor)
+			     OpticalDistanceSensor leftObstacleSensor, OpticalDistanceSensor rightObstacleSensor,
+			     LightSensor lightSensor)
 	{
+		// create a pilot to control the robot
 		this.pilot = new DifferentialPilot(wheelDiameter, trackWidth, leftMotor, rightMotor);
-		this.pilot.setRotateSpeed(200);
-		this.pilot.setTravelSpeed(200);
+		this.pilot.setRotateSpeed(50);
+		this.pilot.setTravelSpeed(50);
 		
+		// store all the sensors
 		this.wallSensor = wallSensor;
 		this.leftObstacleSensor = leftObstacleSensor;
 		this.rightObstacleSensor = rightObstacleSensor;
+		this.lightSensor = lightSensor;
+		this.lightSensor.setFloodlight(true);
 	}
 	
 	public void run()
 	{
-		faceGoal();
 		while(true)
 		{
 			if(shouldAvoid())
-			{
-				this.pilot.stop();
 				avoid();
-			}
+			else if(onTape())
+				this.pilot.arcBackward(-100);// arc away from tape opposite of normal arc
+			else if(!isFacingGoal())
+				this.pilot.rotateLeft();
 			else
-			{
-				this.pilot.forward();
-			}
+				this.pilot.arcForward(-400);// always arc towards the tape
 			
+			//TODO: lower the sleep value
 			try {
-				Thread.sleep(50);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	private void faceGoal()
-	{
-		while(true)
-		{
-			if(this.wallSensor.getDistance() <= Robot.farDistance)
-				break;
-			
-			this.pilot.rotateRight();
-			
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
+	/**
+	 * Avoid an obstacle
+	 */
 	private void avoid()
 	{
+		this.pilot.stop();
 		if(isCloseToWall())
 		{
+			// continue avoiding until in the clear
 			while(shouldAvoid())
 				avoidToRight();
 		}
 		else
 		{
+			// continue avoiding until in the clear
 			while(shouldAvoid())
 				avoidToLeft();
 		}
 	}
 	
+	/**
+	 * Avoid an obstacle and go to the right
+	 */
 	private void avoidToRight()
 	{
 		this.pilot.rotate(-90);
@@ -90,20 +89,49 @@ public class Robot {
 		this.pilot.rotate(90);
 	}
 	
+	/**
+	 * Avoid an obstacle and go to the left
+	 */
 	private void avoidToLeft()
 	{
-		this.pilot.rotate(-90);
-		this.pilot.travel(Robot.obstacleWidth);
 		this.pilot.rotate(90);
+		this.pilot.travel(Robot.obstacleWidth);
+		this.pilot.rotate(-90);
 	}
 	
+	/**
+	 * 
+	 * @return true if the robot thinks it's facing the goal
+	 */
+	private boolean isFacingGoal()
+	{
+		return this.wallSensor.getDistance() <= Robot.farDistance;
+	}
+	
+	/**
+	 * 
+	 * @return true if the robot thinks it's close to the wall
+	 */
 	private boolean isCloseToWall()
 	{
 		return this.wallSensor.getDistance() < Robot.midDist;
 	}
 	
+	/**
+	 * 
+	 * @return true if the robot has an obstacle in front of it
+	 */
 	private boolean shouldAvoid()
 	{
 		return this.leftObstacleSensor.getDistance() < Robot.obstacleDist || this.rightObstacleSensor.getDistance() < Robot.obstacleDist;
+	}
+	
+	/**
+	 * 
+	 * @return true if the robot is currently on tape
+	 */
+	private boolean onTape()
+	{
+		return this.lightSensor.getLightValue() > groundColor;
 	}
 }
