@@ -26,8 +26,8 @@ public class Robot {
 	{
 		// create a pilot to control the robot
 		this.pilot = new DifferentialPilot(wheelDiameter, trackWidth, leftMotor, rightMotor);
-		this.pilot.setRotateSpeed(50);
-		this.pilot.setTravelSpeed(50);
+		this.pilot.setRotateSpeed(100);
+		this.pilot.setTravelSpeed(100);
 		
 		// store all the sensors
 		this.wallSensor = wallSensor;
@@ -45,14 +45,11 @@ public class Robot {
 				avoid();
 			else if(onTape())
 				this.pilot.arcBackward(-100);// arc away from tape opposite of normal arc
-			else if(!isFacingGoal())
-				this.pilot.rotateLeft();
 			else
-				this.pilot.arcForward(-400);// always arc towards the tape
+				this.pilot.arcForward(-900);// always arc towards the tape
 			
-			//TODO: lower the sleep value
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -84,9 +81,12 @@ public class Robot {
 	 */
 	private void avoidToRight()
 	{
-		this.pilot.rotate(-90);
-		this.pilot.travel(Robot.obstacleWidth);
-		this.pilot.rotate(90);
+		this.pilot.arcBackward(100);
+		try {
+			Thread.sleep(1200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -94,9 +94,12 @@ public class Robot {
 	 */
 	private void avoidToLeft()
 	{
-		this.pilot.rotate(90);
-		this.pilot.travel(Robot.obstacleWidth);
-		this.pilot.rotate(-90);
+		this.pilot.arcBackward(-100);
+		try {
+			Thread.sleep(1200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
