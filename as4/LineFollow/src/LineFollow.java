@@ -14,10 +14,11 @@ public class LineFollow {
 		
 		MotorPort leftMotor = MotorPort.C;
 		MotorPort rightMotor = MotorPort.A;
-		Controllers.bangBang(sensor, leftMotor, rightMotor);
-		Controllers.P(3, sensor, leftMotor, rightMotor);
-		Controllers.PD(1.8, 1.5, sensor, leftMotor, rightMotor);
-		Controllers.PI(2, 0.1, sensor, leftMotor, rightMotor);
-		Controllers.PID(1.8, 0.1, 0.3, sensor, leftMotor, rightMotor);
+		Controllers c = new Controllers();
+		c.bangBang(sensor, leftMotor, rightMotor);
+		c.P(3, sensor, leftMotor, rightMotor);
+		c.PD(1.8, 1.5, sensor, leftMotor, rightMotor);
+		c.PI(2, 0.1, sensor, leftMotor, rightMotor);
+		c.PID(1.8, 0.1, 0.3, sensor, leftMotor, rightMotor);
 	}
 }

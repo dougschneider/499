@@ -18,7 +18,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public static void bangBang(LightSensor sensor, MotorPort leftMotor,
+	public void bangBang(LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		while (true) {
 			if (sensor.getLightValue() < 35) {
@@ -44,7 +44,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public static void P(double Kp, LightSensor sensor, MotorPort leftMotor,
+	public void P(double Kp, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		int targetValue = 35;
 		runPID(targetValue, Kp, 0, 0, sensor, leftMotor, rightMotor);
@@ -59,7 +59,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public static void PD(double Kp, double Kd, LightSensor sensor,
+	public void PD(double Kp, double Kd, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 40;
 		runPID(targetValue, Kp, 0, Kd, sensor, leftMotor, rightMotor);
@@ -74,7 +74,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public static void PI(double Kp, double Ki, LightSensor sensor,
+	public void PI(double Kp, double Ki, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 35;
 		runPID(targetValue, Kp, Ki, 0, sensor, leftMotor, rightMotor);
@@ -90,7 +90,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public static void PID(double Kp, double Ki, double Kd, LightSensor sensor,
+	public void PID(double Kp, double Ki, double Kd, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 36;
 		runPID(targetValue, Kp, Ki, Kd, sensor, leftMotor, rightMotor);
@@ -107,7 +107,7 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	private static void runPID(int targetValue, double Kp, double Ki,
+	private void runPID(int targetValue, double Kp, double Ki,
 			double Kd, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		int error = 0;
@@ -145,15 +145,15 @@ public class Controllers {
 		exitController(leftMotor, rightMotor);
 	}
 
-	protected static int getCurrentValue(LightSensor sensor) {
+	protected int getCurrentValue(LightSensor sensor) {
 		return sensor.getLightValue();
 	}
 
-	protected static boolean isTerminalState() {
+	protected boolean isTerminalState() {
 		return Button.RIGHT.isPressed();
 	}
 
-	protected static void exitController(MotorPort leftMotor,
+	protected void exitController(MotorPort leftMotor,
 			MotorPort rightMotor) {
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
