@@ -3,6 +3,7 @@
 	<name>WaypointFollow</name>
 	<comment></comment>
 	<projects>
+		<project>ControllersBase</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
