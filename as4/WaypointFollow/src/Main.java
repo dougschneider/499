@@ -1,5 +1,3 @@
-import org.jfree.chart.renderer.category.WaterfallBarRenderer;
-
 import lejos.nxt.MotorPort;
 import lejos.util.Delay;
 
