@@ -1,5 +1,6 @@
 //http://www.binarytides.com/java-socket-programming-tutorial/
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.net.*;
 
@@ -16,10 +17,13 @@ public class TrackerReader extends Thread
     public volatile double theta;
     public volatile double targetx;
     public volatile double targety;
+    public volatile ArrayList<double[]> waypoints = new ArrayList<double[]>();
 
     //public static void main(String args[])
     public void run()
-    {
+    {	
+    	JSONArray wpOuter = null;
+    	JSONArray wpInner = null;
         x = 0;
         y = 0;
         System.out.println("LISTENER");
@@ -62,6 +66,14 @@ public class TrackerReader extends Thread
                         theta = (Double) jsonObject.get("theta");
                         targetx = (Double) jsonObject.get("targetx");
                         targety = (Double) jsonObject.get("targety");
+                        waypoints.clear();
+                        wpOuter = (JSONArray) jsonObject.get("waypoints");
+                        for (int i = 0; i < new Integer(((Long) jsonObject.get("num_waypoints")).toString()); i++) {
+                        	wpInner = (JSONArray) wpOuter.get(i);
+                        	waypoints.add(new double[] {(Double) wpInner.get(0), (Double) wpInner.get(1)});
+                        }
+                        
+                        
                     }catch (ParseException e) {
                         e.printStackTrace();
                     }

@@ -1,4 +1,5 @@
 """
+Author: Oscar Ramirez
 Modified camshift tracker from opencv sample and tracker_camshift_planar_robot.py
 from Camilo P.
 """
@@ -12,6 +13,7 @@ HISTOGRAM_WINDOW = "Histogram"
 STOP_CRITERIA = (cv.CV_TERMCRIT_EPS | cv.CV_TERMCRIT_ITER, 10, 1)
 TARGET_ELLIPSE_COLOR = (255, 255, 0)
 CENTROID_COLOR = (255, 0, 0)
+WAYPOINT_COLOR = (0, 0, 0)
 
 def is_rect_nonzero(r):
     (_, _, w, h) = r
@@ -61,11 +63,15 @@ class CamShiftTracker:
         self.backproject_mode = False
         self.message = {}
 
+        self.waypoints = list()
+
         self.count = 0
 
         print("Keys:\n"
             "    ESC - quit the program\n"
             "    b - switch to/from backprojection view\n"
+            "    t - add waypoint\n"
+            "    c - clear waypoints\n"
             "To initialize tracking, drag across the object with the mouse\n")
 
     def on_mouse(self, event, x, y, *args):
@@ -117,9 +123,25 @@ class CamShiftTracker:
                 self.update_message(track_box)
                 sock.send(json.dumps(self.message) + "\n")
             self.draw_target(frame, track_box)
+            self.draw_waypoints(frame)
             self.update_windows(frame, backproject, hist)
             self.handle_keyboard_input()
             track_box = None
+
+    def draw_waypoints(self, frame):
+        """ Draw all the waypoints and connecting lines.
+        """
+        for i in range(len(self.waypoints)):
+            w = self.waypoints[i]
+            try:
+                next_w = self.waypoints[i+1]
+            except IndexError:
+                next_w = None
+            print "Waypoint {}, {}".format(w[0], w[1])
+            cv.Circle(frame, (w[0], w[1]), 5, WAYPOINT_COLOR, 3)
+            if next_w:
+                cv.Line(frame, (w[0], w[1]), (next_w[0], next_w[1]), WAYPOINT_COLOR, 3)
+        print "------------------------------------------"
 
     def update_hue(self, frame):
         """ Convert frame to HSV and keep the hue
@@ -167,6 +189,10 @@ class CamShiftTracker:
             self.target_y += 1
         elif c == ord("d"):
             self.target_x += 1
+        elif c == ord("t"):
+            self.waypoints.append((self.target_x, self.target_y))
+        elif c == ord("c"):
+            self.waypoints = list()
 
     def draw_target(self, frame, track_box):
         if track_box:
@@ -191,6 +217,8 @@ class CamShiftTracker:
         self.message['theta'] = float(track_box[2])
         self.message['targetx'] = float(self.target_x)
         self.message['targety'] = float(self.target_y)
+        self.message['num_waypoints'] = int(len(self.waypoints))
+	self.message['waypoints'] = [[float(w[0]), float(w[1])] for w in self.waypoints]
 
 
 if __name__ == "__main__":

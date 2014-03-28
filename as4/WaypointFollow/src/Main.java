@@ -10,8 +10,11 @@ public class Main {
         tracker.start();
         while (true) {
             Delay.msDelay(1000);
-            System.out.println(tracker.x + " " + tracker.y);
+            System.out.println("Waypoints:");
+            for (int i = 0; i < tracker.waypoints.size(); i++) {
+            	System.out.println(tracker.waypoints.get(i)[0] + ", " + tracker.waypoints.get(i)[1]);
+            }
+            System.out.println("------------------------");
         }
 	}
-
 }

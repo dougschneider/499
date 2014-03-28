@@ -128,7 +128,7 @@ class CamShiftTracker:
             self.handle_keyboard_input()
             track_box = None
 
-    def draw_waypoints(self frame):
+    def draw_waypoints(self, frame):
         """ Draw all the waypoints and connecting lines.
         """
         for i in range(len(self.waypoints)):
@@ -217,6 +217,8 @@ class CamShiftTracker:
         self.message['theta'] = float(track_box[2])
         self.message['targetx'] = float(self.target_x)
         self.message['targety'] = float(self.target_y)
+        self.message['num_waypoints'] = int(len(self.waypoints))
+        self.message['waypoints'] = [[float(w[0]), float(w[1])] for w in self.waypoints]
 
 
 if __name__ == "__main__":
