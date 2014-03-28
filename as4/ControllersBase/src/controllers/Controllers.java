@@ -1,17 +1,18 @@
 package controllers;
+
 import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 
-@SuppressWarnings({"deprecation"})
+@SuppressWarnings({ "deprecation" })
 /**
  * Controllers class provides BangBang, P, PD, PI, and PID controller implementations.
  * 
  */
 public class Controllers {
-	
+
 	/**
-	 * BangBang controller implementation.
+	 * Give control to BangBang controller.
 	 * 
 	 * @param sensor
 	 * @param leftMotor
@@ -35,32 +36,80 @@ public class Controllers {
 		System.exit(0);
 	}
 
+	/**
+	 * Give control to P controller.
+	 * 
+	 * @param Kp
+	 * @param sensor
+	 * @param leftMotor
+	 * @param rightMotor
+	 */
 	public static void P(double Kp, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		int targetValue = 35;
 		runPID(targetValue, Kp, 0, 0, sensor, leftMotor, rightMotor);
 	}
 
-	public static void PD(double Kp, double Kd, LightSensor sensor, MotorPort leftMotor,
-			MotorPort rightMotor) {
+	/**
+	 * Give control to PD controller.
+	 * 
+	 * @param Kp
+	 * @param Kd
+	 * @param sensor
+	 * @param leftMotor
+	 * @param rightMotor
+	 */
+	public static void PD(double Kp, double Kd, LightSensor sensor,
+			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 40;
 		runPID(targetValue, Kp, 0, Kd, sensor, leftMotor, rightMotor);
 	}
 
-	public static void PI(double Kp, double Ki, LightSensor sensor, MotorPort leftMotor,
-			MotorPort rightMotor) {
+	/**
+	 * Give control to PI controller.
+	 * 
+	 * @param Kp
+	 * @param Ki
+	 * @param sensor
+	 * @param leftMotor
+	 * @param rightMotor
+	 */
+	public static void PI(double Kp, double Ki, LightSensor sensor,
+			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 35;
 		runPID(targetValue, Kp, Ki, 0, sensor, leftMotor, rightMotor);
 	}
 
-	public static void PID(double Kp, double Ki, double Kd, LightSensor sensor, MotorPort leftMotor,
-			MotorPort rightMotor) {
+	/**
+	 * Give control to PID controller.
+	 * 
+	 * @param Kp
+	 * @param Ki
+	 * @param Kd
+	 * @param sensor
+	 * @param leftMotor
+	 * @param rightMotor
+	 */
+	public static void PID(double Kp, double Ki, double Kd, LightSensor sensor,
+			MotorPort leftMotor, MotorPort rightMotor) {
 		int targetValue = 36;
 		runPID(targetValue, Kp, Ki, Kd, sensor, leftMotor, rightMotor);
 	}
-	
-	private static void runPID(int targetValue, double Kp, double Ki, double Kd, LightSensor sensor, MotorPort leftMotor,
-			MotorPort rightMotor){
+
+	/**
+	 * Actual PID controller implementation.
+	 * 
+	 * @param targetValue
+	 * @param Kp
+	 * @param Ki
+	 * @param Kd
+	 * @param sensor
+	 * @param leftMotor
+	 * @param rightMotor
+	 */
+	private static void runPID(int targetValue, double Kp, double Ki,
+			double Kd, LightSensor sensor, MotorPort leftMotor,
+			MotorPort rightMotor) {
 		int error = 0;
 		int lastError = 0;
 
@@ -68,7 +117,7 @@ public class Controllers {
 
 		double integral = 0;
 		double derivative = 0;
-		
+
 		while (true) {
 			int current = sensor.getLightValue();
 			error = current - targetValue;
