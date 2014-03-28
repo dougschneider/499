@@ -119,7 +119,7 @@ public class Controllers {
 		double derivative = 0;
 
 		while (true) {
-			int current = sensor.getLightValue();
+			int current = getCurrentValue(sensor);
 			error = current - targetValue;
 			System.out.println(current);
 
@@ -134,7 +134,7 @@ public class Controllers {
 			rightMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
 			lastError = error;
 			// 28/45
-			if (Button.RIGHT.isPressed())
+			if (isTerminalState())
 				break;
 			try {
 				Thread.sleep(100);
@@ -142,6 +142,19 @@ public class Controllers {
 				e.printStackTrace();
 			}
 		}
+		exitController(leftMotor, rightMotor);
+	}
+
+	protected static int getCurrentValue(LightSensor sensor) {
+		return sensor.getLightValue();
+	}
+
+	protected static boolean isTerminalState() {
+		return Button.RIGHT.isPressed();
+	}
+
+	protected static void exitController(MotorPort leftMotor,
+			MotorPort rightMotor) {
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
 		System.exit(0);
