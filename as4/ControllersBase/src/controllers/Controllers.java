@@ -7,7 +7,6 @@ import lejos.nxt.MotorPort;
 /**
  * Controllers class provides BangBang, P, PD, PI, and PID controller implementations.
  * 
- *
  */
 public class Controllers {
 	
@@ -38,40 +37,24 @@ public class Controllers {
 
 	public static void P(double Kp, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
-//		double Kp = 3;
-//		double Ki = 0;
-//		double Kd = 0;
-
 		int targetValue = 35;
 		runPID(targetValue, Kp, 0, 0, sensor, leftMotor, rightMotor);
 	}
 
 	public static void PD(double Kp, double Kd, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
-//		double Kp = 1.8;
-//		double Ki = 0;
-//		double Kd = 1.5;
-
 		int targetValue = 40;
 		runPID(targetValue, Kp, 0, Kd, sensor, leftMotor, rightMotor);
 	}
 
 	public static void PI(double Kp, double Ki, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
-//		double Kp = 2;
-//		double Ki = 0.1;
-//		double Kd = 0;
-
 		int targetValue = 35;
 		runPID(targetValue, Kp, Ki, 0, sensor, leftMotor, rightMotor);
 	}
 
 	public static void PID(double Kp, double Ki, double Kd, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
-//		double Kp = 1.8;
-//		double Ki = 0.1;
-//		double Kd = 0.3;
-
 		int targetValue = 36;
 		runPID(targetValue, Kp, Ki, Kd, sensor, leftMotor, rightMotor);
 	}
