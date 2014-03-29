@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/pc"/>
 	<classpathentry kind="lib" path="../tracker/json-simple-1.1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ControllersBase"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,6 +7,8 @@ import controllers.Controllers;
  * appropriately.
  */
 public class WaypointFollowControllers extends Controllers {
+	
+	private double ERROR_SCALE_FACTOR = 0.25;
 
 	/**
 	 * Current value is distance to line.
@@ -40,5 +42,18 @@ public class WaypointFollowControllers extends Controllers {
 			MotorPort rightMotor) {
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
+	}
+	
+	/**
+	 * Provide a margin within which we'll say we're on the line
+	 */
+	@Override
+	protected int getError(int current, int targetValue) {
+		int error = current - targetValue;
+		// error is large (because distance in pixels), so scale it a little
+		error *= ERROR_SCALE_FACTOR;
+		System.out.println(error);
+		// robot was turning the wrong direction, so negate the error
+		return -error;
 	}
 }

@@ -2,7 +2,7 @@ import lejos.nxt.MotorPort;
 import lejos.util.Delay;
 
 public class Main {
-	public static double TARGET_RADIUS = 0.5;
+	public static double TARGET_RADIUS = 10;
 	public static TrackerReader tracker;
 	public static int numWaypoints = 0;
 	public static int currLineStart = 0;
@@ -24,7 +24,6 @@ public class Main {
 				followCurrLine();
 			}
 			setNextLine();
-			Delay.msDelay(1000);
 		}
 	}
 
@@ -89,7 +88,7 @@ public class Main {
 	}
 
 	private static void followCurrLine() {
-		controller.PID(0, 1.8, 0.1, 0.3, null, leftMotor, rightMotor);
+		controller.PID(0, 2.0, 0.1, 0, null, leftMotor, rightMotor);
 	}
 
 	/**
@@ -131,17 +130,21 @@ public class Main {
 	 * @param p
 	 * @param l1
 	 * @param l2
-	 * @return
+	 * @return is positive line is right of point in direction of travel, negative
+	 * if left of point in direction of travel
 	 */
-	private static double distanceToLine(double x1, double y1, double xl1,
+	public static double distanceToLine(double x1, double y1, double xl1,
 			double yl1, double xl2, double yl2) {
-		// see
-		// http://math.ucsd.edu/~wgarner/math4c/derivations/distance/distptline.htm
-
-		// get y=m*x+b format for line
-		double m = yl2 - yl1;
-		double b = xl1;
-
-		return Math.abs(y1 - m * x1 - b) / Math.sqrt(Math.pow(m, 2) + 1);
+		// http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
+		double distance = Math.abs((xl2 - xl1) * (yl1 - y1) - (xl1 - x1) * (yl2 - yl1))
+				/ Math.sqrt(Math.pow((xl2 - xl1), 2) + Math.pow((yl2 - yl1), 2));
+		
+		// check if right or left of line
+		// http://stackoverflow.com/questions/3461453/determine-which-side-of-a-line-a-point-lies
+		if (((xl2 - xl1) * (y1 - yl1) - (yl2 - yl1) * (x1 - xl1)) > 0) {
+			return distance;
+		} else {
+			return -distance;
+		}
 	}
 }

@@ -120,7 +120,7 @@ public class Controllers {
 
 		while (true) {
 			int current = getCurrentValue(sensor);
-			error = current - targetValue;
+			error = getError(current, targetValue);
 
 			integral = integral + error;
 			derivative = error - lastError;
@@ -155,5 +155,9 @@ public class Controllers {
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
 		System.exit(0);
+	}
+	
+	protected int getError(int current, int targetValue) {
+		return current - targetValue;
 	}
 }
