@@ -1,81 +1,79 @@
 import lejos.nxt.LightSensor;
-import lejos.nxt.remote.RemoteMotor;
-import lejos.robotics.localization.OdometryPoseProvider;
-import lejos.robotics.localization.PoseProvider;
-import lejos.robotics.navigation.DifferentialPilot;
-import lejos.robotics.navigation.Pose;
+import lejos.nxt.MotorPort;
 
 
 public class Racer
 {
+	private static final int NORMAL_ZONE_READING = 45;
+	private static final int SPECIAL_ZONE_READING = 40;
+	private static final int INNER_EDGE_READING = 30;
+	private static final int OUTER_EDGE_READING = 24;
+	
 	private static double wheelDiameter = 56;
 	private static double trackWidth = 120;
-	
+
 	private LightSensor lightSensor;
-	private RemoteMotor rightMotor;
-	private RemoteMotor leftMotor;
-	private DifferentialPilot pilot;
-	private PoseProvider poseProvider;
-	private Path path;
+	private LightSensor targetSensor;
+	private MotorPort rightMotor;
+	private MotorPort leftMotor;
 	
-	public Racer(LightSensor lightSensor, RemoteMotor rightMotor, RemoteMotor leftMotor)
+	public Racer(LightSensor lightSensor, LightSensor targetSensor,
+			      MotorPort rightMotor, MotorPort leftMotor)
 	{
 		this.lightSensor = lightSensor;
 		this.lightSensor.setFloodlight(true);
+		this.targetSensor = targetSensor;
+		this.targetSensor.setFloodlight(true);
 		
 		this.rightMotor = rightMotor;
 		this.leftMotor = leftMotor;
-		
-		this.pilot = new DifferentialPilot(Racer.wheelDiameter, Racer.trackWidth, leftMotor, rightMotor);
-		this.pilot.setRotateSpeed(100);
-		this.pilot.setTravelSpeed(100);
-		this.poseProvider = new OdometryPoseProvider(this.pilot);
-		this.poseProvider.setPose(new Pose(748, 150, 180));
-		this.path = new Path();
 	}
 	
 	public void race()
 	{
-		int c = 0;
-		while(c < 10)
-		{
-			++c;
-			Pose currentPose = this.poseProvider.getPose();
-			double heading = (currentPose.getHeading() + 360) % 360;
-			System.out.println("current: " + heading);
-			System.out.println("next: " + this.path.getNextAngle());
+//		while(true)
+//		{
+//			System.out.println(lightSensor.getLightValue());
+//			System.out.println(targetSensor.getLightValue());
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		this.PID(3.5, 0.11, 3);
+	}
+	
+	private void PID(double Kp, double Ki, double Kd) {
+		targetSensor.setFloodlight(true);
+		int error = 0;
+		int lastError = 0;
 
-			double rotation = 0;
-			if(heading - this.path.getNextAngle() > 0)
-			{
-				rotation = -(heading-this.path.getNextAngle());
-				if(this.path.getNextAngle()+360 - heading < rotation)
-					rotation = this.path.getNextAngle()+360 - heading;
-			}
+		int basePower = 15;
+
+		double integral = 0;
+		double derivative = 0;
+
+		while (true) {
+			int targetValue = targetSensor.getLightValue()-4;
+			if(targetValue > 42)
+				targetValue -= 4;
 			else
-			{
-				rotation = this.path.getNextAngle()-heading;
-				if(heading+360 - this.path.getNextAngle() < rotation)
-					rotation = -(heading+360 - this.path.getNextAngle());
-			}
-			this.pilot.rotate(rotation);
-			this.pilot.travel(this.path.getNextDistance());
-			this.path.goToNext();
+				targetValue -= 3;
+			int current = lightSensor.getLightValue();
+			System.out.println(current);
+			error = current - targetValue;
+
+			integral = integral + error;
+			derivative = error - lastError;
+
+			int turn = (int) Math.round(Kp * error + Ki * integral + Kd
+					* derivative);
+
+			leftMotor.controlMotor(basePower + turn, MotorPort.FORWARD);
+			rightMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
+			lastError = error;
 		}
-	}
-	
-	public void stop()
-	{
-		this.pilot.stop();
-	}
-	
-	private void arcLeft()
-	{
-		this.pilot.rotateLeft();
-	}
-	
-	private void arcRight()
-	{
-		this.pilot.rotateRight();
 	}
 }

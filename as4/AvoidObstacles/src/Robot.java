@@ -11,7 +11,7 @@ public class Robot {
 	private static final int midDist = 37;// cm (dist to wall from middle)
 	private static final int obstacleWidth = 200;// mm
 	private static final int farDistance = 90;// cm (dist to wall from far tape
-	private static final int groundColor = 35;// a little above ground light value
+	private static final int groundColor = 30;// a little above ground light value
 	
 	private DifferentialPilot pilot;
 	
