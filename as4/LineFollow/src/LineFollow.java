@@ -9,6 +9,12 @@ public class LineFollow {
 	public static void main(String[] args) {
 		
 		Sound.beep();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LightSensor sensor = new LightSensor(SensorPort.S1);
 		sensor.setFloodlight(true);
 		
@@ -16,9 +22,9 @@ public class LineFollow {
 		MotorPort rightMotor = MotorPort.A;
 		Controllers c = new Controllers();
 		c.bangBang(sensor, leftMotor, rightMotor);
-		c.P(3, sensor, leftMotor, rightMotor);
-		c.PD(1.8, 1.5, sensor, leftMotor, rightMotor);
-		c.PI(2, 0.1, sensor, leftMotor, rightMotor);
-		c.PID(1.8, 0.1, 0.3, sensor, leftMotor, rightMotor);
+//		c.P(33, 3, sensor, leftMotor, rightMotor);
+//		c.PD(34, 3, 1, sensor, leftMotor, rightMotor);
+//		c.PI(32, 3, 0.1, sensor, leftMotor, rightMotor);
+//		c.PID(33, 3, 0.1, 0.3, sensor, leftMotor, rightMotor);
 	}
 }

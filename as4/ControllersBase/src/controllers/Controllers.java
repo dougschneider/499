@@ -21,7 +21,7 @@ public class Controllers {
 	public void bangBang(LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		while (true) {
-			if (sensor.getLightValue() < 35) {
+			if (sensor.getLightValue() < 30) {
 				leftMotor.controlMotor(0, MotorPort.FORWARD);
 				rightMotor.controlMotor(40, MotorPort.FORWARD);
 			} else {
@@ -39,50 +39,51 @@ public class Controllers {
 	/**
 	 * Give control to P controller.
 	 * 
+	 * @param targetValue
 	 * @param Kp
 	 * @param sensor
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public void P(double Kp, LightSensor sensor, MotorPort leftMotor,
+	public void P(int targetValue, double Kp, LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
-		int targetValue = 35;
 		runPID(targetValue, Kp, 0, 0, sensor, leftMotor, rightMotor);
 	}
 
 	/**
 	 * Give control to PD controller.
 	 * 
+	 * @param targetValue
 	 * @param Kp
 	 * @param Kd
 	 * @param sensor
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public void PD(double Kp, double Kd, LightSensor sensor,
+	public void PD(int targetValue, double Kp, double Kd, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
-		int targetValue = 40;
 		runPID(targetValue, Kp, 0, Kd, sensor, leftMotor, rightMotor);
 	}
 
 	/**
 	 * Give control to PI controller.
 	 * 
+	 * @param targetValue
 	 * @param Kp
 	 * @param Ki
 	 * @param sensor
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public void PI(double Kp, double Ki, LightSensor sensor,
+	public void PI(int targetValue, double Kp, double Ki, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
-		int targetValue = 35;
 		runPID(targetValue, Kp, Ki, 0, sensor, leftMotor, rightMotor);
 	}
 
 	/**
 	 * Give control to PID controller.
 	 * 
+	 * @param targetValue
 	 * @param Kp
 	 * @param Ki
 	 * @param Kd
@@ -90,9 +91,8 @@ public class Controllers {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public void PID(double Kp, double Ki, double Kd, LightSensor sensor,
+	public void PID(int targetValue, double Kp, double Ki, double Kd, LightSensor sensor,
 			MotorPort leftMotor, MotorPort rightMotor) {
-		int targetValue = 36;
 		runPID(targetValue, Kp, Ki, Kd, sensor, leftMotor, rightMotor);
 	}
 
@@ -121,19 +121,16 @@ public class Controllers {
 		while (true) {
 			int current = getCurrentValue(sensor);
 			error = current - targetValue;
-			System.out.println(current);
 
 			integral = integral + error;
 			derivative = error - lastError;
 
 			int turn = (int) Math.round(Kp * error + Ki * integral + Kd
 					* derivative);
-			// turn /= 200;
 
 			leftMotor.controlMotor(basePower + turn, MotorPort.FORWARD);
 			rightMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
 			lastError = error;
-			// 28/45
 			if (isTerminalState())
 				break;
 			try {

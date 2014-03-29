@@ -89,7 +89,7 @@ public class Main {
 	}
 
 	private static void followCurrLine() {
-		controller.PID(1.8, 0.1, 0.3, null, leftMotor, rightMotor);
+		controller.PID(0, 1.8, 0.1, 0.3, null, leftMotor, rightMotor);
 	}
 
 	/**
