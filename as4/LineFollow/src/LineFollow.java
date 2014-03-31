@@ -21,10 +21,10 @@ public class LineFollow {
 		MotorPort leftMotor = MotorPort.C;
 		MotorPort rightMotor = MotorPort.A;
 		Controllers c = new Controllers();
-		c.bangBang(sensor, leftMotor, rightMotor);
-//		c.P(33, 3, sensor, leftMotor, rightMotor);
-//		c.PD(34, 3, 1, sensor, leftMotor, rightMotor);
-//		c.PI(32, 3, 0.1, sensor, leftMotor, rightMotor);
-//		c.PID(33, 3, 0.1, 0.3, sensor, leftMotor, rightMotor);
+//		c.bangBang(sensor, leftMotor, rightMotor);
+//		c.P(31, 3, sensor, leftMotor, rightMotor);
+//		c.PD(32, 3, 1, sensor, leftMotor, rightMotor);
+//		c.PI(30, 3, 0.1, sensor, leftMotor, rightMotor);
+		c.PID(30, 3, 0.1, 0.3, sensor, leftMotor, rightMotor);
 	}
 }
