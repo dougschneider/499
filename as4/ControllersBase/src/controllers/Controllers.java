@@ -21,16 +21,20 @@ public class Controllers {
 	public void bangBang(LightSensor sensor, MotorPort leftMotor,
 			MotorPort rightMotor) {
 		while (true) {
+            // wiggle to the left when we don't see tape
 			if (sensor.getLightValue() < 30) {
 				leftMotor.controlMotor(0, MotorPort.FORWARD);
 				rightMotor.controlMotor(40, MotorPort.FORWARD);
 			} else {
+                // rotate right when we see tape
 				leftMotor.controlMotor(20, MotorPort.FORWARD);
 				rightMotor.controlMotor(20, MotorPort.BACKWARD);
 			}
+            // stop when the right button is pressed
 			if (Button.RIGHT.isPressed())
 				break;
 		}
+        // stop and exit
 		leftMotor.controlMotor(100, MotorPort.STOP);
 		rightMotor.controlMotor(100, MotorPort.STOP);
 		System.exit(0);
@@ -113,6 +117,7 @@ public class Controllers {
 		int error = 0;
 		int lastError = 0;
 
+        // base power to each motor it 10%
 		int basePower = 10;
 
 		double integral = 0;
@@ -125,14 +130,20 @@ public class Controllers {
 			integral = integral + error;
 			derivative = error - lastError;
 
+            // find the turn based on the error and k values
 			int turn = (int) Math.round(Kp * error + Ki * integral + Kd
 					* derivative);
 
+            // set the motors power based on the error
 			leftMotor.controlMotor(basePower + turn, MotorPort.FORWARD);
 			rightMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
 			lastError = error;
+
+            // if we should stop, stop
 			if (isTerminalState())
 				break;
+
+            // sleep before adjusting the power again
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {

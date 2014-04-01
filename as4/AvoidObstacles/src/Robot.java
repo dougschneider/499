@@ -13,8 +13,10 @@ public class Robot {
 	private static final int farDistance = 90;// cm (dist to wall from far tape
 	private static final int groundColor = 30;// a little above ground light value
 	
+    // the pilot navigating the robot
 	private DifferentialPilot pilot;
 	
+    // the sensors used to avoid the obstacles
 	private UltrasonicSensor wallSensor;
 	private OpticalDistanceSensor leftObstacleSensor;
 	private OpticalDistanceSensor rightObstacleSensor;
@@ -39,15 +41,18 @@ public class Robot {
 	
 	public void run()
 	{
+        // avoid obstacles indefinitely
 		while(true)
 		{
+            // if we should avoid an obstacle, do so
 			if(shouldAvoid())
 				avoid();
-			else if(onTape())
-				this.pilot.arcBackward(-100);// arc away from tape opposite of normal arc
+			else if(onTape())// if we're on tape, arc backward away from it
+				this.pilot.arcBackward(-100);
 			else
 				this.pilot.arcForward(-900);// always arc towards the tape
 			
+            // sleep to give actions a while to take affect
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -61,7 +66,9 @@ public class Robot {
 	 */
 	private void avoid()
 	{
+        // stop moving before we arc
 		this.pilot.stop();
+
 		if(isCloseToWall())
 		{
 			// continue avoiding until in the clear
@@ -82,6 +89,7 @@ public class Robot {
 	private void avoidToRight()
 	{
 		this.pilot.arcBackward(100);
+        // arc for 1200 ms
 		try {
 			Thread.sleep(1200);
 		} catch (InterruptedException e) {
@@ -95,6 +103,7 @@ public class Robot {
 	private void avoidToLeft()
 	{
 		this.pilot.arcBackward(-100);
+        // arc for 1200 ms
 		try {
 			Thread.sleep(1200);
 		} catch (InterruptedException e) {
@@ -108,6 +117,7 @@ public class Robot {
 	 */
 	private boolean isFacingGoal()
 	{
+
 		return this.wallSensor.getDistance() <= Robot.farDistance;
 	}
 	
@@ -117,6 +127,7 @@ public class Robot {
 	 */
 	private boolean isCloseToWall()
 	{
+        // if the distance of the wall sensor is less than the middle, we're close to the wall
 		return this.wallSensor.getDistance() < Robot.midDist;
 	}
 	
@@ -126,6 +137,7 @@ public class Robot {
 	 */
 	private boolean shouldAvoid()
 	{
+        // if either sensor can see an obstacle, we need to avoid it
 		return this.leftObstacleSensor.getDistance() < Robot.obstacleDist || this.rightObstacleSensor.getDistance() < Robot.obstacleDist;
 	}
 	
