@@ -2,6 +2,7 @@ package arbitrators;
 
 import lejos.nxt.Button;
 import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
 
 public class SingleThreadArbitrator {
 
@@ -35,6 +36,8 @@ public class SingleThreadArbitrator {
 			prev = curr;
 			// for debugging
 			if (Button.RIGHT.isDown()) break;
+			// try to be consistent with timing
+			Delay.msDelay(50);
 		}
 	}
 

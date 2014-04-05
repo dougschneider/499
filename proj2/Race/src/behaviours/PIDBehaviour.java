@@ -5,9 +5,10 @@ import lejos.robotics.subsumption.Behavior;
 import lejos.util.Delay;
 import main.RobotInteractionMembers;
 
+/**
+ * Control the robot using a PID controller to follow the outside line.
+ */
 public class PIDBehaviour implements Behavior {
-
-	// private static final int EXTREME_TURN = 100;
 
 	// PID controller values
 	private static final double SPECIAL_K_P = 1.8;
@@ -64,6 +65,9 @@ public class PIDBehaviour implements Behavior {
 		isConfigured = true;
 	}
 
+	/**
+	 * Reset the PID controller's accumulated error.
+	 */
 	private void resetControllerValues() {
 		error = 0;
 		lastError = 0;
@@ -110,41 +114,17 @@ public class PIDBehaviour implements Behavior {
 			K_D = NORMAL_K_D;
 		}
 		
-		// System.out.println(current);
 		error = current - targetValue;
 
 		integral = integral + error;
 		derivative = error - lastError;
-//		System.out.println(integral);
 
 		// find the turn based on the error and k values
 		int turn = (int) Math.round(K_P * error + K_I * integral + K_D
 				* derivative);
-		// System.out.println(turn);
 
-		// if (Math.abs(integral) > EXTREME_TURN) {
-		// System.out.println("EXTREME!");
-		// if (turn > 0) {
-		// ioMembers.leftMotor.controlMotor(basePower + turn,
-		// MotorPort.BACKWARD);
-		// ioMembers.rightMotor.controlMotor(basePower + turn,
-		// MotorPort.FORWARD);
-		// } else {
-		// ioMembers.leftMotor.controlMotor(basePower - turn,
-		// MotorPort.FORWARD);
-		// ioMembers.rightMotor.controlMotor(basePower - turn,
-		// MotorPort.BACKWARD);
-		// }
-		// integral = integral * 0.8;
-		// } else {
 		ioMembers.leftMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
 		ioMembers.rightMotor.controlMotor(basePower + turn, MotorPort.FORWARD);
-		// }
-		// try to be consistent with timing
-		Delay.msDelay(50);
-		// leftMotor.controlMotor(100, MotorPort.STOP);
-		// rightMotor.controlMotor(100, MotorPort.STOP);
-		// Delay.msDelay(50);
 
 		lastError = error;
 	}

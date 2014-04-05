@@ -62,13 +62,10 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		hasControl = true;
 		System.out.println("Avoiding Obstacle");
 		
-//		ioMembers.stop();
+		ioMembers.stop();
 		
-//		Sound.beep();
-//		Delay.msDelay(1000);
-//		
-
-		
+		Sound.beep();
+		Delay.msDelay(1000);
 
 		// back up and try to go around
 		if (rightSensorTriggered() && leftSensorTriggered()) {
