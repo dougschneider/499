@@ -1,6 +1,7 @@
 package main;
 
 import lejos.nxt.LightSensor;
+import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.OpticalDistanceSensor;
@@ -11,14 +12,14 @@ public class Main {
 
 		LightSensor lightSensor = new LightSensor(SensorPort.S1);
 		LightSensor targetSensor = new LightSensor(SensorPort.S2);
-		OpticalDistanceSensor leftObstacleSensor = new OpticalDistanceSensor(
-				SensorPort.S3);
 		OpticalDistanceSensor rightObstacleSensor = new OpticalDistanceSensor(
+				SensorPort.S3);
+		OpticalDistanceSensor leftObstacleSensor = new OpticalDistanceSensor(
 				SensorPort.S4);
 
 		RobotInteractionMembers ioMembers = new RobotInteractionMembers(
-				lightSensor, targetSensor, MotorPort.A, MotorPort.C,
-				rightObstacleSensor, leftObstacleSensor);
+				lightSensor, targetSensor, MotorPort.A, MotorPort.C, Motor.A,
+				Motor.C, rightObstacleSensor, leftObstacleSensor);
 
 		Racer racer = new Racer(ioMembers);
 		racer.configure();

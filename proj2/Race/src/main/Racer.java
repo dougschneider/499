@@ -34,9 +34,6 @@ public class Racer {
 
 	public void configure() {
 		Behavior[] behaviors = null;
-		// delay for a bit, just to get connection right
-		Delay.msDelay(2000);
-		// TODO configure sensor values
 
 		PIDBehaviour pidDriver = new PIDBehaviour(ioMembers);
 		pidDriver.configure(NORMAL_ZONE, SPECIAL_ZONE, NORMAL_TARGET,
@@ -44,7 +41,8 @@ public class Racer {
 
 		ObstacleAvoidBehaviour obstacleAvoider = new ObstacleAvoidBehaviour(
 				ioMembers);
-		obstacleAvoider.configure();
+		obstacleAvoider.configure(NORMAL_ZONE, SPECIAL_ZONE, NORMAL_TARGET,
+				SPECIAL_TARGET);
 
 //		TimedRecoveryBehavior extremeTurnRecovery = new TimedRecoveryBehavior(
 //				EXTREME_TURN_INTERVENTION_TIME, ioMembers);

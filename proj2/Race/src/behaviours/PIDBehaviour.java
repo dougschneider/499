@@ -15,6 +15,7 @@ public class PIDBehaviour implements Behavior {
 	private static final double SPECIAL_K_I = 0.1;
 	private static final double SPECIAL_K_D = 0.001;
 	
+//	private static final double NORMAL_K_P = 1.8;
 	private static final double NORMAL_K_P = 1.8;
 	private static final double NORMAL_K_I = 0.1;
 	private static final double NORMAL_K_D = 0.001;
@@ -38,6 +39,7 @@ public class PIDBehaviour implements Behavior {
 	private RobotInteractionMembers ioMembers = null;
 
 	// power is ramped up from 0 to max by step size
+	private static final int DEFAULT_BASE_POWER = 20;
 	private static final int MAX_BASE_POWER = 40;
 	private static final int BASE_POWER_STEP = 2;
 
@@ -60,7 +62,6 @@ public class PIDBehaviour implements Behavior {
 		this.regularTarget = regularTarget;
 		this.specialTarget = specialTarget;
 		this.inSpecialWhenBelow = (specialTrack + regularTrack) / 2;
-		Delay.msDelay(1000);
 		resetControllerValues();
 		isConfigured = true;
 	}
@@ -115,6 +116,10 @@ public class PIDBehaviour implements Behavior {
 		}
 		
 		error = current - targetValue;
+		
+		if (Math.abs(error) > 7 && basePower > DEFAULT_BASE_POWER) {
+			basePower -= 5;
+		}
 
 		integral = integral + error;
 		derivative = error - lastError;
