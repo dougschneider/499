@@ -1,58 +1,71 @@
 package behaviours;
 
-import lejos.nxt.LightSensor;
 import lejos.nxt.MotorPort;
 import lejos.robotics.subsumption.Behavior;
 import lejos.util.Delay;
+import main.RobotInteractionMembers;
 
 public class PIDBehaviour implements Behavior {
 
+	// private static final int EXTREME_TURN = 100;
+
 	// PID controller values
-	private static final double K_P = 2.0;
-	private static final double K_I = 0.05;
+	private static final double K_P = 1.8;
+	private static final double K_I = 0.1;
 	private static final double K_D = 0.0;
-	// clear the integral if we're within I_MARGIN of target
-	private static final double I_MARGIN = 5;
 
-	// configuration values
-	private boolean isConfigured = false;
-	private int regularTrack = 52;
-	private int specialTrack = 45;
-	private int inSpecialWhenBelow = (specialTrack+regularTrack)/2;
-	private int specialTarget = 35;
-	private int regularTarget = 40;
-	
-
-	private LightSensor lightSensor;
-	private LightSensor targetSensor;
-	private MotorPort rightMotor;
-	private MotorPort leftMotor;
-	
+	// PID controller internal stuff
 	int error = 0;
 	int lastError = 0;
 	int basePower = 5;
-	private static final int MAX_BASE_POWER = 50;
-	private static final int BASE_POWER_STEP = 1;
-	
-
 	double integral = 0;
 	double derivative = 0;
 
-	public PIDBehaviour(LightSensor lightSensor, LightSensor targetSensor,
-			MotorPort rightMotor, MotorPort leftMotor) {
-		this.lightSensor = lightSensor;
-		this.targetSensor = targetSensor;
+	// configuration values
+	private boolean isConfigured = false;
+//	private int regularTrack = -1;
+//	private int specialTrack = -1;
+	private int inSpecialWhenBelow = -1;
+	private int specialTarget = -1;
+	private int regularTarget = -1;
 
-		this.rightMotor = rightMotor;
-		this.leftMotor = leftMotor;
+	// sensors
+	private RobotInteractionMembers ioMembers = null;
+
+	// power is ramped up from 0 to max by step size
+	private static final int MAX_BASE_POWER = 50;
+	private static final int BASE_POWER_STEP = 2;
+
+	public PIDBehaviour(RobotInteractionMembers ioMembers) {
+		this.ioMembers = ioMembers;
 	}
 
-	public void configure() {
-		lightSensor.getLightValue();
-		targetSensor.getLightValue();
-		Delay.msDelay(2000);
-		// TODO configure target values
+	/**
+	 * Configure the PID controller.
+	 * 
+	 * @param regularTrack
+	 * @param specialTrack
+	 * @param regularTarget
+	 * @param specialTarget
+	 */
+	public void configure(int regularTrack, int specialTrack,
+			int regularTarget, int specialTarget) {
+//		this.regularTrack = regularTrack;
+//		this.specialTrack = specialTrack;
+		this.regularTarget = regularTarget;
+		this.specialTarget = specialTarget;
+		this.inSpecialWhenBelow = (specialTrack + regularTrack) / 2;
+		Delay.msDelay(1000);
+		resetControllerValues();
 		isConfigured = true;
+	}
+
+	private void resetControllerValues() {
+		error = 0;
+		lastError = 0;
+		basePower = 5;
+		integral = 0;
+		derivative = 0;
 	}
 
 	@Override
@@ -71,19 +84,16 @@ public class PIDBehaviour implements Behavior {
 		if (basePower < MAX_BASE_POWER) {
 			basePower += BASE_POWER_STEP;
 		}
-		int targetValue = targetSensor.getLightValue();
-//		System.out.println(targetValue);
+		int targetValue = ioMembers.targetSensor.getLightValue();
+		// System.out.println(targetValue);
 		if (targetValue < inSpecialWhenBelow)
 			targetValue = specialTarget;
 		else
 			targetValue = regularTarget;
-		int current = lightSensor.getLightValue();
-//		System.out.println(current);
+		int current = ioMembers.lightSensor.getLightValue();
+		// System.out.println(current);
 		error = current - targetValue;
-		
-		if (Math.abs(error) < I_MARGIN) {
-			integral = 0;
-		}
+
 		integral = integral + error;
 		derivative = error - lastError;
 //		System.out.println(integral);
@@ -91,20 +101,39 @@ public class PIDBehaviour implements Behavior {
 		// find the turn based on the error and k values
 		int turn = (int) Math.round(K_P * error + K_I * integral + K_D
 				* derivative);
-		System.out.println(turn);
+		// System.out.println(turn);
 
-		// set the motors power based on the error
-		leftMotor.controlMotor(basePower-turn, MotorPort.FORWARD);
-		rightMotor.controlMotor(basePower+turn, MotorPort.FORWARD);
+		// if (Math.abs(integral) > EXTREME_TURN) {
+		// System.out.println("EXTREME!");
+		// if (turn > 0) {
+		// ioMembers.leftMotor.controlMotor(basePower + turn,
+		// MotorPort.BACKWARD);
+		// ioMembers.rightMotor.controlMotor(basePower + turn,
+		// MotorPort.FORWARD);
+		// } else {
+		// ioMembers.leftMotor.controlMotor(basePower - turn,
+		// MotorPort.FORWARD);
+		// ioMembers.rightMotor.controlMotor(basePower - turn,
+		// MotorPort.BACKWARD);
+		// }
+		// integral = integral * 0.8;
+		// } else {
+		ioMembers.leftMotor.controlMotor(basePower - turn, MotorPort.FORWARD);
+		ioMembers.rightMotor.controlMotor(basePower + turn, MotorPort.FORWARD);
+		// }
 		// try to be consistent with timing
 		Delay.msDelay(50);
-		
+		// leftMotor.controlMotor(100, MotorPort.STOP);
+		// rightMotor.controlMotor(100, MotorPort.STOP);
+		// Delay.msDelay(50);
+
 		lastError = error;
 	}
 
 	@Override
 	public void suppress() {
-		// does nothing
+		// reset values
+		resetControllerValues();
 	}
 
 }

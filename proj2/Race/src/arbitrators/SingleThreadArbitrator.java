@@ -1,4 +1,4 @@
-package behaviours;
+package arbitrators;
 
 import lejos.nxt.Button;
 import lejos.robotics.subsumption.Behavior;
@@ -19,23 +19,28 @@ public class SingleThreadArbitrator {
 	}
 
 	public void start() {
+		Behavior prev = null;
 		Behavior curr = null;
-		// select highest-priority behavior and run it
+
 		while (true) {
 			curr = getHighestPriorityBehavior();
+			if (prev != curr && prev != null) {
+				prev.suppress();
+			}
 			if (curr != null) {
 				curr.action();
 			} else if (returnWhenInactive) {
 				break;
 			}
+			prev = curr;
 			// for debugging
 			if (Button.RIGHT.isDown()) break;
 		}
 	}
 
 	private Behavior getHighestPriorityBehavior() {
-		// loop from last to first, to maintain leJOS arbitrator interface
-		// that highest priority behaviors go last on list
+		// Loop from last to first, to maintain leJOS arbitrator interface
+		// that highest priority behaviors go last on list.
 		for (int i = behaviors.length - 1; i > -1; i--) {
 			if (behaviors[i].takeControl()) {
 				return behaviors[i];

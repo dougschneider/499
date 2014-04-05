@@ -1,55 +1,57 @@
 package behaviours;
 
-import lejos.nxt.MotorPort;
-import lejos.nxt.addon.OpticalDistanceSensor;
 import lejos.robotics.subsumption.Behavior;
-import lejos.util.Delay;
+import main.RobotInteractionMembers;
 
 public class ObstacleAvoidBehaviour implements Behavior {
 
-	private static final double OPTICAL_SENSOR_ERROR_MARGIN = 10;
+	private static final double OBSTACLE_MIN_HEIGHT = 60;
+	private static final double NUM_BASELINE_SAMPLES = 100;
 
-	private double rightBaselineHeight = Double.POSITIVE_INFINITY;
-	private double leftBaselineHeight = Double.POSITIVE_INFINITY;
+	private double rightDistanceToFloor = Double.POSITIVE_INFINITY;
+	private double leftDistanceToFloor = Double.POSITIVE_INFINITY;
 
-	private OpticalDistanceSensor leftObstacleSensor;
-	private OpticalDistanceSensor rightObstacleSensor;
-
-	private MotorPort rightMotor;
-	private MotorPort leftMotor;
+	// sensors and motors
+	private RobotInteractionMembers ioMembers = null;
 
 	private boolean isConfigured = false;
+	private boolean hasControl = false;
 
-	public ObstacleAvoidBehaviour(OpticalDistanceSensor rightObstacleSensor,
-			OpticalDistanceSensor leftObstacleSensor, MotorPort rightMotor,
-			MotorPort leftMotor) {
-		this.rightObstacleSensor = rightObstacleSensor;
-		this.leftObstacleSensor = leftObstacleSensor;
-
-		this.rightMotor = rightMotor;
-		this.leftMotor = leftMotor;
+	public ObstacleAvoidBehaviour(RobotInteractionMembers ioMembers) {
+		this.ioMembers = ioMembers;
 	}
 
 	public void configure() {
-		rightBaselineHeight = rightObstacleSensor.getDistance();
-		leftBaselineHeight = leftObstacleSensor.getDistance();
+		rightDistanceToFloor = ioMembers.rightObstacleSensor.getDistance();
+		leftDistanceToFloor = ioMembers.leftObstacleSensor.getDistance();
+		for (int i = 0; i < NUM_BASELINE_SAMPLES - 1; i++) {
+			rightDistanceToFloor += ioMembers.rightObstacleSensor.getDistance();
+			leftDistanceToFloor += ioMembers.leftObstacleSensor.getDistance();
+		}
+		rightDistanceToFloor /= NUM_BASELINE_SAMPLES;
+		leftDistanceToFloor /= NUM_BASELINE_SAMPLES;
+
 		isConfigured = true;
 	}
 
 	@Override
 	public boolean takeControl() {
-//		if (!isConfigured) {
-//			System.out.println("Obstacle avoid behavior not configured.");
-//			return false;
-//		}
-//
-//		double rightHeight = rightObstacleSensor.getDistance();
-//		double leftHeight = leftObstacleSensor.getDistance();
-//
-//		if ((Math.abs(rightBaselineHeight - rightHeight) > OPTICAL_SENSOR_ERROR_MARGIN)
-//				|| (Math.abs(leftBaselineHeight - leftHeight) > OPTICAL_SENSOR_ERROR_MARGIN)) {
-//			return true;
-//		}
+		if (!isConfigured) {
+			System.out.println("Obstacle avoid behavior not configured.");
+			return false;
+		}
+		if (hasControl)
+			return true;
+
+		double rightDistance = ioMembers.rightObstacleSensor.getDistance();
+		double leftDistance = ioMembers.leftObstacleSensor.getDistance();
+
+		System.out.println(leftDistance + "\t\t" + rightDistance);
+		if ((Math.abs(rightDistanceToFloor - rightDistance) > OBSTACLE_MIN_HEIGHT)
+				|| (Math.abs(leftDistanceToFloor - leftDistance) > OBSTACLE_MIN_HEIGHT)) {
+			hasControl = true;
+			return true;
+		}
 		return false;
 	}
 
@@ -57,15 +59,16 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	public void action() {
 		// TODO Auto-generated method stub
 		System.out.println("OH SHIT! AVOID THAT THING!");
+		ioMembers.stop();
 
-		Delay.msDelay(1000);
+		// back up and
 
 	}
 
 	@Override
 	public void suppress() {
 		// TODO Auto-generated method stub
-
+		hasControl = false;
 	}
 
 }

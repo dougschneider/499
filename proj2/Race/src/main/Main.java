@@ -16,8 +16,11 @@ public class Main {
 		OpticalDistanceSensor rightObstacleSensor = new OpticalDistanceSensor(
 				SensorPort.S4);
 
-		Racer racer = new Racer(lightSensor, targetSensor, MotorPort.A,
-				MotorPort.C, rightObstacleSensor, leftObstacleSensor);
+		RobotInteractionMembers ioMembers = new RobotInteractionMembers(
+				lightSensor, targetSensor, MotorPort.A, MotorPort.C,
+				rightObstacleSensor, leftObstacleSensor);
+
+		Racer racer = new Racer(ioMembers);
 		racer.configure();
 		try {
 			racer.race();
