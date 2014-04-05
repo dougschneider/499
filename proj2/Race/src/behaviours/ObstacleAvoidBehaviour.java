@@ -18,7 +18,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 
 	// sensors and motors
 	private RobotInteractionMembers ioMembers = null;
-	
+
 	private DifferentialPilot pilot = null;
 
 	private boolean isConfigured = false;
@@ -26,7 +26,9 @@ public class ObstacleAvoidBehaviour implements Behavior {
 
 	public ObstacleAvoidBehaviour(RobotInteractionMembers ioMembers) {
 		this.ioMembers = ioMembers;
-//		this.pilot = new DifferentialPilot(RobotInteractionMembers.WHEEL_DIAMETER, RobotInteractionMembers.TRACK_WIDTH, RemoteMotor., rightMotor)
+		// this.pilot = new
+		// DifferentialPilot(RobotInteractionMembers.WHEEL_DIAMETER,
+		// RobotInteractionMembers.TRACK_WIDTH, RemoteMotor., rightMotor)
 	}
 
 	public void configure() {
@@ -38,33 +40,40 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		}
 		rightDistanceToFloor /= NUM_BASELINE_SAMPLES;
 		leftDistanceToFloor /= NUM_BASELINE_SAMPLES;
+		
+		System.out.println("Left Baseline: " + leftDistanceToFloor);
+		System.out.println("Right Baseline: " + rightDistanceToFloor);
 
 		isConfigured = true;
 	}
 
 	@Override
 	public boolean takeControl() {
-//		if (!isConfigured) {
-//			System.out.println("Obstacle avoid behavior not configured.");
-//			return false;
-//		}
-//		if (hasControl)
-//			return true;
-//
-//		if (rightSensorTriggered() || leftSensorTriggered()) {
-//			return true;
-//		}
+		if (!isConfigured) {
+			System.out.println("Obstacle avoid behavior not configured.");
+			return false;
+		}
+		if (hasControl)
+			return true;
+
+		if (rightSensorTriggered() || leftSensorTriggered()) {
+			System.out.println("Avoiding Obstacle: "
+					+ ioMembers.leftObstacleSensor.getDistance());
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void action() {
 		hasControl = true;
-		System.out.println("Avoiding Obstacle");
-		
+
 		ioMembers.stop();
-		
+
 		Sound.beep();
+		System.out.println("Current Obs Reading: "
+				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
+				+ ioMembers.rightObstacleSensor.getDistance());
 		Delay.msDelay(1000);
 
 		// back up and try to go around
@@ -82,21 +91,23 @@ public class ObstacleAvoidBehaviour implements Behavior {
 
 	@Override
 	public void suppress() {
-		// TODO Auto-generated method stub
 		hasControl = false;
 	}
-	
+
 	private boolean rightSensorTriggered() {
-		return sensorTriggered(ioMembers.rightObstacleSensor, rightDistanceToFloor);
+		return sensorTriggered(ioMembers.rightObstacleSensor,
+				rightDistanceToFloor);
 	}
-	
+
 	private boolean leftSensorTriggered() {
-		return sensorTriggered(ioMembers.leftObstacleSensor, leftDistanceToFloor);
+		return sensorTriggered(ioMembers.leftObstacleSensor,
+				leftDistanceToFloor);
 	}
-	
-	private boolean sensorTriggered(OpticalDistanceSensor sensor, double distanceToFloor) {
+
+	private boolean sensorTriggered(OpticalDistanceSensor sensor,
+			double distanceToFloor) {
 		double distance = sensor.getDistance();
-		return Math.abs(distanceToFloor - distance) > OBSTACLE_MIN_HEIGHT;
+		return (distanceToFloor - distance) > OBSTACLE_MIN_HEIGHT;
 	}
 
 }
