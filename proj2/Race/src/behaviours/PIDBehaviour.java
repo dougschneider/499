@@ -23,7 +23,7 @@ public class PIDBehaviour implements Behavior {
 	// PID controller internal stuff
 	int error = 0;
 	int lastError = 0;
-	int basePower = 5;
+	int basePower = 0;
 	double integral = 0;
 	double derivative = 0;
 
@@ -72,7 +72,7 @@ public class PIDBehaviour implements Behavior {
 	private void resetControllerValues() {
 		error = 0;
 		lastError = 0;
-		basePower = 5;
+		basePower = 0;
 		integral = 0;
 		derivative = 0;
 	}

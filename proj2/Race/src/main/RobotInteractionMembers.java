@@ -44,4 +44,9 @@ public class RobotInteractionMembers {
 		rightMotor.controlMotor(100, MotorPort.STOP);
 		leftMotor.controlMotor(100, MotorPort.STOP);
 	}
+	
+	public void forward() {
+		leftMotor.controlMotor(30, MotorPort.FORWARD);
+		rightMotor.controlMotor(30, MotorPort.FORWARD);
+	}
 }

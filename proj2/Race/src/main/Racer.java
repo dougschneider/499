@@ -22,6 +22,8 @@ public class Racer {
 	private int SPECIAL_TARGET = 35;
 
 //	private int EXTREME_TURN_INTERVENTION_TIME = 400;
+	
+	private static final int NUM_SENSOR_POLLS = 100;
 
 	private RobotInteractionMembers ioMembers = null;
 
@@ -34,7 +36,7 @@ public class Racer {
 
 	public void configure() {
 		Behavior[] behaviors = null;
-
+		
 		PIDBehaviour pidDriver = new PIDBehaviour(ioMembers);
 		pidDriver.configure(NORMAL_ZONE, SPECIAL_ZONE, NORMAL_TARGET,
 				SPECIAL_TARGET);
@@ -52,6 +54,9 @@ public class Racer {
 		behaviors = new Behavior[] { pidDriver,
 				obstacleAvoider };
 		this.arbitrator = new SingleThreadArbitrator(behaviors, true);
+		
+		ioMembers.stop();
+		
 		this.isConfigured = true;
 	}
 
@@ -59,8 +64,6 @@ public class Racer {
 		if (!this.isConfigured) {
 			throw new ConfigurationException("Run configure() before race()");
 		}
-		ioMembers.stop();
-		
 		arbitrator.start();
 
 		// This code is only reached if arbitrator exits
