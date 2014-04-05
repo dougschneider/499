@@ -10,9 +10,13 @@ public class PIDBehaviour implements Behavior {
 	// private static final int EXTREME_TURN = 100;
 
 	// PID controller values
-	private static final double K_P = 1.8;
-	private static final double K_I = 0.1;
-	private static final double K_D = 0.0;
+	private static final double SPECIAL_K_P = 1.8;
+	private static final double SPECIAL_K_I = 0.1;
+	private static final double SPECIAL_K_D = 0.001;
+	
+	private static final double NORMAL_K_P = 1.8;
+	private static final double NORMAL_K_I = 0.1;
+	private static final double NORMAL_K_D = 0.001;
 
 	// PID controller internal stuff
 	int error = 0;
@@ -23,8 +27,8 @@ public class PIDBehaviour implements Behavior {
 
 	// configuration values
 	private boolean isConfigured = false;
-//	private int regularTrack = -1;
-//	private int specialTrack = -1;
+	private int regularTrack = -1;
+	private int specialTrack = -1;
 	private int inSpecialWhenBelow = -1;
 	private int specialTarget = -1;
 	private int regularTarget = -1;
@@ -33,7 +37,7 @@ public class PIDBehaviour implements Behavior {
 	private RobotInteractionMembers ioMembers = null;
 
 	// power is ramped up from 0 to max by step size
-	private static final int MAX_BASE_POWER = 50;
+	private static final int MAX_BASE_POWER = 40;
 	private static final int BASE_POWER_STEP = 2;
 
 	public PIDBehaviour(RobotInteractionMembers ioMembers) {
@@ -50,8 +54,8 @@ public class PIDBehaviour implements Behavior {
 	 */
 	public void configure(int regularTrack, int specialTrack,
 			int regularTarget, int specialTarget) {
-//		this.regularTrack = regularTrack;
-//		this.specialTrack = specialTrack;
+		this.regularTrack = regularTrack;
+		this.specialTrack = specialTrack;
 		this.regularTarget = regularTarget;
 		this.specialTarget = specialTarget;
 		this.inSpecialWhenBelow = (specialTrack + regularTrack) / 2;
@@ -80,17 +84,32 @@ public class PIDBehaviour implements Behavior {
 
 	@Override
 	public void action() {
+		int targetValue = ioMembers.targetSensor.getLightValue();
+		int current = ioMembers.lightSensor.getLightValue();
+		double K_P = Double.POSITIVE_INFINITY;
+		double K_I = Double.POSITIVE_INFINITY;
+		double K_D = Double.POSITIVE_INFINITY;
+		
 		// ramp up speed over time
 		if (basePower < MAX_BASE_POWER) {
 			basePower += BASE_POWER_STEP;
 		}
-		int targetValue = ioMembers.targetSensor.getLightValue();
+		
 		// System.out.println(targetValue);
-		if (targetValue < inSpecialWhenBelow)
+		if (targetValue < inSpecialWhenBelow) {
+			// in special zone
 			targetValue = specialTarget;
-		else
+			K_P = SPECIAL_K_P;
+			K_I = SPECIAL_K_I;
+			K_D = SPECIAL_K_D;
+		} else {
+			// in normal zone
 			targetValue = regularTarget;
-		int current = ioMembers.lightSensor.getLightValue();
+			K_P = NORMAL_K_P;
+			K_I = NORMAL_K_I;
+			K_D = NORMAL_K_D;
+		}
+		
 		// System.out.println(current);
 		error = current - targetValue;
 

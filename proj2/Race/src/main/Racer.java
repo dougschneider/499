@@ -16,10 +16,10 @@ public class Racer {
 
 	private int NORMAL_ZONE = 52;
 	private int SPECIAL_ZONE = 45;
-	private int NORMAL_TARGET = 39;
-	private int SPECIAL_TARGET = 35;
-//	private int NORMAL_TARGET = 33;
+//	private int NORMAL_TARGET = 39;
 //	private int SPECIAL_TARGET = 35;
+	private int NORMAL_TARGET = 35;
+	private int SPECIAL_TARGET = 35;
 
 //	private int EXTREME_TURN_INTERVENTION_TIME = 400;
 
@@ -34,7 +34,7 @@ public class Racer {
 
 	public void configure() {
 		Behavior[] behaviors = null;
-		// delay fot a bit, just to get connection right
+		// delay for a bit, just to get connection right
 		Delay.msDelay(2000);
 		// TODO configure sensor values
 
