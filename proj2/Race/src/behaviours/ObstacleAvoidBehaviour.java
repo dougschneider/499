@@ -19,12 +19,12 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	private static final int ROTATE_SPEED = 100;
 	private static final int BACK_UP_DISTANCE = -50;
 	private static final int SIDE_DISTANCE = 150;
-	private static final int FORWARD_DISTANCE = 350;
+	private static final int FORWARD_DISTANCE = 300;
 	private static final int SIDE_STEP_ANGLE = 40;
 
 	private double rightDistanceToFloor = Double.POSITIVE_INFINITY;
 	private double leftDistanceToFloor = Double.POSITIVE_INFINITY;
-	
+
 	private int regularTrack = -1;
 	private int specialTrack = -1;
 	private int specialTarget = -1;
@@ -54,8 +54,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		this.specialTrack = specialTrack;
 		this.regularTarget = regularTarget;
 		this.specialTarget = specialTarget;
-		
-		
+
 		rightDistanceToFloor = ioMembers.rightObstacleSensor.getDistance();
 		leftDistanceToFloor = ioMembers.leftObstacleSensor.getDistance();
 		for (int i = 0; i < NUM_BASELINE_SAMPLES - 1; i++) {
@@ -79,10 +78,10 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		}
 		if (hasControl)
 			return true;
-		
-//		double distance = ioMembers.leftObstacleSensor.getDistance();
-//		System.out.println(distance);
-//		return false;
+
+		// double distance = ioMembers.leftObstacleSensor.getDistance();
+		// System.out.println(distance);
+		// return false;
 
 		if (rightSensorTriggered() || leftSensorTriggered()) {
 			System.out.println("Avoiding Obstacle: "
@@ -95,7 +94,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	@Override
 	public void action() {
 		hasControl = true;
-		
+
 		ioMembers.stop();
 
 		Sound.beep();
@@ -103,17 +102,16 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
 				+ ioMembers.rightObstacleSensor.getDistance());
 		Delay.msDelay(500);
-		
-		/* check which sensors are triggered
-		 * if sensors the same
-		 * 		rotate left
-		 * else
-		 * 		rotate right
+
+		/*
+		 * check which sensors are triggered if sensors the same rotate left
+		 * else rotate right
 		 */
-		if (Math.abs(ioMembers.lightSensor.getLightValue() - ioMembers.targetSensor.getLightValue()) < 10) {
-			pilot.rotate(10);
+		if (Math.abs(ioMembers.lightSensor.getLightValue()
+				- ioMembers.targetSensor.getLightValue()) < 5) {
+			pilot.rotate(15);
 		} else {
-			pilot.rotate(-10);
+			pilot.rotate(-15);
 		}
 
 		boolean prevTrigger = true;
@@ -125,6 +123,9 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				currTrigger = leftSensorTriggered();
 			}
 			moveForward(true);
+			moveForward(true);
+			moveForward(true);
+			moveForward(true);
 			shuffleBack(true, 0);
 		} else {
 			int shuffleCount = 0;
@@ -135,10 +136,16 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				++shuffleCount;
 			}
 			moveForward(false);
-			shuffleBack(false, shuffleCount);
-			System.out.println("Done shuffle back to center");
-			shuffleBack(true, 0);
-			System.out.println("Found line.");
+			if (!isOnLine(120)) {
+				moveForward(false);
+				moveForward(false);
+				moveForward(false);
+				moveForward(false);
+				shuffleBack(false, shuffleCount);
+				System.out.println("Done shuffle back to center");
+				shuffleBack(true, 0);
+				System.out.println("Found line.");
+			}
 		}
 
 		hasControl = false;
@@ -148,13 +155,12 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	public void suppress() {
 		hasControl = false;
 	}
-	
+
 	private void shuffleBack(boolean right, int shuffleCount) {
 		int curCount = 0;
 		while (true) {
 			if (right) {
-				if(ioMembers.lightSensor.getLightValue() < (specialTarget + 5))
-				{
+				if (ioMembers.lightSensor.getLightValue() < (specialTarget + 5)) {
 					break;
 				}
 				sideStepRightForward();
@@ -170,8 +176,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				}
 				pilot.rotate(10);
 			} else {
-				if(curCount > shuffleCount + 2)
-				{
+				if (curCount > shuffleCount + 2) {
 					break;
 				}
 				++curCount;
@@ -180,34 +185,57 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		}
 	}
 	
+	/**
+	 * Pivot left, check for line, if line found return true.
+	 * 
+	 * @param degrees
+	 * 		must be a multiple of 5 
+	 * @return
+	 */
+	private boolean isOnLine(int degrees) {
+		int degRotated = 0;
+		// 1 or -1
+		int unit = degrees / Math.abs(degrees) * 5;
+		while (degRotated != degrees) {
+			pilot.rotate(unit);
+			degRotated += unit;
+			if (ioMembers.lightSensor.getLightValue() < (specialTarget + 5)) {
+				return true;
+			}
+		}
+		pilot.rotate(-degrees);
+		return false;
+	}
+
 	private void moveForward(boolean exit) {
 		int distForward = 0;
 		while (distForward < FORWARD_DISTANCE) {
 			pilot.forward();
-			Delay.msDelay(80);
+			Delay.msDelay(10);
 			distForward += 10;
-			if (exit && (ioMembers.lightSensor.getLightValue() < (specialTarget + 5))) {
+			if (exit
+					&& (ioMembers.lightSensor.getLightValue() < (specialTarget + 5))) {
 				break;
 			}
 		}
 	}
-	
+
 	private void sideStepLeftBackward() {
 		sideStep(true, true);
 	}
-	
+
 	private void sideStepRightBackward() {
 		sideStep(false, true);
 	}
-	
+
 	private void sideStepLeftForward() {
 		sideStep(false, false);
 	}
-	
+
 	private void sideStepRightForward() {
 		sideStep(true, false);
 	}
-	
+
 	private void sideStep(boolean left, boolean backward) {
 		int angle = left ? SIDE_STEP_ANGLE : -SIDE_STEP_ANGLE;
 		int distance = backward ? BACK_UP_DISTANCE : -BACK_UP_DISTANCE;
@@ -236,7 +264,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		distance /= NUM_SENSOR_SAMPLES;
 		System.out.println("Distance = " + distance);
 		return distance < OBSTACLE_MIN_HEIGHT;
-		
+
 	}
 
 }
