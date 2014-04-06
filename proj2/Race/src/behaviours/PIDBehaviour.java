@@ -89,7 +89,7 @@ public class PIDBehaviour implements Behavior {
 
 	@Override
 	public void action() {
-		int targetValue = ioMembers.targetSensor.getLightValue();
+//		int targetValue = ioMembers.targetSensor.getLightValue();
 		int current = ioMembers.lightSensor.getLightValue();
 		double K_P = Double.POSITIVE_INFINITY;
 		double K_I = Double.POSITIVE_INFINITY;
@@ -101,19 +101,19 @@ public class PIDBehaviour implements Behavior {
 		}
 		
 		// System.out.println(targetValue);
-		if (targetValue < inSpecialWhenBelow) {
-			// in special zone
-			targetValue = specialTarget;
-			K_P = SPECIAL_K_P;
-			K_I = SPECIAL_K_I;
-			K_D = SPECIAL_K_D;
-		} else {
+//		if (targetValue < inSpecialWhenBelow) {
+//			// in special zone
+//			targetValue = specialTarget;
+//			K_P = SPECIAL_K_P;
+//			K_I = SPECIAL_K_I;
+//			K_D = SPECIAL_K_D;
+//		} else {
 			// in normal zone
-			targetValue = regularTarget;
+			int targetValue = regularTarget;
 			K_P = NORMAL_K_P;
 			K_I = NORMAL_K_I;
 			K_D = NORMAL_K_D;
-		}
+//		}
 		
 		error = current - targetValue;
 		

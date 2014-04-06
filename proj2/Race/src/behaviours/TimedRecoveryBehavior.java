@@ -52,7 +52,8 @@ public class TimedRecoveryBehavior implements Behavior {
 	}
 	
 	private boolean isOffEdgeLine() {
-		int trackReading = ioMembers.targetSensor.getLightValue();
+//		int trackReading = ioMembers.targetSensor.getLightValue();
+		int trackReading = 0;
 		int edgeReading = ioMembers.lightSensor.getLightValue();
 		int isOffEdge = 0;
 		

@@ -8,27 +8,26 @@ import lejos.nxt.remote.RemoteMotor;
 public class RobotInteractionMembers {
 
 	public LightSensor lightSensor;
-	public LightSensor targetSensor;
 	public MotorPort rightMotor;
 	public MotorPort leftMotor;
 	public RemoteMotor rightRemoteMotor;
 	public RemoteMotor leftRemoteMotor;
 	public OpticalDistanceSensor leftObstacleSensor;
 	public OpticalDistanceSensor rightObstacleSensor;
+	public OpticalDistanceSensor farRightObstacleSensor;
 
 	public static final double WHEEL_DIAMETER = 56;
 	public static final double TRACK_WIDTH = 120;
 
 	public RobotInteractionMembers(LightSensor lightSensor,
-			LightSensor targetSensor, MotorPort rightMotor,
+			MotorPort rightMotor,
 			MotorPort leftMotor, RemoteMotor motorRightMotor,
 			RemoteMotor motorLeftMotor,
 			OpticalDistanceSensor rightObstacleSensor,
-			OpticalDistanceSensor leftObstacleSensor) {
+			OpticalDistanceSensor leftObstacleSensor,
+			OpticalDistanceSensor farRightObstacleSensor) {
 		this.lightSensor = lightSensor;
 		this.lightSensor.setFloodlight(true);
-		this.targetSensor = targetSensor;
-		this.targetSensor.setFloodlight(true);
 
 		this.rightMotor = rightMotor;
 		this.leftMotor = leftMotor;
@@ -37,6 +36,7 @@ public class RobotInteractionMembers {
 		this.leftRemoteMotor = motorLeftMotor;
 
 		this.rightObstacleSensor = rightObstacleSensor;
+		this.farRightObstacleSensor = farRightObstacleSensor;
 		this.leftObstacleSensor = leftObstacleSensor;
 	}
 

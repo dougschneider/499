@@ -23,6 +23,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	private static final int SIDE_STEP_ANGLE = 40;
 
 	private double rightDistanceToFloor = Double.POSITIVE_INFINITY;
+	private double farRightDistanceToFloor = Double.POSITIVE_INFINITY;
 	private double leftDistanceToFloor = Double.POSITIVE_INFINITY;
 
 	private int regularTrack = -1;
@@ -55,17 +56,21 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		this.regularTarget = regularTarget;
 		this.specialTarget = specialTarget;
 
-		rightDistanceToFloor = ioMembers.rightObstacleSensor.getDistance();
-		leftDistanceToFloor = ioMembers.leftObstacleSensor.getDistance();
-		for (int i = 0; i < NUM_BASELINE_SAMPLES - 1; i++) {
-			rightDistanceToFloor += ioMembers.rightObstacleSensor.getDistance();
-			leftDistanceToFloor += ioMembers.leftObstacleSensor.getDistance();
-		}
-		rightDistanceToFloor /= NUM_BASELINE_SAMPLES;
-		leftDistanceToFloor /= NUM_BASELINE_SAMPLES;
-
-		System.out.println("Left Baseline: " + leftDistanceToFloor);
-		System.out.println("Right Baseline: " + rightDistanceToFloor);
+//		rightDistanceToFloor = ioMembers.rightObstacleSensor.getDistance();
+//		farRightDistanceToFloor = ioMembers.farRightObstacleSensor.getDistance();
+//		leftDistanceToFloor = ioMembers.leftObstacleSensor.getDistance();
+//		for (int i = 0; i < NUM_BASELINE_SAMPLES - 1; i++) {
+//			rightDistanceToFloor += ioMembers.rightObstacleSensor.getDistance();
+//			farRightDistanceToFloor += ioMembers.farRightObstacleSensor.getDistance();
+//			leftDistanceToFloor += ioMembers.leftObstacleSensor.getDistance();
+//		}
+//		rightDistanceToFloor /= NUM_BASELINE_SAMPLES;
+//		farRightDistanceToFloor /= NUM_BASELINE_SAMPLES;
+//		leftDistanceToFloor /= NUM_BASELINE_SAMPLES;
+//
+//		System.out.println("Left Baseline: " + leftDistanceToFloor);
+//		System.out.println("Right Baseline: " + rightDistanceToFloor);
+//		System.out.println("Far Right Baseline: " + farRightDistanceToFloor);
 
 		isConfigured = true;
 	}
@@ -79,6 +84,11 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		if (hasControl)
 			return true;
 
+		System.out.println("Current Obs Reading: "
+				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
+				+ ioMembers.rightObstacleSensor.getDistance() + "\t\t"
+				+ ioMembers.farRightObstacleSensor.getDistance());
+		
 		// double distance = ioMembers.leftObstacleSensor.getDistance();
 		// System.out.println(distance);
 		// return false;
@@ -100,23 +110,33 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		Sound.beep();
 		System.out.println("Current Obs Reading: "
 				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
-				+ ioMembers.rightObstacleSensor.getDistance());
+				+ ioMembers.rightObstacleSensor.getDistance() + "\t\t"
+				+ ioMembers.farRightObstacleSensor.getDistance());
 		Delay.msDelay(500);
 
 		/*
 		 * check which sensors are triggered if sensors the same rotate left
 		 * else rotate right
 		 */
-		if (Math.abs(ioMembers.lightSensor.getLightValue()
-				- ioMembers.targetSensor.getLightValue()) < 5) {
-			pilot.rotate(15);
-		} else {
-			pilot.rotate(-15);
-		}
+//		if (Math.abs(ioMembers.lightSensor.getLightValue()
+//				- ioMembers.targetSensor.getLightValue()) < 5) {
+//			pilot.rotate(15);
+//		} else {
+//			pilot.rotate(-15);
+//		}
 
+		// if(leftSensorTriggered() && rightSensorTriggered() && farRightSensorTriggered())
+		//		go on outside
+		// else if(leftSensorTriggered() && rightSensorTriggered())
+		// 		go on inside
+		// else if(rightSensorTriggered() && farRightSensorTriggered())
+		// 		go on outside
+		// else if(rightSensorTriggered())
+		// 		go on inside
 		boolean prevTrigger = true;
 		boolean currTrigger = true;
-		if (leftSensorTriggered()) {
+		if (leftSensorTriggered() || (rightSensorTriggered() && !farRightSensorTriggered())) {
+			// inside
 			while (currTrigger || prevTrigger) {
 				sideStepLeftBackward();
 				prevTrigger = currTrigger;
@@ -128,6 +148,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 			moveForward(true);
 			shuffleBack(true, 0);
 		} else {
+			// outside
 			int shuffleCount = 0;
 			while (currTrigger || prevTrigger) {
 				sideStepRightBackward();
@@ -250,6 +271,11 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				rightDistanceToFloor);
 	}
 
+	private boolean farRightSensorTriggered() {
+		return sensorTriggered(ioMembers.farRightObstacleSensor,
+				farRightDistanceToFloor);
+	}
+
 	private boolean leftSensorTriggered() {
 		return sensorTriggered(ioMembers.leftObstacleSensor,
 				leftDistanceToFloor);
@@ -262,7 +288,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 			distance += sensor.getDistance();
 		}
 		distance /= NUM_SENSOR_SAMPLES;
-		System.out.println("Distance = " + distance);
+//		System.out.println("Distance = " + distance);
 		return distance < OBSTACLE_MIN_HEIGHT;
 
 	}
