@@ -5,11 +5,12 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.addon.GyroDirectionFinder;
 import lejos.nxt.addon.GyroSensor;
 import lejos.robotics.DirectionFinder;
-import lejos.robotics.Gyroscope;
-import lejos.robotics.navigation.CompassPilot;
 import lejos.util.Delay;
 
-
+/**
+ * Test NXT project for playing with the gyroscope and compass pilot.
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) {

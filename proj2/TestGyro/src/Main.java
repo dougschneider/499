@@ -7,7 +7,10 @@ import lejos.robotics.DirectionFinder;
 import lejos.robotics.Gyroscope;
 import lejos.robotics.navigation.CompassPilot;
 
-
+/**
+ * Test PC project for playing with gyroscope and compass pilot.
+ * Doesn't appear to work because USB doesn' support threads.
+ */
 public class Main {
 
 	public static void main(String[] args) {
