@@ -118,7 +118,7 @@ public class PIDBehaviour implements Behavior {
 		error = current - targetValue;
 		
 		if (Math.abs(error) > 7 && basePower > DEFAULT_BASE_POWER) {
-			basePower -= 5;
+			basePower -= 7;
 		}
 
 		integral = integral + error;
