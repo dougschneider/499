@@ -266,36 +266,28 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	}
 
 	private boolean rightSensorTriggered() {
-		return sensorTriggered(ioMembers.rightObstacleSensor,
-				rightDistanceToFloor);
+		return sensorTriggered(ioMembers.rightObstacleSensor);
 	}
 
 	private boolean farRightSensorTriggered() {
-		return sensorTriggered(ioMembers.farRightObstacleSensor,
-				farRightDistanceToFloor);
+		return sensorTriggered(ioMembers.farRightObstacleSensor);
 	}
 
 	private boolean leftSensorTriggered() {
-		return sensorTriggered(ioMembers.leftObstacleSensor,
-				leftDistanceToFloor);
+		return sensorTriggered(ioMembers.leftObstacleSensor);
 	}
 
 	/**
 	 * Returns true id distance sensor is triggered.
 	 * @param sensor
-	 * @param distanceToFloor
 	 * @return
 	 */
-	private boolean sensorTriggered(OpticalDistanceSensor sensor,
-			double distanceToFloor) {
+	private boolean sensorTriggered(OpticalDistanceSensor sensor) {
 		double distance = sensor.getDistance();
 		for (int i = 0; i < NUM_SENSOR_SAMPLES - 1; i++) {
 			distance += sensor.getDistance();
 		}
 		distance /= NUM_SENSOR_SAMPLES;
-//		System.out.println("Distance = " + distance);
 		return distance < OBSTACLE_MIN_HEIGHT;
-
 	}
-
 }
