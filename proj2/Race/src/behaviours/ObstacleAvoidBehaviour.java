@@ -12,14 +12,13 @@ import main.RobotInteractionMembers;
 public class ObstacleAvoidBehaviour implements Behavior {
 
 	private static final double OBSTACLE_MIN_HEIGHT = 150;
-	private static final double NUM_BASELINE_SAMPLES = 100;
 	private static final double NUM_SENSOR_SAMPLES = 3;
 
 	private static final int TRAVEL_SPEED = 100;
 	private static final int ROTATE_SPEED = 100;
 	private static final int BACK_UP_DISTANCE = -50;
-	private static final int SIDE_DISTANCE = 150;
-	private static final int FORWARD_DISTANCE = 300;
+	// forward move is in milliseconds
+	private static final int FORWARD_TIME_MS = 300;
 	private static final int SIDE_STEP_ANGLE = 40;
 
 	private double rightDistanceToFloor = Double.POSITIVE_INFINITY;
@@ -37,6 +36,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 	private DifferentialPilot pilot = null;
 
 	private boolean isConfigured = false;
+	// actions take a long time, so we won't release control until we're don
 	private boolean hasControl = false;
 
 	public ObstacleAvoidBehaviour(RobotInteractionMembers ioMembers) {
@@ -49,28 +49,20 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		this.pilot.setRotateSpeed(ROTATE_SPEED);
 	}
 
+	/**
+	 * Configure the Obstacle Avoidance Behavior.
+	 * 
+	 * @param regularTrack
+	 * @param specialTrack
+	 * @param regularTarget
+	 * @param specialTarget
+	 */
 	public void configure(int regularTrack, int specialTrack,
 			int regularTarget, int specialTarget) {
 		this.regularTrack = regularTrack;
 		this.specialTrack = specialTrack;
 		this.regularTarget = regularTarget;
 		this.specialTarget = specialTarget;
-
-//		rightDistanceToFloor = ioMembers.rightObstacleSensor.getDistance();
-//		farRightDistanceToFloor = ioMembers.farRightObstacleSensor.getDistance();
-//		leftDistanceToFloor = ioMembers.leftObstacleSensor.getDistance();
-//		for (int i = 0; i < NUM_BASELINE_SAMPLES - 1; i++) {
-//			rightDistanceToFloor += ioMembers.rightObstacleSensor.getDistance();
-//			farRightDistanceToFloor += ioMembers.farRightObstacleSensor.getDistance();
-//			leftDistanceToFloor += ioMembers.leftObstacleSensor.getDistance();
-//		}
-//		rightDistanceToFloor /= NUM_BASELINE_SAMPLES;
-//		farRightDistanceToFloor /= NUM_BASELINE_SAMPLES;
-//		leftDistanceToFloor /= NUM_BASELINE_SAMPLES;
-//
-//		System.out.println("Left Baseline: " + leftDistanceToFloor);
-//		System.out.println("Right Baseline: " + rightDistanceToFloor);
-//		System.out.println("Far Right Baseline: " + farRightDistanceToFloor);
 
 		isConfigured = true;
 	}
@@ -84,15 +76,13 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		if (hasControl)
 			return true;
 
+		// debug output
 		System.out.println("Current Obs Reading: "
 				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
 				+ ioMembers.rightObstacleSensor.getDistance() + "\t\t"
 				+ ioMembers.farRightObstacleSensor.getDistance());
-		
-		// double distance = ioMembers.leftObstacleSensor.getDistance();
-		// System.out.println(distance);
-		// return false;
 
+		// take control if either of the top sensors is triggered
 		if (rightSensorTriggered() || leftSensorTriggered()) {
 			System.out.println("Avoiding Obstacle: "
 					+ ioMembers.leftObstacleSensor.getDistance());
@@ -107,36 +97,27 @@ public class ObstacleAvoidBehaviour implements Behavior {
 
 		ioMembers.stop();
 
+		// debugging output
 		Sound.beep();
 		System.out.println("Current Obs Reading: "
 				+ ioMembers.leftObstacleSensor.getDistance() + "\t\t"
 				+ ioMembers.rightObstacleSensor.getDistance() + "\t\t"
 				+ ioMembers.farRightObstacleSensor.getDistance());
+		
+		// delay so that robot stops shaking
 		Delay.msDelay(500);
 
-		/*
-		 * check which sensors are triggered if sensors the same rotate left
-		 * else rotate right
+		/* Sensors need to be non triggered twice in a row before we consider
+		 * the obstacle passed.
 		 */
-//		if (Math.abs(ioMembers.lightSensor.getLightValue()
-//				- ioMembers.targetSensor.getLightValue()) < 5) {
-//			pilot.rotate(15);
-//		} else {
-//			pilot.rotate(-15);
-//		}
-
-		// if(leftSensorTriggered() && rightSensorTriggered() && farRightSensorTriggered())
-		//		go on outside
-		// else if(leftSensorTriggered() && rightSensorTriggered())
-		// 		go on inside
-		// else if(rightSensorTriggered() && farRightSensorTriggered())
-		// 		go on outside
-		// else if(rightSensorTriggered())
-		// 		go on inside
 		boolean prevTrigger = true;
 		boolean currTrigger = true;
+		
+		/* Left sensor and then avoid right, or right sensor with more space
+		 * on right, so also avoid right. Else avoid left.
+		 */
 		if (leftSensorTriggered() || (rightSensorTriggered() && !farRightSensorTriggered())) {
-			// inside
+			// avoid on inside of track
 			while (currTrigger || prevTrigger) {
 				sideStepLeftBackward();
 				prevTrigger = currTrigger;
@@ -148,7 +129,7 @@ public class ObstacleAvoidBehaviour implements Behavior {
 			moveForward(true);
 			shuffleBack(true, 0);
 		} else {
-			// outside
+			// avoid on outside of track
 			int shuffleCount = 0;
 			while (currTrigger || prevTrigger) {
 				sideStepRightBackward();
@@ -177,6 +158,13 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		hasControl = false;
 	}
 
+	/**
+	 * Do a forward-turn-backward or backward-turn-forward shuffle toward center. 
+	 * @param right
+	 * 		If true, shuffle right, otherwise shuffle left.
+	 * @param shuffleCount
+	 * 		Number of shuffles to do. Shuffle right does 2 extra.
+	 */
 	private void shuffleBack(boolean right, int shuffleCount) {
 		int curCount = 0;
 		while (true) {
@@ -228,9 +216,13 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		return false;
 	}
 
+	/**
+	 * Move forward for FORWARD_TIME_MS. If parameter is true, exit when line is found.
+	 * @param exit
+	 */
 	private void moveForward(boolean exit) {
 		int distForward = 0;
-		while (distForward < FORWARD_DISTANCE) {
+		while (distForward < FORWARD_TIME_MS) {
 			pilot.forward();
 			Delay.msDelay(10);
 			distForward += 10;
@@ -257,6 +249,13 @@ public class ObstacleAvoidBehaviour implements Behavior {
 		sideStep(true, false);
 	}
 
+	/**
+	 * Do a single step tot he left or right, going forward first or backward first.
+	 * @param left
+	 * 		If true go left, if false go right.
+	 * @param backward
+	 * 		If true start step going backward, if false start step going forward.
+	 */
 	private void sideStep(boolean left, boolean backward) {
 		int angle = left ? SIDE_STEP_ANGLE : -SIDE_STEP_ANGLE;
 		int distance = backward ? BACK_UP_DISTANCE : -BACK_UP_DISTANCE;
@@ -281,6 +280,12 @@ public class ObstacleAvoidBehaviour implements Behavior {
 				leftDistanceToFloor);
 	}
 
+	/**
+	 * Returns true id distance sensor is triggered.
+	 * @param sensor
+	 * @param distanceToFloor
+	 * @return
+	 */
 	private boolean sensorTriggered(OpticalDistanceSensor sensor,
 			double distanceToFloor) {
 		double distance = sensor.getDistance();
