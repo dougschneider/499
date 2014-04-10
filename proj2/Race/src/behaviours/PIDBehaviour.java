@@ -15,7 +15,6 @@ public class PIDBehaviour implements Behavior {
 	private static final double SPECIAL_K_I = 0.1;
 	private static final double SPECIAL_K_D = 0.001;
 	
-//	private static final double NORMAL_K_P = 1.8;
 	private static final double NORMAL_K_P = 1.8;
 	private static final double NORMAL_K_I = 0.1;
 	private static final double NORMAL_K_D = 0.001;
@@ -100,23 +99,15 @@ public class PIDBehaviour implements Behavior {
 			basePower += BASE_POWER_STEP;
 		}
 		
-		// System.out.println(targetValue);
-//		if (targetValue < inSpecialWhenBelow) {
-//			// in special zone
-//			targetValue = specialTarget;
-//			K_P = SPECIAL_K_P;
-//			K_I = SPECIAL_K_I;
-//			K_D = SPECIAL_K_D;
-//		} else {
-			// in normal zone
-			int targetValue = regularTarget;
-			K_P = NORMAL_K_P;
-			K_I = NORMAL_K_I;
-			K_D = NORMAL_K_D;
-//		}
+		// K values are all the same anyway
+		int targetValue = regularTarget;
+		K_P = NORMAL_K_P;
+		K_I = NORMAL_K_I;
+		K_D = NORMAL_K_D;
 		
 		error = current - targetValue;
 		
+		// If error is too large, slow down. Allows robot to make sharp turns.
 		if (Math.abs(error) > 7 && basePower > DEFAULT_BASE_POWER) {
 			basePower -= 7;
 		}
