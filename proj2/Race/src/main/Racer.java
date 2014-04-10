@@ -3,7 +3,6 @@ package main;
 import javax.naming.ConfigurationException;
 
 import lejos.robotics.subsumption.Behavior;
-import lejos.util.Delay;
 import arbitrators.SingleThreadArbitrator;
 import behaviours.ObstacleAvoidBehaviour;
 import behaviours.PIDBehaviour;
