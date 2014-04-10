@@ -6,6 +6,11 @@ import lejos.robotics.subsumption.Behavior;
 import main.RobotInteractionMembers;
 
 /**
+ * This class is not used in the implementation but was an experiment to
+ * make the sharp left-turn. Code is left in since it might be in report.
+ */
+
+/**
  * If the robot has been off the edge line for longer than
  * the configured time, take control and try to recover.
  */
