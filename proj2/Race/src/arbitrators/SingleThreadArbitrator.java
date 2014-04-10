@@ -1,9 +1,27 @@
 package arbitrators;
 
 import lejos.nxt.Button;
+import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import lejos.util.Delay;
 
+/**
+ * Single-threaded implementation of an arbitrator. Works with existing
+ * LeJOS {@link Behavior} interface.
+ * 
+ * LeJOS's {@link Arbitrator} class is multi-threaded and doesn't work with USB
+ * communication.
+ * 
+ * This implementation polls each behavior in a loop, so try to keep
+ * each Behavior's takeControl() method simple as complexity adds delay.
+ * The Behavior's action() method should perform a single move (so in the case
+ * of a PID controller a single correction). The action() loop is called
+ * in a loop by the arbitrator.
+ * 
+ * Once the Behaviors are implemented this way, the SingleThreadArbitrator
+ * works the same as LeJOS's {@link Arbitrator}.
+ *
+ */
 public class SingleThreadArbitrator {
 
 	private Behavior[] behaviors = null;
@@ -19,6 +37,10 @@ public class SingleThreadArbitrator {
 		this.returnWhenInactive = returnWhenInactive;
 	}
 
+	/**
+	 * Run, calling action() on the highest-priority behavior that want to take control,
+	 * and suppress() on transition to a different behavior.
+	 */
 	public void start() {
 		Behavior prev = null;
 		Behavior curr = null;
@@ -41,6 +63,9 @@ public class SingleThreadArbitrator {
 		}
 	}
 
+	/**
+	 * Return the highest-priority behavior that wants to take control. 
+	 */
 	private Behavior getHighestPriorityBehavior() {
 		// Loop from last to first, to maintain leJOS arbitrator interface
 		// that highest priority behaviors go last on list.
