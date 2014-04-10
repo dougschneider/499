@@ -1,0 +1,2 @@
+http://sourceforge.net/p/lejos/wiki-nxt/Queued%20Navigation%20Architecture/
+http://www.lejos.org/nxt/nxj/api/
